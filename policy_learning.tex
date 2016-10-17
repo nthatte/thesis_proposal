@@ -1,0 +1,211 @@
+\chapter{Policy Learning} \label{ch:Policy Learning}
+
+\section{Learning from Demonstration} \label{sec:Learning from Demonstration}
+
+\begin{enumerate} 
+
+    \item \papertitle{A survey of robot learning from
+    demonstration}{argall2009survey}{-3ex}
+
+    This paper organizes the existing learning from demonstration literature
+    according to several characteristics:
+
+    \begin{description} 
+        \item[Data Gathering] 
+            Data gathering strategies attest to deal with the two important
+            data correspondence mappings:
+            \begin{description} 
+                \item[The Record Mapping] 
+                    The mapping from the states/actions the teacher experiences
+                    to the states/actions recorded in the dataset. For example
+                    if learning from able-bodied subjects outfit with Vicon
+                    markers, we directly record their joint angles where as if
+                    we record the subjects with a camera there is an indirect
+                    mapping.
+                \item[The Embodiment Mapping] 
+                    Whether the states/actions for the system are directly
+                    recorded in the dataset. For example, if we can directly use
+                    the human's joint angles on the prosthesis, the embodiment
+                    mapping is identity. If we want to learn torque commands,
+                    then the embodiment mapping would be running inverse
+                    dynamics on the recorded joint angles to get the required
+                    torques for the prosthesis to follow the recordings from the
+                    teacher.
+            \end{description} 
+
+            Based on the whether embodiment mapping is identity or not we split
+            the data acquisition approaches into two groups:
+            \begin{description} 
+                \item[Demonstration] 
+                    Learning from Demonstration is possible when the embodiment
+                    mapping is identity. We further classify strategies in this
+                    category based on the record mapping.
+                    \begin{description} 
+                        \item[Teleoperation] 
+                            Used when the record mapping is identity. Examples
+                            include demonstrating how a manipulator should move
+                            by manually moving it while it is in gravity comp
+                            mode or remote controlling a car or plane. 
+                        \item[Shadowing] 
+                            Used in the case when the record mapping is not
+                            identity; the robot senses state from its own
+                            sensors while mimicking the teacher.  For example, a
+                            robot follows a leader through a maze.
+                    \end{description} 
+                \item[Imitation] 
+                    We employ imitation learning when the embodiment mapping is
+                    not identity. We further classify strategies in this
+                    category based on the record mapping.
+                    \begin{description} 
+                        \item[Sensors on Teacher] 
+                            Used to make the record mapping direct. Example
+                            Vicon markers on a subject to directly record their
+                            joint angles. However, the embodiment mapping is
+                            not identity so we have to translate the teacher's
+                            joint angles to the robot's.
+                        \item[External Observation] 
+                            When the record mapping is indirect.\ examples we
+                            watch the subject via a camera and need to do more
+                            complex processing to extract the teacher's state.
+                    \end{description} 
+            \end{description} 
+        \item[Policy Derivation]
+            Given data recorded with one of the four possible strategies listed
+            above, we learn a policy using one of three general methods:
+            \begin{description}
+                \item[Mapping Function] 
+                    In the mapping function approach we directly learn a policy
+                    of the form $\pi: S \rightarrow A$.
+                    \begin{description}
+                        \item[Classification]
+                            If actions and/or states are discrete we can use
+                            classification approaches such as Gaussian Mixture
+                            Models (GMM), k-Nearest-Neighbors (kNN), logistic
+                            regression/SVM, and Hidden Markov Models
+                            (HMM).
+                        \item[Regression]
+                            If states and actions are continuous we use
+                            regression such as Locally Weighted Regression
+                            (LWR) or Neural Networks (NN).
+                    \end{description}
+                \item[System Model] 
+                    In the system model approach the data is used to learn a
+                    probabilistic model of the system dynamics $T(s'| s, a)$ and
+                    a reward function $R(S, A)$ is either learned or provided.
+                    We use these two to derive a policy $pi: S \rightarrow A$. 
+                    \begin{description}
+                        \item[Engineered Reward Functions]  
+                            The reward function is given. Usually it's very
+                            sparse only giving reward at the goal. Rewards can
+                            be hard to design manually.
+                        \item[Learned reward functions]
+                            Use the data to learn the teacher's reward function.
+                            Then use the Dynamics model to create a policy.
+                            Examples include maximum margin planning and maximum
+                            entropy reward functions.
+                    \end{description}
+                \item[Plans] 
+                    Represent the policy as a sequence of actions from state
+                    state to goal state. There are preconditions: the state you
+                    have to be in before we can take the action and post
+                    conditions the state we end up in after taking the action:
+                    formal logic controllers.
+            \end{description}
+    \end{description}
+
+    \item \papertitle{A Reduction of Imitation Learning and Structured
+    Prediction to No-Regret Online Learning}{ross2011reduction}{-3ex}. 
+    
+    \takeaway{To improve imitation learning performance, you should iteratively
+    add training data on the states induced by learned polices} 
+    
+    Imitation learning can lead to poor performance in practice because it
+    validates i.i.d.\ assumptions. When the policy makes a mistake, it can lead
+    to states not seen in the training data, leading to further mistakes and a
+    compounding of errors. The solution is to obtain expert demonstrations of
+    actions to take in the states induced by the last learned policy and add
+    those to the training dataset.
+
+    The example experiments point to how we could learn trip recovery on the
+    prosthesis. In their, experiments, the initial policy is simply the expert
+    executing the control. For example, the expert driving the kart. In our
+    case, we could start with a hand-tuned policy, or a policy learned from
+    gathering data on healthy subjects. Then, we could execute this policy on
+    the prosthesis and manually label what strategy should have been used, by
+    for example labeling the frames of a video that are synced to the prosthesi
+    s data.
+
+    \item \papertitle{Robust trajectory learning and approximation for robot
+    programming by demonstration}{aleotti2006robust}{-6ex}. 
+    
+    \takeaway{Clustering can help group similar demonstrations that represent
+    different solutions to a problem.} 
+    
+    This work falls into the sensors on teacher imitation learning paradigm. The
+    authors create an interactive system for programming a manipulator. The
+    teacher wears a glove that is tracked by a motion tracking system providing
+    demonstrations of end-effector trajectories. The teacher provides multiple
+    demonstrations of the same pick and place task.  These demonstrations are
+    clustered by an unsupervised clustering algorithm.  An HMM is then trained
+    that is used to then rank the demonstrated trajectories within a cluster.
+    NURBS splines are then used to fit the highest ranked trajectories within
+    each cluster. The fitted NURBS trajectories are shown to the user who can
+    then edit them via a GUI. The chosen trajectory is then executed on the
+    robot using inverse kinematics (non-identity embodiment mapping). The
+    approach does not seem to have much generalizability capability as they don't
+    learn a policy.
+
+    \item \papertitle{Incremental learning of gestures by imitation in a
+    humanoid robot}{calinon2007incremental}{-3ex}. 
+    
+    \takeaway{Sensors on teacher + kinesthetic teaching allows the robot to
+    learn natural motions and also allows the teacher to refine the motion to
+    account for the embodiment mismatch} 
+
+    In this paper, the authors train a small humanoid robot to perform gestures.
+    The teacher wears a motion capture system that records his joint angles.
+    The trajectories are ran through PCA to reduce their dimensionality. Then
+    Gaussian mixture models are trained to fit the trajectories using the EM
+    algorithm. Two methods are analyzed to incrementally update the GMM as new
+    data is acquired. Sensors on teacher is not solely capable of learning
+    policies because of the embodiment mismatch. Kinaesthetic teaching helps
+    refine the policy as it is executed like DAGGER. However, kinaesthetic
+    teaching alone tends to provide unnatural demonstrations as the teacher can
+    not move all joints at once. GMM's provide a convenient way to encode
+    trajectories although temporal Gaussian processes seem to make more sense
+    for this.
+
+    \item \papertitle{Learning from demonstration and adaptation of biped
+    locomotion}{nakanishi2004learning}{-3ex}. 
+    
+    \takeaway{We can train CPGs using data gathered from biomechanical data but
+    the learned policies do not necessarily work well on hardware.} 
+
+    \takeaway{We can also train the CPG on a hand-designed controller to help
+    which may improve upon the initial policy.} 
+
+    In this work, the authors train a complex CPG first using biomechanical
+    data. The CPG encodes a kinematic trajectory with coupling between joints
+    and phase resetting at heel strike. The learned trajectory worked on a
+    simulated robot and was robust to disturbances. However, when applied to the
+    real robot, the learned trajectory did not work. Instead, they trained the
+    CPG on a trajectory generated by a hand-designed policy in order to
+    successfully train the CPG.
+
+    \item \papertitle{Movement imitation with nonlinear dynamical systems in
+    humanoid robots}{ijspeert2002movement}{-3ex}. 
+    
+    \takeaway{We can generalize demonstrations to new situations by representing
+    the demonstrations as the solutions to differential equations that are
+    attracted to the goal state.} 
+
+    This work fits nonlinear differential equations (DMPs) to the demonstrated
+    trajectories that are attracted to the goal state. This representation
+    appears to have some generalizability as the goal state can be changed in
+    the equations to perform different tasks unlike
+    in~\citet{aleotti2006robust}. However, some clustering is still required as
+    the author's note the policies generalize better when the goal state is
+    moved vertically more so than when they are moved horizontally. It's not
+    clear why one would use DMPs instead of learning a reward function and then
+    optimizing it. The parameterization of the DMP is very unintuitive.
+\end{enumerate}

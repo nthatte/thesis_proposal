@@ -1,0 +1,96 @@
+\chapter{Trip Recovery} \label{ch:trip_recovery}
+
+\section{Amputee Trip Recovery} \label{sec:amputee_trip_recovery}
+
+\begin{enumerate} \item \papertitle{Transfemoral amputee recovery strategies
+following trips to their sound and prosthesis sides throughout swing
+phase}{shirota2015transfemoral}{-6ex}. 
+    
+    \takeaway{Stance side behavior possibly more important than swing behavior
+    for trip recovery.} 
+
+    \takeaway{Amputees can still implement all able-bodied
+    strategies including elevating strategies}
+    
+    In this paper the researchers tripped amputees on both their healthy and
+    prosthesis sides and tripped healthy subjects on both sides using a
+    cable-driven tripping machine. They identified four strategies for able
+    bodied subjects: 
+    
+    \begin{description} 
+        \item[Elevating strategy] Subject raised foot and placed it ahead of
+        arrested location.  
+
+        \item[Delayed-lowering strategy] Subject raised foot and put it behind
+        arresting location 
+
+        \item[Lowering strategy] Subject did not raise foot and placed it at or
+        behind arresting location 
+
+        \item[Incomplete Arrest] Subject did not raise foot and placed it ahead
+        of arrested location
+    \end{description}
+    
+    Additionally the authors identified two amputee-only strategies:
+    \begin{description} 
+        \item[Hopping strategy] Subject jumped over virtual obstacle with both
+        feet.  
+
+        \item[Skipping strategy] Subject lowered tripped foot and then took an
+        extra step with the tripped foot over the obstacle.
+    \end{description}
+    
+    Most individual amputees used a subset of the able-bodied strategies. But
+    across all subjects, all able-bodied strategies were utilized. Surprisingly,
+    foot kinematics were not different between amputees and healthy-subjects.
+    \ie amputees were able to implement all strategies even on the prosthesis
+    via sound-side leg and hip movements.
+    
+    However, the distribution of strategies is different especially when the
+    sound side is tripped (amputees used elevating and delayed lowering
+    strategies less and used them even less on the sound side). The author's
+    credit the large change in the sound side to the lack of active torque on
+    the prosthesis side when it is the stance leg. The prosthesis cannot produce
+    counteracting moments to halt forward momentum.  
+    
+\end{enumerate}
+
+\section{Trip Classification} 
+
+Trip Classification papers successfully detect trips and classify them based on
+strategy. So far these studies gather data from able-bodied subjects. These
+results may not be applicable to amputee subjects.
+However,~\citet{shirota2015transfemoral} note the similarity in kinematics of
+trip recoveries between amputees and able-bodied subjects so they still might
+work.  The main issue is likely the DAGGER problem: data was collected from
+subjects who are correctly performing trip recovery. The distribution of states
+on a prosthesis who's trip recovery controller makes mistakes will be different
+than that of an able-bodied subject. Therefore, the IID assumption is violated
+and this should not be treated as a pure supervised learning problem.
+
+\begin{enumerate} 
+    \item \papertitle{Stumble detection and classification for an intelligent
+    transfemoral prosthesis}{lawson2010stumble}{-3ex}. 
+
+    \takeaway{Successfully implemented trip detection with average delay of 70 ms.}
+   
+    Collected data from healthy subjects and trained trip detection and
+    classification into lowering and elevating strategies. Used FFT features
+    in windows of hip, knee, and ankle data of tripped leg. The author's trained
+    and tested on the same data so the results are suspect.
+
+    \item \papertitle{Recovery strategy identification throughout swing phase
+    using kinematic data from the tripped leg}{shirota2014recovery}{-6ex}. 
+
+    \takeaway{Two part classifier that first classifies walking from trip and
+    then the type of trip works better than one part classifier.}
+    
+    Researcher tripped able-bodied subjects and learned one and two part
+    classifiers to classify trip and type of trip. Two part classifier worked
+    better. Classifier was learned for each specific subject. Features used were
+    min, max, mean, and standard deviation of knee, ankle, foot angle/position
+    and acceleration. Features were calculated within windows. Optimal number of
+    windows and window length were identified.
+
+\end{enumerate}
+%%

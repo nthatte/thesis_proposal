@@ -1,0 +1,155 @@
+\chapter{Prosthesis Control} \label{ch:pros_control}
+
+\section{EMG Control} \label{sec:emg_pros_control}
+
+\begin{enumerate} 
+    \item \papertitle{A Strategy for Identifying Locomotion Modes Using Surface
+    Electromyography}{huang2009strategy}{-3ex}. 
+
+    \takeaway{Paper suggests using Linear Discriminant Analysis instead of
+    Artificial Neural Networks, combining EMG time domain or autoregressive
+    features with kinematics data as in the later work
+    \citet{hargrove2015intuitive}}
+    
+    In this work EMG sensors were used to measure neuromuscular data from 8
+    healthy subjects and 2 TF amputees performing different walking modes. The
+    authors used Linear Discriminiant Analysis (LDA) and Artificial Neural
+    Networks (ANN) trained on time domain (TD), Autoregressive (AR) features,
+    and a combination of both (TDAR) to recognize walking mode during 4
+    sub-phases of gait. Different subsets of the EMG sensors were tried and
+    different. They found that LDA had lower classification error than ANN and
+    was simpler. They found using hip muscles in addition to thigh muscles
+    helped even though these would probably be more difficult to measure outside
+    of lab. Also they found, using only TD or only AR features worked better
+    than using both. A window size of 120ms or more is less noisy and small
+    increments between window starts allows for faster updates.  Although, later
+    work in~\citet{hargrove2015intuitive} uses a weighted average of
+    instantaneous features instead of discrete windows. Also the later work adds
+    in mechanical data as is suggested by this work to improve performance. This
+    work only reports LOOCV offline validation. The later work also includes
+    online validation with slightly worse performance. Dagger may help.  
+
+    \item \papertitle{Multiclass real-time intent recognition of a powered lower
+    limb prosthesis}{varol2010multiclass}{-3ex}. 
+
+    \takeaway{Using mechanical sensor data (no emg), LDA instead of PCA for
+    dimensionality reduction and Gaussian mixture model the authors built a gait
+    intent recognition system}
+
+    The authors built a gait recognition system based on mechanical sensor data.
+    They used LDA for dimensionality which is similar to logistic regression. ie
+    the normal vector for a dividing hyper plane will tell you which dimensions
+    are important and which are not. They used a Gaussian mixture model trained
+    with EM to fit the classes. They only trained on tested with one subject and
+    report error rates using 10 fold cross validation. The author's recognized
+    the difficulty of boot strapping the model learning especially in the sit-to
+    stand case and trained that model "off policy". They also specifically
+    included in the database data from when the system is in the wrong state and
+    needs to recover.
+
+
+    \item \papertitle{Continuous locomotion-mode identification for prosthetic legs based on neuromuscular--mechanical fusion}{huang2011continuous}{-6ex}. 
+
+    \takeaway{Combining EMG and Mechanical data reduces classification error of
+    walking modes.} 
+
+    \takeaway{SVMs achieved better performance than linear discriminant
+    analysis}
+
+    The author's trained SVM and LDA classifiers to detect gait mode and
+    transitions. Features used were EMG time domain features and mechanical
+    features (GRF and 6dof load cell data). Fusing EMG + mech worked better than
+    just EMG data and SVM worked better (both in terms of accuracy and speed)
+    than LDA because of nonlinear decision boundaries (exponential kernel).
+    Classification error was computed offline not online via LOOCV.
+
+    \item \papertitle{Intent recognition in a powered lower limb prosthesis
+    using time history information}{young2014intent}{-3ex}. 
+
+    \takeaway{A dynamic Bayesian Network ahceived lower LVOO classification error
+    than maximum likelihood methods.} 
+
+    \takeaway{This paper treats the problem as a filtering problem isntead of a
+    policy learning problem} 
+
+    The authors trained a dynamic Bayesian Network (DBN) to classify walking
+    mode and compared classification error rates to maximum likelihood methods
+    (LDA) and LDA with majority vote over closely spaced windows. They found the
+    produced lower LVOO error rates. The classifier were trained on mechanical
+    data only.
+
+    The DBN is similar to a hidden markov model where the current state is
+    dependent on the last state and the current observation
+    \begin{align}
+        \prob{C_t| x_t} &= \frac{\prob{\vec{x}_t|C_t}
+        \prob{C_t}}{\prob{\vec{x_t}}} \\
+        \prob{C_t} &= \phi \prob{C_{t-1} | x_{t-1}}
+    \end{align}
+    where $\phi$ is a matrix of transition probabilities. The likelihood,
+    $\prob{x|C}$, was assumed to be a multivariate Gaussian.
+
+    This work uses LVOO classification error and doesnt address the DAGGER
+    problem but points it out. The follow up work \citep{hargrove2015intuitive}
+    is the first to quantify online error.
+
+    The state representation in this paper is just the high level states
+    (walking, standing etc). There is no lower level sensor data such as leg
+    angle. The states don't seem like they would satisfy Markov property well
+    \ie we wont be able to predict a distribution of all future states and
+    observations from the current state. Also, the observation models would make
+    it equally likely to observe sensor values regardless of gait phase.
+    Splitting the walking states in half or thirds based on leg angle to
+    represent early/late or early/mid/late stance/swing could make it more
+    accurate. This will likely be especially important for Swing/Stance/Trip
+    detection. Maybe it would be better to go back to imitation learning and use
+    a classification-based policy on sensor data so we can run DAGGER.
+
+    It seems like treating the issue as a filtering problem instead of an policy
+    learning problem doesn't allow us to analyize mismatches between prosthesis
+    state and human state. For example, It is not necessarily true that the
+    prosthesis should be in the MAP state of the human. Example if not correctly
+    recognizing a trip is costly we may want to switch to trip recovery even if
+    its not the most likely state. Maybe we should use a simple POMDP.
+
+    \takeaway{Definition of state doesn't seem like it comes close to satisfying
+    markov property. Also include discretized leg angle?}
+
+    \item \papertitle{A training method for locomotion mode prediction using
+    powered lower limb prostheses}{young2014training}{-3ex}. 
+
+    \takeaway{Training data that includes transitions improves the
+    LVOO classification error of the transitional steps espeically} 
+
+    The author had subjects walk on the prosthesis through different types of
+    gaits. At the transition between gaits, the experimenter indicated the
+    transition occured via a GUI\@. LDA classifiers were trained on mechanical
+    data to recognize gait mode including the transitions in the training set
+    helped improve the error on transitional steps from 90\% to 20\% although it
+    also increased error in the steady-state steps from 1\% to 4\%. They
+    suggest improving performance by adding EMG and DBN which is finally done
+    in~\citet{hargrove2015intuitive} but DAGGER is likely important too.
+
+    \item \papertitle{Intuitive control of a powered prosthetic leg during
+    ambulation: a randomized clinical trial}{hargrove2015intuitive}{-6ex}. 
+    
+    \takeaway{Combining EMG and Mechanical data reduces classification error of
+    walking modes.} 
+
+    \takeaway{Dynamic Bayesian Networks (DBN) achieved better performance than
+    linear discriminant analysis}
+
+    \takeaway{Offline error is worse than Online error. Possible to solve using
+    DAGGER?}
+    
+    In this paper the researchers collected data sensor and EMG data 
+    from 7 transfemoral amputees. They trained classifiers to detect what 
+    ambulation mode the user intended to use and transitions between modes.
+    Using EMG data as well as mechanical data from the prosthesis reduced
+    classification error by $6.2\%$. Offline error computed after the fact
+    (Leave One Out) was less than online/realtime error. The author's
+    attribute this to the classic reenforcment learning problem:
+    Misclassification causes the prosthesis/human to enter states than are not
+    in the training data set leading to further degredation of performance.
+    This may be solveable using DAGGER~\citet{ross2011reduction}.
+
+\end{enumerate}
