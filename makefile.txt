@@ -1,0 +1,23 @@
+# Author: Emiliano Carlos de Moraes Firmino @ 10/2012
+DOC=main
+REF=references
+
+.SUFFIXES:
+.SUFFIXES: .bib .pdf .tex
+.PHONY: clean
+
+run: $(DOC).pdf
+
+$(DOC).pdf: $(DOC).bbl $(DOC).tex
+	pdflatex $(DOC).tex -draftmode
+	pdflatex $(DOC).tex 
+
+$(DOC).bbl: $(DOC).aux
+	bibtex $(DOC).aux
+
+$(DOC).aux: $(REF).bib
+	pdflatex $(DOC).tex -draftmode
+	pdflatex $(DOC).tex -draftmode
+
+clean:
+	rm -rf *.aux *.lof *.log *.lot *.toc *.bbl *.blg *pdf

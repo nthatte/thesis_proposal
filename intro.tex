@@ -1,6 +1,6 @@
 \chapter{Introduction}
-
 \begin{marginfigure}
+    \centering
 	\begin{subfigure}[b]{\textwidth}
     	\centering
         %\includegraphics{}
@@ -19,13 +19,156 @@
     \caption{Examples of common mechanically-passive ankle and knee prostheses}
 \end{marginfigure}
 
-\Paragraph{Prevalance of Amputation}
+\begin{enumerate}
+    \item Significance of problem
+    \begin{enumerate}
+        \item Number of amputees and cause of amputations
+        \item Amputees face problems due to energy expenditure, unnatural gait,
+            fear of falling gait
+    \end{enumerate}
+    \item Caused by mechanically passive prostheses. The tasks that we need to
+    do: regular walking, upslope, downslope, stairs, tripping, stumbling require
+    positive energy consumption
 
-There are currently an estimated six hundred thousand lower-limb amputees in the
-United States, a number expected to rise significantly over the coming decades
-due to the prevalence of diabetes~\citep{ziegler2008estimating}. Currently, prostheticists typically prescribe amputees mechanically-passive prostheses.  While mechanically passive knee prostheses can feature intelligence and control in the form of online adjustment of joint damping, they are incapable of providing positive joint work over the course of the gait cycle. The lack of active control of the knee and ankle joints results in three major consequences for amputee gait: increased energy consumption, unnatural gait kinematics, and increased likelihood of falling.
+    \item People have tried to fix this with active prostheses over the past few
+    years:
+    \begin{enumerate}
+        \item vanderbilt prostheses: slope walking, upstairs, other examples
+        \item biom - upslope adaptation, biom dancing
+    \end{enumerate}
 
-Popular options include the Freedom Innovations Pacifica~(\cref{fig:freedom_innov_pacifica}) and Ottobock C-Leg~(\cref{fig:ottobock_cleg}).
+    \item Control issue with impedance control.  Need many specialized
+    controllers. Example different gains for slopes, rough ground, different
+    target landing angles. Highlights need for more robust control approach.
+
+    \item Discuss the constraints of prosthesis control:
+    \begin{enumerate}
+        \item decentralized - we do not wish to sensorize the whole body so
+            traditional centralized robotics approaches are inapplicable
+        \item dynamicism - human locomotion even walking is very dynamic, cop
+        goes to edge of foot, straight knee. etc
+        \item decentralized control approaches such as simbicon, impedance
+        control, neuromuscular control - has already shown its robustness and
+        ability to generalize and also produce natural gaits in simulation
+    \end{enumerate}
+
+    \item Approach - neuromuscular inspired prosthesis control
+    \begin{enumerate}
+        \item First test ideas using simulations of amputees before transferring
+        to prosthesis. 
+        \item Develop prosthesis hardware that can accurately reproduce the
+        torques desired by the model
+        \item Tune the parameters of the control for individual users using
+        preferences and proposed dagger solution for trip recovery
+    \end{enumerate}
+
+    \item Expected contributions
+    \begin{enumerate}
+        \item SEA prosthesis design capable of producing enough torque for trip
+        recovery, impact resilient, torque control.
+        \item Evaluation of Neuromuscular prosthesis control in terms of
+        energetics, kinematics, and preferences.
+        \item method for tuning prostheses and other systems using preferences
+        \item Dagger tuning method for learning high level trip recovery policy.
+    \end{enumerate}
+\end{enumerate}
+
 \section{Motivation}
-\section{Challenges}
+There are currently an estimated six hundred thousand lower-limb amputees in the
+United States~\citep{ziegler2008estimating}. People suffer from amputations due
+to traumatic injuries workplace accidents, traffic collisions, and as casualties
+of war. However, a large percentage (54\%) suffer from the loss of a limb due to
+complications arising from dysvacular disease associated with Diabetes.
+Therefore, \citet{ziegler2008estimating} estimate that by 2050 the number of
+amputees living in the United States will likely double, largely due to the
+growing prevalence of diabetes in society.
+
+
+Currently,
+most amputees receive mechanically-passive prostheses, such as the Freedom
+Innovations Pacifica~(\cref{fig:freedom_innov_pacifica}) ankle prosthesis or 
+Ottobock C-Leg~(\cref{fig:ottobock_cleg}) knee prosthesis. While mechanically
+passive knee prostheses can feature intelligence and control in the form of
+online adjustment of joint damping, they are incapable of providing positive
+joint work over the course of the gait cycle. Consequently, lower-limb amputees,
+and especially transfemoral or above-the-knee amputees, equipped with
+mechanically-passive prostheses suffer from a number of issues including
+markedly increased energy consumption~\citep{}, unnatural gait
+kinematics~\citep{}, and an increased likelihood of falling~\citep{}.
+Importantly, these gait pathologies can lead an avoidance of walking, causing
+a degradation of physical fitness and further deterioration of the amputee's
+condition.
+
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{Biom Ankle}
+    \caption{Biom Robotic Ankle Prosthesis}
+    \label{fig:biom_ankle}
+\end{marginfigure}
+
+To help remedy this situation, in the past decade researchers and companies have
+developed robotic powered knee and ankle prostheses for lower-limb amputees.
+These prostheses feature actuators at the knee and/or ankle that, if controlled
+correctly, promise to restore the kinetics, kinematics, and reactions of the
+healthy human leg. Noteworthy examples include four generations of transfemoral
+prostheses developed by Vanderbilt University~\cref{fig:vanderbilt_prostheses}
+~\citep{} and the Biom powered ankle~\cref{fig:biom_ankle}~\citep{}. These
+powered prostheses have helped amputees \todo{cite improvements to amputee gait}
+
+\begin{figure*}
+    \centering
+	\begin{subfigure}[b]{0.2\textwidth}
+    	\centering
+        %\includegraphics{}
+        \missingfigure{Gen 1}
+        \caption{Generation 1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.2\textwidth}
+    	\centering
+        %\includegraphics{}
+        \missingfigure{Gen 2}
+        \caption{Generation 2}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.2\textwidth}
+    	\centering
+        %\includegraphics{}
+        \missingfigure{Gen 3}
+        \caption{Generation 3}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.2\textwidth}
+    	\centering
+        %\includegraphics{}
+        \missingfigure{Gen 4}
+        \caption{Generation 4}
+	\end{subfigure}
+    \caption{Vanderbilt University's Robotic Transfemoral Prostheses}
+\end{figure*}
+
+However, it still remains an open research question how best to control these
+prostheses to achieve natural and robust gaits. In the most established control
+method for powered prostheses, the prosthesis uses simple impedance functions to
+approximate the joint torque versus angle relationships observed during
+walking~\citep{sup2009preliminary}. However, since the torque functions only
+approximate steady, level walking, this method does not seem to generalize well
+to other situations such as walking on slopes~\citep{sup2011upslope} or rough
+ground~\citep{thatte2016toward} and changing foot placement
+targets~\citep{schepelmann2016evaluation}. 
+
+An alternative approach to joint control in prostheses is to mimic the
+underlying dynamics and control of the human neuromuscular system. Rather than
+replicating recorded torque profiles with impedance functions, modeling the
+dynamical system that generates these torques may help generalize the control to
+unexpected situations. Prior work on neuromuscular models shows that they can
+lead to robust and natural-looking gaits when used to control a simulated biped.
+For example, using a neuromuscular model, an optimized simulated biped model
+walked on unseen, uneven terrain with sudden drops and steps up to 14
+centimeters~\cite{song2015neural}. In addition, \citet{eilenberg2010control}
+successfully applied the neuromuscular control approach to a powered ankle
+prosthesis, which mimics the kinematics and kinetics of the ankle joint in human
+walking including its adaptation to sloped environments. It remains unclear,
+however, whether we can generalize the approach to the more complex function of
+the knee joint in gait and balance recovery.
+
+\subsection{Approach}
 \section{Expected Contributions}
