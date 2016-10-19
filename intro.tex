@@ -65,7 +65,6 @@ At the ankle as well, passive spring-like prostheses cannot replicate the
 positive net work seen in the ankle joint during level ground walking, which is
 essential for push-off and forward propulsion \citep{perry1992gait}.
 
-
 Consequently, lower-limb amputees, and especially transfemoral or above-the-knee
 amputees, equipped with mechanically-passive prostheses suffer from a number of
 issues including markedly increased energy consumption~\citep{waters1976energy},
@@ -125,11 +124,10 @@ further debilitation.
     \label{fig:vanderbilt_prostheses}
 \end{figure*}
 
-
 To help remedy this situation, in the past decade researchers and companies have
 developed robotic powered knee and ankle prostheses for lower-limb amputees.
 These prostheses feature actuators at the knee and/or ankle that, if controlled
-correctly, could potentially to restore the kinetics, kinematics, and reactions
+correctly, could potentially restore the kinetics, kinematics, and reactions
 of the healthy human leg. Notable examples include four generations of
 transfemoral prostheses developed by Vanderbilt
 University~(\cref{fig:vanderbilt_prostheses}) \citep{sup2007design,
@@ -144,9 +142,9 @@ impossible to perform with mechanically-passive prostheses as they require
 positive joint power.
 
 \subsection{Challenges in Transfemoral Prosthesis Control}
-However, it still remains an open research question how best to control these
-prostheses to achieve natural and robust gaits. In the most established control
-method for powered prostheses, the prosthesis uses simple impedance functions to
+It still remains an open research question how best to control these prostheses
+to achieve natural and robust gaits. In the most established control method for
+powered prostheses, the prosthesis uses simple impedance functions to
 approximate the joint torque versus angle relationships observed during
 walking~\citep{sup2009preliminary}. However, since the torque functions only
 approximate steady, level walking, this method does not seem to generalize well
@@ -154,23 +152,171 @@ to other situations such as walking on slopes~\citep{sup2011upslope} or rough
 ground~\citep{thatte2016toward} and changing foot placement
 targets~\citep{schepelmann2016evaluation}. 
 
-An alternative approach to joint control in prostheses is to mimic the
-underlying dynamics and control of the human neuromuscular system. Rather than
-replicating recorded torque profiles with impedance functions, modeling the
-dynamical system that generates these torques may help generalize the control to
-unexpected situations. Prior work on neuromuscular models shows that they can
-lead to robust and natural-looking gaits when used to control a simulated biped.
-For example, using a neuromuscular model, an optimized simulated biped model
-walked on unseen, uneven terrain with sudden drops and steps up to 14
-centimeters~\cite{song2015neural}. In addition, \citet{eilenberg2010control}
-successfully applied the neuromuscular control approach to a powered ankle
-prosthesis, which mimics the kinematics and kinetics of the ankle joint in human
-walking including its adaptation to sloped environments. It remains unclear,
-however, whether we can generalize the approach to the more complex function of
-the knee joint in gait and balance recovery.
+As mentioned earlier, walking on slopes and rough ground present major hurdles
+for transfemoral amputees. Moreover, previously developed prosthesis controls
+have not specifically addressed the risk of falling that is so detrimental to
+amputee quality of life. Therefore, it is clear that we should formulate a
+prosthesis controller with more power to generalize to a larger variety of
+environments thereby improving amputee gait robustness. Formulating a robotic
+prosthesis controller to accomplish this goal requires we address three main
+challenges:
+
+\begin{description}
+    \item[Challenge 1: Human locomotion is a dynamic task] 
+    \begin{marginfigure}[-0.5in]
+        \centering
+        %\includegraphics{}
+        \missingfigure{passive dynamic walker}
+        \caption{A passive dynamic walker}
+        \label{fig:passive_dynamic_walker}
+    \end{marginfigure}
+    
+    Human locomotion is characterized by dynamic interaction with the
+    environment \citep{mcgeer_1992}. During stance, the leg acts in a compliant,
+    spring-like manner \citep{geyer2006compliant} and significant time is spent
+    in statically-unstable contact on the heel or toe, suggesting the importance
+    of mechanical stability achieved via foot placement \citep{perry1992gait}.
+    During swing, ballistic motion explains much of the leg trajectory
+    \citep{mochon1980ballistic}. Indeed, much of the entire gait cycle can be
+    explained via passive dynamics as evidenced by passive-dynamic walkers
+    (\cref{fig:passive_dynamic_walker}) that can stably walk down slight
+    inclines with no onboard power source~\citep{mcgeer1990passive,
+    collins2005efficient}.
+
+    \begin{marginfigure}[-0.5in]
+        \centering
+        %\includegraphics{}
+        \missingfigure{Rheo Knee}
+        \caption{Honda's Asimo Robot uses position control and statically
+        stable gaits}
+        \label{fig:asimo}
+    \end{marginfigure}
+
+    Consequently, in order to ensure that amputee gaits are natural and
+    efficient, but still robust it is essential that robotic prosthesis
+    controllers not only admit, but leverage the inherent dynamics of walking.
+    Therefore, the required control paradigm cannot follow strategies often used
+    for humanoid locomotion (for example on Honda's Asimo Robot
+    \cref{fig:asimo}) that employ position control in order to track preplanned,
+    statically-stable gaits. Rather, the control strategy should interact
+    dynamically with the amputee by governing interaction forces instead of
+    mandating kinematic objectives.
+
+    \item[Challenge 2: We have incomplete state information]
+
+    An additional difference between robotic prosthesis control and controls
+    often used on humanoid walking robots stems from the lack of full state
+    information. In humanoid walking controllers such as those used in the DARPA
+    robotics challenge, controllers use the full state information to
+    plan and track a trajectory for robot's center of mass, thereby
+    ensuring stability of the full system \citep{feng2015optimization,
+    kuindersma2014efficiently, englsberger2014trajectory}.
+    
+    Unlike a humanoid robot control scenario in which we know the positions,
+    velocities, and forces applied to every joint and the center of mass, for
+    prosthesis control we typically only know the state of the prosthesis
+    itself. It is unreasonable to expect that amputees will don full body
+    sensing suits in order to provide a complete picture of the state of the
+    amputee-prosthesis system. Therefore, prosthesis controllers must be
+    decentralized, meaning joint torque commands are computed using only a
+    subset of the full state. A side affect of this approach is a loss of formal
+    stability guarantees. However, we can still evaluate amputee stability
+    empirically.
+
+    \item[Challenge 3: Amputees are unique]
+    
+    Finally, we should be able to adapt robotic prosthesis controllers to each
+    amputees individual's needs. The variation in amputee needs arise from a
+    number of factors including but not limited to the amputee's height, weight,
+    strength, endurance, reason for amputation, time since amputation, 
+    experience, and personal preferences. Consequently, prostheses and
+    controllers should be optimized to suit individual users.
+\end{description}
+
+\begin{fullwidth}
+\emph{This thesis proposes decentralized, dynamic control methods for
+transfemoral prostheses, along with methods to optimize them for individual
+patients, in order to improve amputee gait robustness and naturalness.}
+\end{fullwidth}
 
 \subsection{Approach}
+
+In this thesis, we seek to improve amputee gait robustness and naturalness by
+employing an alternative approach to joint control in prostheses that seeks to
+mimic the underlying dynamics and control of the human neuromuscular system. In
+this approach, instead of replicating recorded torque profiles with impedance
+functions, we model the dynamical system, consisting of virtual muscles and
+local reflex feedback pathways, that generate joint torques during locomotion.
+Crucially, the resulting prosthesis control is decentralized, as the reflex
+feedback are designed to rely only on the state of other muscles in the same
+leg. Additionally, it is dynamic, as the virtual muscles integrate the sensed
+kinematic state of the prosthesis in order to generate desired torques at the
+joints. These torques, along with the reaction forces in the amputee's socket
+and on the ground shape the motion of the amputee-prosthesis system.
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{muscle ankle}
+    \caption{\citet{eilenberg2010control} simulate virtual muscles in
+    order to control an ankle prosthesis.}
+    \label{fig:eilenberg_muscle}
+\end{marginfigure}
+
+Prior work on neuromuscular models shows that they can lead to robust and
+natural-looking gaits when used to control simulated bipeds. For example, using
+a neuromuscular model, an optimized simulated biped model walked on unseen,
+uneven terrain with sudden drops and steps up to 14 centimeters
+\citep{song2015neural}. In addition, \citet{eilenberg2010control} successfully
+applied the neuromuscular control approach to a powered ankle prosthesis
+(\cref{fig:eilenberg_muscle}), which mimics the kinematics and kinetics of the
+ankle joint in human walking including its adaptation to sloped environments. It
+remains unclear, however, whether we can extend the approach to transfemoral
+prostheses with both knee and ankle joints.
+
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{prosthesis}
+    \caption{Proposed SEA prosthesis design}
+    \label{fig:prosthesis_design}
+\end{marginfigure}
+
+To test this control approach, we will first design and build custom
+transfemoral prosthesis hardware. Two important features the prosthesis must have
+are the ability to produce enough torque and speed to enable trip recovery and
+the ability to faithfully reproduce the desired joint torques commanded by the
+neuromuscular model. To achieve these goals, we employ series-elastic
+actuation~\cite{} in the proposed design (\cref{fig:prosthesis_design}), which
+allows for precise control of joint torque. Furthermore, series elastic
+actuators also help protect the prosthesis from the impact loads it will
+experience during trip recovery experiments. 
+
+Next, to motivate our specific choice of neuromuscular control for improving
+amputee gait stability, we construct a simulation of the amputee-prosthesis
+system and compare the gait robustness achieved by neuromuscular control versus
+the established impedance control method.
+
+To address the challenge of optimizing prosthesis controls for specific subjects
+we develop a new optimization technique called Predictive Entropy Search with
+Preferences. The method utilizes user feedback in the form of preferences
+between pairs of parameters in order to circumvent having to define an explicit
+reward function and uses Bayesian optimization techniques in order to
+efficiently find the optimum control parameters. 
+
+Finally, in order to further improve the capability of the transfemoral
+prosthesis to respond to trips, we seek to use imitation learning techniques
+\citep{argall2009survey}, in order to allow the prosthesis to mimic observed
+trip recovery strategies employed after disturbances to the swing leg.
+
 \section{Expected Contributions}
+
+Work presented in this thesis will advance the state-of-the-art for robotic
+transfemoral prosthesis control and optimization. There are three main expected 
+contributions: 
+
+\begin{description}
+    \item[Contribution 1]
+\end{description}
 
 \begin{enumerate}
     \item Significance of problem
