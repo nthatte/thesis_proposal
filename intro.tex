@@ -273,23 +273,15 @@ ankle joint in human walking including its adaptation to sloped environments. It
 remains unclear, however, whether we can extend the approach to transfemoral
 prostheses with both knee and ankle joints.
 
-\begin{marginfigure}
-    \centering
-    %\includegraphics{}
-    \missingfigure{prosthesis}
-    \caption{Proposed SEA prosthesis design}
-    \label{fig:prosthesis_design}
-\end{marginfigure}
-
 To test this control approach, we will first design and build custom
-transfemoral prosthesis hardware. Two important features the prosthesis must have
-are the ability to produce enough torque and speed to enable trip recovery and
-the ability to faithfully reproduce the desired joint torques commanded by the
-neuromuscular model. To achieve these goals, we employ series-elastic
-actuation~\cite{} in the proposed design (\cref{fig:prosthesis_design}), which
-allows for precise control of joint torque. Furthermore, series elastic
-actuators also help protect the prosthesis from the impact loads it will
-experience during trip recovery experiments. 
+transfemoral prosthesis hardware. Two important features the prosthesis must
+have are the ability to produce enough torque and speed to enable trip recovery
+and the ability to faithfully reproduce the desired joint torques commanded by
+the neuromuscular model. To achieve these goals, we employ series-elastic
+actuation~\citep{pratt1995series} in the proposed design
+(\cref{fig:prosthesis_design}), which allows for precise control of joint
+torque. Furthermore, series elastic actuators also help protect the prosthesis
+from the impact loads it will experience during trip recovery experiments. 
 
 Next, to motivate our specific choice of neuromuscular control for improving
 amputee gait stability, we construct a simulation of the amputee-prosthesis
@@ -297,13 +289,15 @@ system and compare the gait robustness achieved by neuromuscular control versus
 the established impedance control method.
 
 To address the challenge of optimizing prosthesis controls for specific subjects
-we develop a new optimization technique called Predictive Entropy Search with
-Preferences. The method utilizes user feedback in the form of preferences
-between pairs of parameters in order to circumvent having to define an explicit
-reward function and uses Bayesian optimization techniques in order to
-efficiently find the optimum control parameters. 
+we develop an algorithm that uses preference feedback from the amputee to
+optimize the prosthesis control parameters. We test the method first by
+optimizing synthetic reward functions of increasing relevance and by optimizing
+neuromuscular control parameters for intact users wearing the prosthesis through
+an amputee emulator brace. Finally, we use the method to optimize the control
+parameters for a specific amputee wearing and evaluate the resulting prosthesis
+control performance relative to the amputee's prescribed prosthesis.
 
-Finally, in order to further improve the capability of the transfemoral
+Lastly, in order to further improve the capability of the transfemoral
 prosthesis to respond to trips, we seek to use imitation learning techniques
 \citep{argall2009survey}, in order to allow the prosthesis to mimic observed
 trip recovery strategies employed after disturbances to the swing leg.
@@ -315,7 +309,34 @@ transfemoral prosthesis control and optimization. There are three main expected
 contributions: 
 
 \begin{description}
-    \item[Contribution 1]
+    \item[Contribution 1: series elastic prosthesis design] We present the
+    design of a transfemoral prosthesis featuring series elastic actuators
+    (SEAs) capable of accurately producing the torques commanded by the
+    neuromuscular model, generating enough torque and speed to enable trip
+    recovery experiments, and handling the impact loads expected during trip
+    recovery experiments. We have made significant progress towards this
+    contribution already by completing the design, manufacturing, assembly, and
+    initial testing of the prosthesis' knee joint as well as the design and
+    fabrication of its ankle joint. \Cref{fig:prosthesis_design} shows the
+    current stage of the prosthesis prototype with the completed SEA knee and a
+    passive spring-loaded ankle well as a CAD render of the expected completed
+    prosthesis design.
+    \begin{marginfigure}
+        \centering
+        %\includegraphics{}
+        \missingfigure{prosthesis}
+        \caption{Proposed SEA prosthesis design}
+        \label{fig:prosthesis_design}
+    \end{marginfigure}
+
+    \item[Contribution 2: evaluation of neuromuscular transfemoral prosthesis control]
+    test
+
+    \item[Contribution 3: method for optimizing prostheses via preferences]
+    test
+
+    \item[Contribution 4: learning and evaluation of a trip recovery policy]
+    test
 \end{description}
 
 \begin{enumerate}
