@@ -171,7 +171,7 @@ resetting to synchronize the amputee and CPG dynamics.
 
 For active prostheses, \citet{geng2012design} suggest using a Hopf oscillators
 to fit the trajectory of the knee angle during walking. \citet{guo2010study}
-extend the iea of using a CPG for active prosthesis control by proposing a a
+extend the idea of using a CPG for active prosthesis control by proposing a
 hierarchical approach with a support vector machine (SVM) at the high-level
 inferring amputee intent from EMG signals, and a CPG at the lower-level
 determining the desired knee and ankle angles for an active transfemoral
@@ -179,7 +179,7 @@ prosthesis. However, in both cases, the authors do not provide experimental
 results on real prosthesis hardware. Moreover, unlike in
 \citeauthor{taga1991self}'s original work, these proposed CPG networks for
 prostheses generate desired joint kinematics instead of torques. Consequently,
-these controllers may not allow prostheses to exhibit the dynamicism and
+these controllers may not allow prostheses to exhibit the dynamism and
 compliance we desire.
 
 \begin{comment}
@@ -196,41 +196,60 @@ locomotion in simulation.
 \end{comment}
 
 \subsubsection{Reflexes}
-Reflexes represent an alternative mechanism for generating cyclic
-neural signals. Arround the same time \citeauthor{brown1911intrinsic} was
-putting forth the idea of central pattern generators,
-\citeauthor{sherrington1910integrative} suggested the existance of chains of
-reflexes triggering cyclical nerual signals \citep{sherrington1910integrative,
-sherrington1910flexion}.
+Around the same time \citeauthor{brown1911intrinsic} hypothesized the existence
+of central pattern generators, \citet{sherrington1910integrative,
+sherrington1910flexion} suggested another mechanism for oscillatory neural
+signals: chains of reflexes that trigger in response and entrain to sensory
+signals. \citeauthor{sherrington1910integrative} identified complex,
+multi-joint, multi-limb reflex arcs involving both excitation and inhibition in
+response to cutaneous stimulation in decerebrated cats. Moreover, he observed
+rhythmic stepping behavior in decerebrated cats suspended off the ground and
+concluded that the behavior emerged reflexively based on proprioceptive signals
+emanating from the muscles themselves.
 
-Reflexes may play an increased role in biped locomotion in order to
-stabilize the inherently unstable dynamics of upright walking
-\citep{capaday2002special}. Interestingly, wheras we often consider bioinspired
-robotics, in this case we can refer to robotics to learn about biology: in the
-previously discussed experiments on humanoid robots controlled by CPGs, a
-significant reduction in robustness was obsereved after blocking sensory
-feedback pathways~\citep{endo2005experimental, righetti2006programmable}
-indicating CPGs alone cannot explain bipedal locomotion. Moreover, biological
-experiments on humans and primates reveal the role of CPGs is much less clear
-than for decerebrate cats and simpler vertebrate animals
-\citep{mackay2002central, vaughan2003theories, nielsen2003we}. For example,
-while rhythmic spinal activity has been observed in humans, it is not clear of
-the neural signals are an exapmle of autonomous fictive motion, indicitive of a
-CPG, or entrainment with stretch reflexes in leg muscles
-\citep{capaday2002special, stewart1991modulation}. 
-
-Even in animal experiments discussed earlier, while CPGs can go a long way to
-explaining locomotion neural activity, they still do not fullly explain all
+In animal experiments discussed earlier, while CPGs can go a long way towards
+explaining locomotion neural activity, they still do not fully explain all
 observed phenomena. Reflexes or local feedback loops, likely at least shape
 locomotion activation patterns through entrainment, for example in Lamprey's
 movement of the tail generates activation in the spinal chord of equal frequency
 \citep{mcclellan1993mechanosensory} and phase resetting, as demonstrated by the
 ability of decerebrated cats to walk on treadmills across a range of speeds
 \citep{rossignol2000locomotion}.
-                    
-On the other hand, recent simulation models suggest that bipedal locomotion can
-arise via reflexs only. 
 
+For human and primate bipedal locomotion, the roll of CPGs is more muddied and
+the roll of reflexes more evident than for decerebrated cats and simpler
+vertebrate animals \citep{mackay2002central, vaughan2003theories,
+nielsen2003we}. This is perhaps due to the demands of controlling the inherently
+unstable dynamics of upright walking \citep{capaday2002special}. For example,
+while rhythmic spinal activity has been observed in humans, it is not clear if
+the neural signals are an example of autonomous fictive motion, indicative of a
+CPG, or entrainment with stretch reflexes in leg muscles
+\citep{capaday2002special, stewart1991modulation}. In this case, we can also
+look to robotics to provide insight about biology: in the previously discussed
+experiments on humanoid robots controlled by CPGs, a significant reduction in
+robustness was observed after blocking sensory feedback pathways
+\citep{endo2005experimental, righetti2006programmable} indicating CPGs alone may
+not fully explain bipedal locomotion. Whereas research has not yet clearly
+established the presence of a CPG driving human locomotion, research has
+identified many reflexes that contribute to locomotion such as the Hoffman
+reflex (H-reflex) of the soleus ankle plantarflexor muscle
+\citep{capaday1987difference}, stretch reflex in the soleus
+\citep{yang1991contribution}, soleus force feedback \citep{grey2007positive},
+and cutaneous reflexes that induce withdrawal responses \citep{yang1990phase}. 
+
+To model the potential interplay between muscular reflexes and CPGs in human
+locomotion \citet{ogihara2001generation} and extend the model presented in
+\citet{taga1991self} by adding muscles stimulated by alpha motor neurons.  This
+model simulates nine muscles of the leg, each stimulated by an alpha motor
+neuron that receives input from a CPG oscillator and feedback from
+proprioceptive sensors on the muscles.
+
+Whereas models have robot experiments have shown reflexes are vital for
+maintaining bipedal gait stability, the came cannot be said about CPGs. In fact,
+as shown by \citet{}, it is possible to achieve robust and human-like bipedal
+locomotion using only reflexes.
+
+Reflexes in robotics and prosthetics.
 
 \section{Neuromuscular Model}
 
