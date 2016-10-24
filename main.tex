@@ -16,6 +16,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass{tufte-book}
 
+%\makeatletter
+%\renewcommand{\subsubsection}{\ttl@straightclass{subsubsection}}
+%\makeatother
+%\titleformat{\subsubsection}[hang]
+%    {\tiny\itfamily}
+%    {\thesubsubsection}
+%    {1em}
+%    {}
+%    []
+
+\makeatletter
+\renewcommand{\subsubsection}{\ttl@straightclass{subsubsection}}
+\makeatother
+\titleformat{\subsubsection}[hang]
+  {\em}
+  {\thesubsubsection}
+  {1em}
+  {}
+  []
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
 %\hypersetup{colorlinks}% uncomment this line if you prefer colored hyperlinks (e.g., for onscreen viewing)
 
 
@@ -35,7 +57,7 @@
 % For graphics / images
 \usepackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
-\graphicspath{{graphics/}}
+\graphicspath{{./figures/}}
 
 % The fancyvrb package lets us customize the formatting of verbatim
 % environments.  We use a slightly smaller font.
@@ -186,6 +208,7 @@ for Tansfemoral Prostheses}
 % Start the main matter (normal chapters)
 \mainmatter
 \input{intro}
+\input{background}
 % The back matter contains appendices, bibliographies, indices, glossaries, etc.
 
 \backmatter
