@@ -238,17 +238,56 @@ reflex (H-reflex) of the soleus ankle plantarflexor muscle
 and cutaneous reflexes that induce withdrawal responses \citep{yang1990phase}. 
 
 To model the potential interplay between muscular reflexes and CPGs in human
-locomotion \citet{ogihara2001generation} and extend the model presented in
-\citet{taga1991self} by adding muscles stimulated by alpha motor neurons.  This
+locomotion \citet{ogihara2001generation} extend the model presented in
+\citet{taga1991self} by adding muscles stimulated by alpha motor neurons. This
 model simulates nine muscles of the leg, each stimulated by an alpha motor
-neuron that receives input from a CPG oscillator and feedback from
-proprioceptive sensors on the muscles.
+neuron that receives input from a CPG oscillator and proprioceptive feedback
+from one or more muscles. The muscles produce forces according to their state
+and activation input (computed using models presented in
+\citet{pierrynowski1985physiological} and \citet{davy1987dynamic}). These forces
+are applied to constant moment arms in order to produce joint torques summed
+about joints. The authors optimize the cost of transport of transport of them
+model with a genetic algoritm and achieve a gait with human-like kinematics,
+kinetics. Moreover, the forces produced by many of the muscles resemble those
+produce during human locomotion. Desipite the fact that the CPG used in this
+model received no feedback signals, the resultant gait still exhibited a small
+degree of robustness to pertubations although not as much as
+\citeauthor{taga1991self}'s model. The author's attribute the robustness to the
+stabilizing feedback provided by muscle reflexes. 
 
-Whereas models have robot experiments have shown reflexes are vital for
-maintaining bipedal gait stability, the came cannot be said about CPGs. In fact,
-as shown by \citet{}, it is possible to achieve robust and human-like bipedal
-locomotion using only reflexes.
+Whereas models and robot experiments show reflexes are vital for maintaining
+bipedal gait stability, the same cannot be said about CPGs. In fact, as shown by
+\citet{geyer2010muscle}, it is possible to simulate robust and human-like
+bipedal locomotion using only reflexes. This work, employs a neuromuscular
+model, similar to that used in \citet{ogihara2001generation}, but does away with
+the feed forward CPG stimulations sent to alpha motor neurons. Instead,
+\citeauthor{geyer2010muscle} hypothesize the existence of several force and
+length muscle reflexes that seek to implement three key aspects of bipedal
+locmotion: compliant leg behavior, preventing joint over extension, and trunk
+stabilization. The gait achieved by this model is more robust and more
+accurately reporoduces kinematics, kinetics, and ground reaction forces seen in
+human walking than \citeauthor{ogihara2001generation}'s model and produces
+human-like stimulations for many of its muscles.
 
+While we cannot say based on this result alone that CPGs do not play an
+important role in human locomotion, the fact that human locomotion can emerge
+from purely reflexive controls increases the attractiveness of this approach for
+robotics. This is because the reflex-only paradigm may be easier to design and
+optimzize than the CPG+reflex paradigm for two reasons: First, first the reflex
+connection graph used by \citet{geyer2010muscle}'s reflex-only model is
+much more sparse than that used by \citet{ogihara2001generation} CPG+reflex
+model. Using a sparse set of reflexs and no CPG reduces the number of parameters
+that we must tune in order to achieve locomotion. Second, the reflexes in the
+reflex-only model are functionally motivated, which may increase our intuition
+about the role of each reflex and assist our ability to tune the model's
+parameters. This is evidenced by the fact that \citeauthor{geyer2010muscle} hand
+tuned the parameters of their model whereas \citeauthor{ogihara2001generation}
+used a genetic algorithm. Moreover, functionally motivated feedbacks used in the
+reflex-only approach has allowed further research to extend this model to
+include swing leg placement \citep{desai2013muscle}, 3D locomotion, running,
+speed changes, stair and slope negotiation, turning, and obstacle avoidance
+\citep{song2015neural}.  
+ 
 Reflexes in robotics and prosthetics.
 
 \section{Neuromuscular Model}
