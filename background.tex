@@ -1,75 +1,76 @@
 \chapter{Background}
 
-\section{Fundamental Walking Dynamics}
-\subsection{Rimless wheel}
-\subsection{Inverted Pendulum}
-\subsection{Bipedal Spring Mass}
+\section{Fundamental Walking Dynamics and Control}
+\subsection{Simple Models}
+\subsubsection{Rimless wheel}
+\subsubsection{Inverted Pendulum}
+\subsubsection{Bipedal Spring Mass}
 
-\section{Walking Controls}
-
+\subsection{Walking Controllers}
 Shaping walking Dynamics through control
-\subsection{Kinematic Centralized Controllers}
+
+\subsubsection{Kinematic Centralized Controllers}
 
 These approaches are usually model based and try to force the full system to
 behave like a lower dimensional system. We can derive provably stable
 controllers for lower order systems so if full order system behaves like lower
 order system it will not fall.
 
+\begin{itemize}
+    \item ZMP preview control - forces robot to follow kinematics of lipm
+    model
+\end{itemize}
 
-    \begin{itemize}
-        \item ZMP preview control - forces robot to follow kinematics of lipm
-        model
-    \end{itemize}
+\subsubsection{Dynamic Centralized Controllers}
+Force control allows robots to be compliant to external disturbances.
 
-\subsection{Dynamic Centralized Controllers}
-    Force control allows robots to be compliant to external disturbances.
-
-    \begin{itemize}
-        \item Model reduction approaches:        
+\begin{itemize}
+    \item Model reduction approaches:        
+        \begin{itemize}
+            \item DRC  QP controllers force robots to follow dynamics of
+                point mass systems
             \begin{itemize}
-                \item DRC  QP controllers force robots to follow dynamics of
-                    point mass systems
-                \begin{itemize}
-                    \item Gaits are still statically stable
-                    \item dynamic in the sense that these controllers command forces
-                        not kinematics
-                \end{itemize}
-
-
-                \item Spring mass model similar to previous approaches but force
-                the robot to follow the dynamics of spring mass model
-
-                \item Hybrid zero dynamics for full robots reduce dynamics to
-                those of a single degree of freedom theo jansen walker
+                \item Gaits are still statically stable
+                \item dynamic in the sense that these controllers command forces
+                    not kinematics
             \end{itemize}
 
-        \item Heuristic Centralized/dynamic approaches
-        \begin{itemize}
-            \item Neural Network Dog controller - high level centralized neural
-            network for commanding parameters of decentralized lower-level
-            impedance controllers
+
+            \item Spring mass model similar to previous approaches but force
+            the robot to follow the dynamics of spring mass model
+
+            \item Hybrid zero dynamics for full robots reduce dynamics to
+            those of a single degree of freedom theo jansen walker
         \end{itemize}
+
+    \item Heuristic Centralized/dynamic approaches
+    \begin{itemize}
+        \item Neural Network Dog controller - high level centralized neural
+        network for commanding parameters of decentralized lower-level
+        impedance controllers
     \end{itemize}
+\end{itemize}
 
 Centralized controllers rely heavily on models causes two problems
 \begin{enumerate}
-    \item QPs and inverse dynamics result in unnatural, inneficient gaits to avoid
-    singularity which causes
-    \item Its unlikely we can model the diverse population of amputees in order
-    to derive centralized controllers that consider the joint amputee/prosthesis
-    dynamics.
+\item QPs and inverse dynamics result in unnatural, inneficient gaits to avoid
+singularity which causes
+\item Its unlikely we can model the diverse population of amputees in order
+to derive centralized controllers that consider the joint amputee/prosthesis
+dynamics.
 \end{enumerate}
 This motivates alternative heuristic decentralized controllers.
 
-
-\subsection{Kinematic Decentralized Controllers}
+\subsubsection{Kinematic Decentralized Controllers}
     \begin{itemize}
         \item echo control
     \end{itemize}
-\subsection{Dynamic Decentralized Controllers}
+\subsubsection{Dynamic Decentralized Controllers}
     \begin{itemize}
         \item raibert - motivation for landing leg angles
         \item virtual model control
+        \item simbicon
+        \item bioinspired controllers
 
         \item Applicable to prostheses
         \begin{itemize}
@@ -94,7 +95,8 @@ This motivates alternative heuristic decentralized controllers.
         \end{itemize}
    \end{itemize}
 
-\subsubsection{Central Pattern Generators}
+\section{Dynamic Decentralized Control for Prostheses}
+\subsection{Central Pattern Generators}
 Central Pattern Generators (CPGs) are hypothesized nonlinear
 oscillators, comprised of neurons in the central nervous system, that can
 autonomously generate periodic neural activation
@@ -195,7 +197,7 @@ the role of interconnections between pools of neurons
 locomotion in simulation. 
 \end{comment}
 
-\subsubsection{Reflexes}
+\subsection{Reflexes}
 Around the same time \citeauthor{brown1911intrinsic} hypothesized the existence
 of central pattern generators, \citet{sherrington1910integrative,
 sherrington1910flexion} suggested another mechanism for oscillatory neural
@@ -290,39 +292,16 @@ speed changes, stair and slope negotiation, turning, and obstacle avoidance
  
 Reflexes in robotics and prosthetics.
 
-\section{Neuromuscular Model}
 
-\subsection{Hill muscle models}
-\subsection{Hypothesized Reflexes}
-\subsection{Swing Leg Control}
-\subsection{Previous results}
-\subsubsection{Biped simulations}
-    \begin{itemize}
-        \item Neuromuscular models replicate characteristics of human walking
-        \begin{itemize}
-            \item kinematics
-            \item emg
-            \item kinetics
-            \item robust
-        \end{itemize}
+\section{Prosthesis Design}
 
-        \item have been used in animation
-    \end{itemize}
+\subsection{Design of Walking Machines}
 
-\subsubsection{prostheses}
-    Has been used in Ankle prosthesis and showed automatic adaptations to slopes
-    unlike impedance control which needed retuning
-
-
-\section{Design of Dynamic Walking Machines}
-
-\subsection{Early Hopping Robots}
-\subsubsection{CMU hydraulic six legged}
-\subsubsection{Raibert's machines}
-
-\subsection{Bipedal Robots}
-\subsubsection{Mabel}
-\subsubsection{Atrias}
+\subsubsection{Bipedal Robots}
+\begin{description}
+    \item[MIT Cheetah]
+    \item[Atrias]
+\end{description}
 
 \subsection{Prostheses}
 \subsubsection{Vanderbilt's prostheses}
