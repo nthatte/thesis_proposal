@@ -142,7 +142,7 @@ mechanically-passive prostheses.
 \end{marginfigure}
 
 
-\subsection{Challenges in Transfemoral Prosthesis Control}
+\subsection{Challenges in Transfemoral Prosthesis Control}\label{sec:challenges}
 It still remains an open research question how best to control these prostheses
 to achieve natural and robust gaits. In the most established control method for
 powered prostheses, the prosthesis uses simple impedance functions to
@@ -162,83 +162,79 @@ environments thereby improving amputee gait robustness. Formulating a robotic
 prosthesis controller to accomplish this goal requires we address three main
 challenges:
 
-\begin{description}
-    \item[Challenge 1: Human locomotion is a dynamic task] 
-    \begin{marginfigure}
-        \centering
-        %\includegraphics{}
-        \missingfigure{passive dynamic walker}
-        \caption{A passive dynamic walker walks down hill with no internal
-        actuation highlighting the role of natural dynamics in walking.}
-        \label{fig:passive_dynamic_walker}
-    \end{marginfigure}
-    
-    Human locomotion is characterized by dynamic interaction with the
-    environment \citep{mcgeer_1992}. During stance, the leg acts in a compliant,
-    spring-like manner \citep{geyer2006compliant} and significant time is spent
-    in statically-unstable contact on the heel or toe, suggesting the importance
-    of mechanical stability achieved via foot placement \citep{perry1992gait}.
-    During swing, ballistic motion explains much of the leg trajectory
-    \citep{mochon1980ballistic}. Indeed, much of the entire gait cycle can be
-    explained via passive dynamics as evidenced by passive-dynamic walkers
-    (\cref{fig:passive_dynamic_walker}) that can stably walk down slight
-    inclines with no onboard power source~\citep{mcgeer1990passive,
-    collins2005efficient}.
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{passive dynamic walker}
+    \caption{A passive dynamic walker walks down hill with no internal
+    actuation highlighting the role of natural dynamics in walking.}
+    \label{fig:passive_dynamic_walker}
+\end{marginfigure}
 
-    \begin{marginfigure}
-        \centering
-        %\includegraphics{}
-        \missingfigure{Rheo Knee}
-        \caption{Honda's Asimo Robot uses position control and statically
-        stable gaits.}
-        \label{fig:asimo}
-    \end{marginfigure}
+\paragraph{Challenge 1: Human locomotion is a dynamic task}
+Human locomotion is characterized by dynamic interaction with the
+environment \citep{mcgeer_1992}. During stance, the leg acts in a compliant,
+spring-like manner \citep{geyer2006compliant} and significant time is spent
+in statically-unstable contact on the heel or toe, suggesting the importance
+of mechanical stability achieved via foot placement \citep{perry1992gait}.
+During swing, ballistic motion explains much of the leg trajectory
+\citep{mochon1980ballistic}. Indeed, much of the entire gait cycle can be
+explained via passive dynamics as evidenced by passive-dynamic walkers
+(\cref{fig:passive_dynamic_walker}) that can stably walk down slight
+inclines with no onboard power source~\citep{mcgeer1990passive,
+collins2005efficient}.
 
-    Consequently, in order to ensure that amputee gaits are natural and
-    efficient, but still robust, it is essential that robotic prosthesis
-    controllers not only admit, but leverage the inherent dynamics of walking.
-    Therefore, the required control paradigm cannot follow strategies often used
-    for humanoid locomotion (for example on Honda's Asimo Robot
-    \cref{fig:asimo}) that employ position control in order to track preplanned,
-    statically-stable gaits. Rather, the control strategy should interact
-    dynamically with the amputee by governing interaction forces instead of
-    mandating kinematic objectives.
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{Rheo Knee}
+    \caption{Honda's Asimo Robot uses position control and statically
+    stable gaits.}
+    \label{fig:asimo}
+\end{marginfigure}
 
-    \item[Challenge 2: We have incomplete state information]
+Consequently, in order to ensure that amputee gaits are natural and efficient,
+but still robust, it is essential that robotic prosthesis controllers not only
+admit, but leverage the inherent dynamics of walking.  Therefore, the required
+control paradigm cannot follow strategies often used for humanoid locomotion
+(for example on Honda's Asimo Robot \cref{fig:asimo}) that employ position
+control in order to track preplanned, statically-stable gaits. Rather, the
+control strategy should interact dynamically with the amputee by governing
+interaction forces instead of mandating kinematic objectives.
 
-    An additional difference between robotic prosthesis control and controls
-    often used on humanoid walking robots stems from the lack of full state
-    information. Humanoid walking controllers such as those used in the DARPA
-    robotics challenge (DRC), controllers use the full state of the robot (\ie the
-    positions and velocities of every joint and the robot's center of mass), to
-    plan and track a trajectories, thereby ensuring stability of the full system
-    \citep{feng2015optimization, kuindersma2014efficiently,
-    englsberger2014trajectory}.
-    
-    While these recent approaches used in the DRC are dynamic and therefore
-    address challenge 1, for prosthesis control we typically only know the state
-    of the prosthesis itself. It is unreasonable to expect that amputees will
-    don full body sensing suits in order to provide a complete picture of the
-    state of the amputee-prosthesis system. Therefore, prosthesis controllers
-    must be decentralized, meaning joint torque commands are computed using only
-    a subset of the full state. A side affect of this approach is a loss of
-    formal stability guarantees. However, we can still evaluate amputee
-    stability empirically.
+\paragraph{Challenge 2: We have incomplete state information}
 
-    \item[Challenge 3: Amputees are unique]
-    
-    Finally, we should be able to adapt robotic prosthesis controllers to each
-    amputees individual's needs. The variation in amputee needs arise from a
-    number of factors including but not limited to the amputee's height, weight,
-    strength, endurance, reason for amputation, time since amputation, 
-    experience, and personal preferences. Consequently, prostheses and
-    controllers should be optimized to suit individual users.
-\end{description}
+An additional difference between robotic prosthesis control and controls often
+used on humanoid walking robots stems from the lack of full state information.
+Humanoid walking controllers such as those used in the DARPA robotics challenge
+(DRC), controllers use the full state of the robot (\ie the positions and
+velocities of every joint and the robot's center of mass), to plan and track a
+trajectories, thereby ensuring stability of the full system
+\citep{feng2015optimization, kuindersma2014efficiently,
+englsberger2014trajectory}.
 
-\begin{fullwidth}
-\emph{This thesis proposes decentralized, dynamic control methods for
-transfemoral prostheses, along with methods to optimize them for individual
-amputees, in order to improve gait robustness and naturalness.}
+While these recent approaches used in the DRC are dynamic and therefore address
+challenge 1, for prosthesis control we typically only know the state of the
+prosthesis itself. It is unreasonable to expect that amputees will don full body
+sensing suits in order to provide a complete picture of the state of the
+amputee-prosthesis system. Therefore, prosthesis controllers must be
+decentralized, meaning joint torque commands are computed using only a subset of
+the full state. A side affect of this approach is a loss of formal stability
+guarantees. However, we can still evaluate amputee stability empirically.
+
+\paragraph{Challenge 3: Amputees are unique}
+
+Finally, we should be able to adapt robotic prosthesis controllers to each
+amputees individual's needs. The variation in amputee needs arise from a number
+of factors including but not limited to the amputee's height, weight, strength,
+endurance, reason for amputation, time since amputation, experience, and
+personal preferences. Consequently, prostheses and controllers should be
+optimized to suit individual users.
+
+\vspace{2ex}
+\begin{fullwidth} \emph{This thesis proposes decentralized, dynamic control
+methods for transfemoral prostheses, along with methods to optimize them for
+individual amputees, in order to improve gait robustness and naturalness.}
 \end{fullwidth}
 
 \subsection{Approach}
@@ -350,51 +346,46 @@ Work presented in this thesis will advance the state-of-the-art for robotic
 transfemoral prosthesis control and optimization. There are four main expected 
 contributions: 
 
-\begin{description}
-    \begin{marginfigure}
-        \centering
-        %\includegraphics{}
-        \missingfigure{prosthesis}
-        \caption{Proposed SEA prosthesis design}
-        \label{fig:prosthesis_design}
-    \end{marginfigure}
-    \item[Contribution 1: A series elastic prosthesis design] We present the
-    design of a transfemoral prosthesis featuring series elastic actuators
-    (SEAs) capable of accurately producing the torques commanded by the
-    neuromuscular model, generating enough torque and speed to enable trip
-    recovery experiments, and handling the impact loads expected during trip
-    recovery experiments. We have made significant progress towards this
-    contribution already by completing the design, manufacturing, assembly, and
-    initial testing of the prosthesis' knee joint as well as the design and
-    fabrication of its ankle joint. \Cref{fig:prosthesis_design} shows the
-    current stage of the prosthesis prototype with the completed SEA knee and a
-    passive spring-loaded ankle well as a CAD render of the expected completed
-    prosthesis design.
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{prosthesis}
+    \caption{Proposed SEA prosthesis design}
+    \label{fig:prosthesis_design}
+\end{marginfigure}
+\paragraph{Contribution 1: A series elastic prosthesis design} 
+We present the design of a transfemoral prosthesis featuring series elastic
+actuators (SEAs) capable of accurately producing the torques commanded by the
+neuromuscular model, generating enough torque and speed to enable trip recovery
+experiments, and handling the impact loads expected during trip recovery
+experiments. We have made significant progress towards this contribution already
+by completing the design, manufacturing, assembly, and initial testing of the
+prosthesis' knee joint as well as the design and fabrication of its ankle joint.
+\Cref{fig:prosthesis_design} shows the current stage of the prosthesis prototype
+with the completed SEA knee and a passive spring-loaded ankle well as a CAD
+render of the expected completed prosthesis design.
 
-    \item[Contribution 2: A method for optimizing systems via preferences]
-    We present a new algorithm for optimizing systems, such as prostheses, using
-    user preferences.  The algorithm uses preferences between pairs of control
-    parameters to circumvent having to define or learn an explicit reward
-    function for each user. Additionally, the algorithm employs Bayesian
-    optimization techniques in order to query users for preferences that are
-    expected to maximally reduce the uncertainty of the location of the optimum
-    parameters.
+\paragraph{Contribution 2: A method for optimizing systems via preferences} We
+present a new algorithm for optimizing systems, such as prostheses, using user
+preferences.  The algorithm uses preferences between pairs of control parameters
+to circumvent having to define or learn an explicit reward function for each
+user. Additionally, the algorithm employs Bayesian optimization techniques in
+order to query users for preferences that are expected to maximally reduce the
+uncertainty of the location of the optimum parameters.
 
-    \item[Contribution 3: Evaluation of neuromuscular transfemoral prosthesis
-    control] We will implement the proposed neuromuscular prosthesis control on
-    the SEA transfemoral prosthesis, optimize its parameters according to the
-    amputee subject's preferences, and evaluate the prosthesis' ability to
-    produce a natural and comfortable gait. We will measure gait characteristics
-    in terms of joint kinematics and kinetics and the amputee's metabolic energy
-    consumption. We will present results relative to typical non-amputee gait,
-    the amputee's gait using his or her prescribed prosthesis, and the
-    gait achieved by an unoptimized prosthesis control.
+\paragraph{Contribution 3: Evaluation of neuromuscular transfemoral prosthesis
+control} We will implement the proposed neuromuscular prosthesis control on the
+SEA transfemoral prosthesis, optimize its parameters according to the amputee
+subject's preferences, and evaluate the prosthesis' ability to produce a natural
+and comfortable gait. We will measure gait characteristics in terms of joint
+kinematics and kinetics and the amputee's metabolic energy consumption. We will
+present results relative to typical non-amputee gait, the amputee's gait using
+his or her prescribed prosthesis, and the gait achieved by an unoptimized
+prosthesis control.
 
-    \item[Contribution 4: Learning and evaluation of trip recovery policies] The
-    last contribution is a method to learn and evaluation of trip response
-    policies for recovering from disturbances during swing. The learned policies
-    will advance the state-of-the-art as they will be the first trip recovery
-    policies implemented on real prosthesis hardware, whereas previous policies
-    were trained and tested offline using data collected from healthy human
-    subjects.
-\end{description}
+\paragraph{Contribution 4: Learning and evaluation of trip recovery policies}
+The last contribution is a method to learn and evaluation of trip response
+policies for recovering from disturbances during swing. The learned policies
+will advance the state-of-the-art as they will be the first trip recovery
+policies implemented on real prosthesis hardware, whereas previous policies were
+trained and tested offline using data collected from healthy human subjects.
