@@ -270,7 +270,7 @@ model with a genetic algorithm and achieve a gait with human-like kinematics,
 kinetics. Moreover, the forces produced by many of the muscles resemble those
 produce during human locomotion. Despite the fact that the CPG used in this
 model received no feedback signals, the resultant gait still exhibited a small
-degree of robustness to pertubations although not as much as
+degree of robustness to perturbations although not as much as
 \citeauthor{taga1991self}'s model. The author's attribute the robustness to the
 stabilizing feedback provided by muscle reflexes. 
 
@@ -315,10 +315,14 @@ into target landing angles. The authors optimize this model to achieve a
 combination of robustness and energy efficiency.  The resulting gait can walk on
 terrains featuring random steps up to $\unit[\pm 6]{cm}$ (50 \% success rate)
 and reject pushes in both the forward and backward directions at various points
-in the gait cycle.
+in the gait cycle. In another work, \citet{murai2011neuromuscular} subject a
+neuromuscular model, initially trained to match kinematic data of single
+subject, to impacts during early and late swing. They find the learned model
+exhibits elevating and lowering strategies despite not being explicitly trained
+to do so.
 
 \subsubsection{Reflexes for Prosthesis Control}
-\begin{marginfigure}[3in]
+\begin{marginfigure}
     \centering
     \includegraphics[width=\linewidth]{eilenberg_diagram} \caption{Neuromuscular
     model used by \citet{eilenberg2010control} to control an active ankle
@@ -345,6 +349,19 @@ plantarflexion torque when walking up slopes and less when walking down slopes.
 Additionally, \citet{markowitz2011speed} found that a similar neuromuscular
 reflex model automatically produced more ankle plantarflexion work as the
 amputee increased his gait speed.
+
+\subsubsection{Conclusion of Controls Review} 
+In summary, simulations and implementations of the neuromuscular reflex control
+approach have repeated demonstrated its ability to generalize to a variety of
+situations and exhibit robustness to a variety of disturbances. These two
+properties make this control paradigm very attractive for application to
+transfemoral prostheses due to the gait deficits and fall risk transfemoral
+amputees face. In contrast, other control approaches for prostheses such as
+impedance control have not demonstrated these properties. As yet, there have not
+been any published works applying neuromuscular reflex control to active
+knee and ankle transfemoral prostheses. Therefore, in this thesis, we work
+towards goal with the hope of improving transfemoral amputee gait robustness and
+naturalness.
 
 \section{Prosthesis Design}
 
