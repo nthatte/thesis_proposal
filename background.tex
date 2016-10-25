@@ -97,6 +97,7 @@ This motivates alternative heuristic decentralized controllers.
 
 \section{Bioinspired Control for Prostheses}
 \subsection{Central Pattern Generators}
+\subsubsection{Central Pattern Generators in Biology}
 Central Pattern Generators (CPGs) are hypothesized nonlinear
 oscillators, comprised of neurons in the central nervous system, that can
 autonomously generate periodic neural activation
@@ -135,6 +136,7 @@ an attractive option for robotic legged locomotion controllers as
 decentralization and dimensionality reduction are desirable properties in this
 domain as well.
 
+\subsubsection{Neuromuscular Models with CPGs}
 The seminal work on CPG-based bipedal locomotion control is presented in
 \citet{taga1991self}. In this model, a CPG neural network of six interconnected
 oscillators describes the joint torques applied to a four link biped model.
@@ -153,7 +155,7 @@ nonlinear oscillators along with by bio-inspired feedback pathways that regulate
 ground reaction forces and body roll to generate desired foot trajectories for
 the bipedal QRIO robot. As in \citeauthor{taga1991self}'s simulations walking
 speed can be controlled via adjustment of a single parameter and the robot is
-robust to changes in step height. Authors have also succesfully employed other
+robust to changes in step height. Authors have also successfully employed other
 nonlinear oscillator models. In \citet{shan2002neural}, a Recurrent Neural
 Network generates oscillatory signals for a 20-DOF humanoid robot, HOAP-1, that
 allow it to walk up and down stairs. In \citet{righetti2006programmable},
@@ -161,6 +163,7 @@ programmable ``Hopf'' oscillators \citep{righetti2006dynamic} learn desired
 walking trajectories through entrainment enabling HOAP-2, a 25-DOF robot, to
 walk forwards and backwards at varying speeds and step lengths.  
 
+\subsubsection{CPGs for Prosthesis Control}
 CPGs have also been proposed for controlling both mechanically-passive and
 active lower limb prostheses.  \citet{nandi2009development} optimize CPG
 parameters to fit recorded knee angle trajectories from healthy human subjects.
@@ -198,28 +201,30 @@ locomotion in simulation.
 \end{comment}
 
 \subsection{Reflexes}
+\subsubsection{Reflexes in biology}
 Around the same time \citeauthor{brown1911intrinsic} hypothesized the existence
 of central pattern generators, \citet{sherrington1910integrative,
 sherrington1910flexion} suggested another mechanism for oscillatory neural
-signals: chains of reflexes that trigger in response and entrain to sensory
-signals. \citeauthor{sherrington1910integrative} identified complex,
-multi-joint, multi-limb reflex arcs involving both excitation and inhibition in
-response to cutaneous stimulation in decerebrated cats. Moreover, he observed
-rhythmic stepping behavior in decerebrated cats suspended off the ground and
-concluded that the behavior emerged reflexively based on proprioceptive signals
-emanating from the muscles themselves.
+signals: chains of reflexes, or local feedback loops, that trigger in response
+and entrain to sensory signals. \citeauthor{sherrington1910integrative}
+identified complex, multi-joint, multi-limb reflex arcs involving both
+excitation and inhibition in response to cutaneous stimulation in decerebrated
+cats. Moreover, he observed rhythmic stepping behavior in decerebrated cats
+suspended off the ground and concluded that the behavior emerged reflexively
+based on proprioceptive signals emanating from the muscles themselves and not
+from centrally generated oscillatory signals.
 
 In animal experiments discussed earlier, while CPGs can go a long way towards
 explaining locomotion neural activity, they still do not fully explain all
-observed phenomena. Reflexes or local feedback loops, likely at least shape
-locomotion activation patterns through entrainment, for example in Lamprey's
-movement of the tail generates activation in the spinal chord of equal frequency
+observed phenomena. Reflexes likely at least shape locomotion activation
+patterns through entrainment, for example in Lamprey's movement of the tail
+generates activation in the spinal chord of equal frequency
 \citep{mcclellan1993mechanosensory} and phase resetting, as demonstrated by the
 ability of decerebrated cats to walk on treadmills across a range of speeds
 \citep{rossignol2000locomotion}.
 
-For human and primate bipedal locomotion, the roll of CPGs is more muddied and
-the roll of reflexes more evident than for decerebrated cats and simpler
+For human and primate bipedal locomotion, the role of CPGs is more muddied and
+the role of reflexes more evident than for decerebrated cats and simpler
 vertebrate animals \citep{mackay2002central, vaughan2003theories,
 nielsen2003we}. This is perhaps due to the demands of controlling the inherently
 unstable dynamics of upright walking \citep{capaday2002special}. For example,
@@ -239,6 +244,18 @@ reflex (H-reflex) of the soleus ankle plantarflexor muscle
 \citep{yang1991contribution}, soleus force feedback \citep{grey2007positive},
 and cutaneous reflexes that induce withdrawal responses \citep{yang1990phase}. 
 
+\subsubsection{Neuromuscular Models with Muscular Reflexes}
+\begin{marginfigure}
+    \centering
+    \includegraphics[height=5.5in]{reflex_diagram} 
+    \caption{Neuromuscular models with muscular reflex feedbacks. The model
+    developed by \citet{ogihara2001generation} activates individual muscles
+    according to the activity of a CPG and proprioceptive reflexes that can
+    involve the muscle itself, other muscles, and ground contact sensing.
+    \citet{geyer2010muscle} does away with the CPG and achieves locomotion with
+    only reflex feedbacks.}
+    \label{fig:reflex_diagram}
+\end{marginfigure}
 To model the potential interplay between muscular reflexes and CPGs in human
 locomotion \citet{ogihara2001generation} extend the model presented in
 \citet{taga1991self} by adding muscles stimulated by alpha motor neurons. This
@@ -249,9 +266,9 @@ and activation input (computed using models presented in
 \citet{pierrynowski1985physiological} and \citet{davy1987dynamic}). These forces
 are applied to constant moment arms in order to produce joint torques summed
 about joints. The authors optimize the cost of transport of transport of them
-model with a genetic algoritm and achieve a gait with human-like kinematics,
+model with a genetic algorithm and achieve a gait with human-like kinematics,
 kinetics. Moreover, the forces produced by many of the muscles resemble those
-produce during human locomotion. Desipite the fact that the CPG used in this
+produce during human locomotion. Despite the fact that the CPG used in this
 model received no feedback signals, the resultant gait still exhibited a small
 degree of robustness to pertubations although not as much as
 \citeauthor{taga1991self}'s model. The author's attribute the robustness to the
@@ -265,33 +282,69 @@ model, similar to that used in \citet{ogihara2001generation}, but does away with
 the feed forward CPG stimulations sent to alpha motor neurons. Instead,
 \citeauthor{geyer2010muscle} hypothesize the existence of several force and
 length muscle reflexes that seek to implement three key aspects of bipedal
-locmotion: compliant leg behavior, preventing joint over extension, and trunk
+locomotion: compliant leg behavior, preventing joint over extension, and trunk
 stabilization. The gait achieved by this model is more robust and more
-accurately reporoduces kinematics, kinetics, and ground reaction forces seen in
+accurately reproduces kinematics, kinetics, and ground reaction forces seen in
 human walking than \citeauthor{ogihara2001generation}'s model and produces
 human-like stimulations for many of its muscles.
 
 While we cannot say based on this result alone that CPGs do not play an
 important role in human locomotion, the fact that human locomotion can emerge
-from purely reflexive controls increases the attractiveness of this approach for
-robotics. This is because the reflex-only paradigm may be easier to design and
-optimzize than the CPG+reflex paradigm for two reasons: First, first the reflex
-connection graph used by \citet{geyer2010muscle}'s reflex-only model is
-much more sparse than that used by \citet{ogihara2001generation} CPG+reflex
-model. Using a sparse set of reflexs and no CPG reduces the number of parameters
-that we must tune in order to achieve locomotion. Second, the reflexes in the
-reflex-only model are functionally motivated, which may increase our intuition
-about the role of each reflex and assist our ability to tune the model's
-parameters. This is evidenced by the fact that \citeauthor{geyer2010muscle} hand
-tuned the parameters of their model whereas \citeauthor{ogihara2001generation}
-used a genetic algorithm. Moreover, functionally motivated feedbacks used in the
-reflex-only approach has allowed further research to extend this model to
-include swing leg placement \citep{desai2013muscle}, 3D locomotion, running,
-speed changes, stair and slope negotiation, turning, and obstacle avoidance
-\citep{song2015neural}.  
- 
-Reflexes in robotics and prosthetics.
+from purely reflexive controls increases the attractiveness of using this
+approach for prosthesis control. This is because the reflex-only paradigm may be
+easier to design and optimize than the CPG+reflex paradigm for two reasons:
+First, the reflex connection graph used by \citet{geyer2010muscle}'s reflex-only
+model is much more sparse than that used by \citet{ogihara2001generation}
+CPG+reflex model. Using a sparse set of reflexes and no CPG reduces the number of
+parameters that we must tune in order to achieve locomotion. Second, the
+reflexes in the reflex-only model are functionally motivated, which may increase
+our intuition about the role of each reflex and assist our ability to tune the
+model's parameters. This is evidenced by the fact that
+\citeauthor{geyer2010muscle} hand tuned the parameters of their model whereas
+\citeauthor{ogihara2001generation} used a genetic algorithm.  Moreover,
+functionally motivated feedbacks used in the reflex-only approach has allowed
+further research to extend this model to include swing leg placement
+\citep{desai2013muscle}, 3D locomotion, running, speed changes, stair and slope
+negotiation, turning, and obstacle avoidance \citep{song2015neural}.  
 
+The robustness properties exhibited by neuromuscular control are especially
+relevant to our goal of developing a robust prosthesis control that will help
+transfemoral amputees avoid falls. In \citet{song2015neural} the author's
+improve the model's robustness by incorporating reflexes that place the swing leg
+into target landing angles. The authors optimize this model to achieve a
+combination of robustness and energy efficiency.  The resulting gait can walk on
+terrains featuring random steps up to $\unit[\pm 6]{cm}$ (50 \% success rate)
+and reject pushes in both the forward and backward directions at various points
+in the gait cycle.
+
+\subsubsection{Reflexes for Prosthesis Control}
+\begin{marginfigure}[3in]
+    \centering
+    \includegraphics[width=\linewidth]{eilenberg_diagram} \caption{Neuromuscular
+    model used by \citet{eilenberg2010control} to control an active ankle
+    prosthesis. During stance, a virtual muscle driven by positive force
+    feedback, generates plantarflexion torque. During swing, a virtual spring
+    damper provides dorsiflexion torque to prevent toe scuffing.}
+    \label{fig:eilenberg_diagram}
+\end{marginfigure}
+Motivated by the robustness and natural gait achievable by neuromuscular
+reflex control, past research has applied this model to active prostheses and
+exoskeletons. \citet{eilenberg2010control} applied a simplified version of the
+control to a powered ankle prosthesis (\cref{fig:eilenberg_diagram}). In this
+work, the neuromuscular model was reduced to a single ankle plantarflexor muscle
+driven by a positive force feedback reflex during stance. During swing, the
+control applies torque to dorsiflex the ankle according to a virtual spring
+damper model. In amputee testing of a prosthesis controlled by the neuromuscular
+model the control produced ankle kinematics and kinetics similar to those
+observed in healthy human walking. Significantly,
+\citeauthor{eilenberg2010control} found evidence that the robustness and
+entrainment properties observed in neuromuscular model simulations may carry
+over to amputee gait as well. The author's note that the prosthesis
+automatically adapts torque output when walking on slopes, producing more
+plantarflexion torque when walking up slopes and less when walking down slopes.
+Additionally, \citet{markowitz2011speed} found that a similar neuromuscular
+reflex model automatically produced more ankle plantarflexion work as the
+amputee increased his gait speed.
 
 \section{Prosthesis Design}
 
