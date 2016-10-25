@@ -318,13 +318,6 @@ decentralized control that only uses information from the prosthesis and be
 dynamic and personalized by working with each amputee' innate trip response
 reflexes.
 
-\begin{marginfigure}
-    \centering
-    %\includegraphics{}
-    \missingfigure{push bot}
-    \caption{Push Bot robot for training and evaluating trip recovery policies}
-    \label{fig:push_bot}
-\end{marginfigure}
 Previous work in this area has trained classifiers on data obtained by tripping
 healthy human subjects~\citep{lawson2010stumble, shirota2014recovery}. The
 authors then evaluate these classifiers via cross validation, in which a subset
@@ -343,6 +336,14 @@ testing data to learn and evaluate the trip recovery policies using the Push Bot
 robot (\cref{fig:push_bot}) which can apply tripping forces to subjects via
 actuated tethers.
 
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{push bot}
+    \caption{Push Bot robot for training and evaluating trip recovery policies}
+    \label{fig:push_bot}
+\end{marginfigure}
+
 \section{Expected Contributions}
 
 Work presented in this thesis will advance the state-of-the-art for robotic
@@ -357,7 +358,7 @@ contributions:
         \caption{Proposed SEA prosthesis design}
         \label{fig:prosthesis_design}
     \end{marginfigure}
-    \item[Contribution 1: a series elastic prosthesis design] We present the
+    \item[Contribution 1: A series elastic prosthesis design] We present the
     design of a transfemoral prosthesis featuring series elastic actuators
     (SEAs) capable of accurately producing the torques commanded by the
     neuromuscular model, generating enough torque and speed to enable trip
@@ -370,7 +371,7 @@ contributions:
     passive spring-loaded ankle well as a CAD render of the expected completed
     prosthesis design.
 
-    \item[Contribution 2: a method for optimizing systems via preferences]
+    \item[Contribution 2: A method for optimizing systems via preferences]
     We present a new algorithm for optimizing systems, such as prostheses, using
     user preferences.  The algorithm uses preferences between pairs of control
     parameters to circumvent having to define or learn an explicit reward
@@ -379,7 +380,7 @@ contributions:
     expected to maximally reduce the uncertainty of the location of the optimum
     parameters.
 
-    \item[Contribution 3: evaluation of neuromuscular transfemoral prosthesis
+    \item[Contribution 3: Evaluation of neuromuscular transfemoral prosthesis
     control] We will implement the proposed neuromuscular prosthesis control on
     the SEA transfemoral prosthesis, optimize its parameters according to the
     amputee subject's preferences, and evaluate the prosthesis' ability to
@@ -389,7 +390,7 @@ contributions:
     the amputee's gait using his or her prescribed prosthesis, and the
     gait achieved by an unoptimized prosthesis control.
 
-    \item[Contribution 4: learning and evaluation of trip recovery policies] The
+    \item[Contribution 4: Learning and evaluation of trip recovery policies] The
     last contribution is a method to learn and evaluation of trip response
     policies for recovering from disturbances during swing. The learned policies
     will advance the state-of-the-art as they will be the first trip recovery
