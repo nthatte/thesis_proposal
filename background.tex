@@ -138,7 +138,7 @@ an attractive option for robotic legged locomotion controllers as
 decentralization and dimensionality reduction are desirable properties in this
 domain as well.
 
-\subsubsection{Neuromuscular Models with CPGs}
+\subsubsection{Neuromechanical Models with CPGs}
 The seminal work on CPG-based bipedal locomotion control is presented in
 \citet{taga1991self}. In this model, a CPG neural network of six interconnected
 oscillators describes the joint torques applied to a four link biped model.
@@ -202,8 +202,8 @@ the role of interconnections between pools of neurons
 locomotion in simulation. 
 \end{comment}
 
-\subsection{Reflexes}
-\subsubsection{Reflexes in biology}
+\subsection{Neuromuscular Reflexes}
+\subsubsection{Neuromuscular Reflexes in biology}
 Around the same time \citeauthor{brown1911intrinsic} hypothesized the existence
 of central pattern generators, \citet{sherrington1910integrative,
 sherrington1910flexion} suggested another mechanism for oscillatory neural
@@ -246,16 +246,15 @@ reflex (H-reflex) of the soleus ankle plantarflexor muscle
 \citep{yang1991contribution}, soleus force feedback \citep{grey2007positive},
 and cutaneous reflexes that induce withdrawal responses \citep{yang1990phase}. 
 
-\subsubsection{Neuromuscular Models with Muscular Reflexes}
+\subsubsection{Neuromuscular Models with Reflexes}
 \begin{marginfigure}
     \centering
     \includegraphics[height=5.5in]{reflex_diagram} 
-    \caption{Neuromuscular models with muscular reflex feedbacks. The model
-    developed by \citet{ogihara2001generation} activates individual muscles
-    according to the activity of a CPG and proprioceptive reflexes that can
-    involve the muscle itself, other muscles, and ground contact sensing.
-    \citet{geyer2010muscle} does away with the CPG and achieves locomotion with
-    only reflex feedbacks.}
+    \caption{Neuromuscular models with reflex feedbacks. The model developed by
+    \citet{ogihara2001generation} activates individual muscles according to the
+    activity of a CPG and proprioceptive reflexes that can involve the muscle
+    itself, other muscles, and ground contact sensing.  \citet{geyer2010muscle}
+    does away with the CPG and achieves locomotion with only reflex feedbacks.}
     \label{fig:reflex_diagram}
 \end{marginfigure}
 To model the potential interplay between muscular reflexes and CPGs in human
@@ -323,7 +322,7 @@ subject, to impacts during early and late swing. They find the learned model
 exhibits elevating and lowering strategies despite not being explicitly trained
 to do so.
 
-\subsubsection{Reflexes for Prosthesis Control}
+\subsubsection{Neuromuscular Reflexes for Prosthesis Control}
 \begin{marginfigure}
     \centering
     \includegraphics[width=\linewidth]{eilenberg_diagram} \caption{Neuromuscular
@@ -352,64 +351,138 @@ Additionally, \citet{markowitz2011speed} found that a similar neuromuscular
 reflex model automatically produced more ankle plantarflexion work as the
 amputee increased his gait speed.
 
-\subsubsection{Conclusion of Controls Review} 
+\subsubsection{EMG-based Control}\label{sec:emg_control}
+
+The inclusion of user intent recognition via surface electromyography (EMG)
+signals represents an interesting extension of neuromuscular reflex prosthesis
+control. In these approaches, muscle activity in the residual limb is directly
+measured via EMG sensors embedded in the amputee's prosthesis socket. These EMG
+sensors are then used to control the torque generation of the amputees leg
+prosthesis. Because neuromuscular models describe how joint torque is generated
+in response to muscle activations, a natural approach is to use the EMG signal
+in reflex pathways in order to activate virtual muscles. This is the approach
+proposed by \citet{wu2011electromyography}. In this work,
+\citeauthor{wu2011electromyography} control an active transfemoral prosthesis
+using EMG sensor readings from the residual thigh to activate virtual knee
+flexor and extensor muscles according to a linearised Hill muscle model. The
+resulting prosthesis control allowed an intact subject wearing the prosthesis
+via an able-bodied emulator to achieve nearly normal gait. In a similar
+approach, \citet{wang2013proportional} use EMG signals to modify the gain on a
+positive torque feedback loop (similar to positive force feedback used in
+\citet{geyer2010muscle}) in order to control ankle plantarflexion torque. As
+seen in healthy human walking, toe off angle and ankle net work increased with
+increasing walking speed.
+
+These two works have demonstrated that neuromuscular approaches have enabled EMG
+based control to go beyond its typical application of high-level mode
+recognition. For example, \citet{huang2009strategy, huang2011continuous}, and
+\citet{hargrove2015intuitive} recognize walking modes, such as level ground
+walking, ramp and stair ascent, and ramp and stair descent, by training
+classifiers on features of EMG and mechanical sensor data. In contrast, the EMG
++ neuromuscular approaches allow to use typically noisy EMG sensor data for
+low-level continuous control. \citet{wu2011electromyography} and
+\citet{wang2013proportional} propose that because EMG + neuromuscular approaches
+model physiologically plausible feedback loops and dynamics, they may allow
+amputees to use muscle activations to control their prostheses in an intuitive
+way.
+
+\subsection{Conclusion} 
 In summary, simulations and implementations of the neuromuscular reflex control
 approach have repeatedly demonstrated its ability to generalize to a variety of
 situations and exhibit robustness to a variety of disturbances. Due to the gait
 deficits and fall risk transfemoral amputees face, these two properties make
 this control paradigm very attractive for application to transfemoral prostheses
-. In contrast, other control approaches for prostheses such as impedance control
-have not demonstrated these properties. Importantly, neuromuscular control
-addresses challenges 1 and 2 of amputee locomotion~(\cref{sec:challenges}).
+. Moreover, neuromuscular approaches have been successfully extended with EMG
+sensor feedback from amputees' residual limbs, enabling intuitive low-level
+prosthesis control. In contrast, other control approaches for prostheses such as
+impedance control have not demonstrated these properties. Importantly,
+neuromuscular control addresses challenges 1 and 2 of amputee
+locomotion~(\cref{sec:challenges}) as we can implement them via a decentralized,
+sparse set of reflexes and they allow for dynamism by providing joint torque
+commands via muscle models.
 
 As yet, there have not been any published works applying neuromuscular reflex
 control to active knee and ankle transfemoral prostheses. Therefore, in this
-thesis, we work towards goal with the hope of improving transfemoral amputee
-gait robustness and naturalness. \Cref{sec:neuro_model} will review the details
-of the particular neuromuscular implementation used in this thesis.
+thesis, we work towards this goal with the hope of improving transfemoral
+amputee gait robustness and naturalness. \Cref{sec:neuro_model} will review the
+details of the particular neuromuscular implementation used in this thesis.
 
-\subsection{EMG-based Control}
+\section{Prosthesis Design}\label{sec:pros_design}
 
-\section{Prosthesis Design}
+We can trace efforts to build an active knee-ankle prostheses to the seventies
+when \citet{flowers1974use} created an active knee-ankle prosthesis emulator in
+order simulate potential control schemes. This prosthesis used a hydraulic
+actuator capable of producing $\unit[90]{N \cdot m}$ of torque and
+$\unitfrac[0.5]{rev}{s}$ of no-load speed, sufficient for simulation of passive
+prostheses. With this device, \citet{donath1974proportional} tested proportional
+EMG control, a problem researchers are still investigating today
+(see~\cref{sec:emg_control}). Indeed, this line of research proved to be far
+ahead of its time, as most relevant research in active lower-limb prostheses
+design has occurred only in the last ten years. The recent interest in active
+knee ankle prostheses has been spurred by hardware improvements that allow
+designs to approach the strength, speed, and low weight of the biological leg.
+Enabling technologies include power-dense brushless motors, motor controllers,
+and lithium-ion batteries, inexpensive microcontrollers and inertial measurement
+units (IMUs), and strong but light composite materials such as carbon fiber. In
+this \namecref{sec:pros_design} we review a number of recent prosthesis designs
+and compare them to the design of other dynamic walking machines.
 
-\subsection{Design of Walking Robots}
-
-\subsubsection{Bipedal Robots}
+\subsection{Existing Transfemoral Prostheses}
+Prostheses without springs or springs for conservative torque capture
+\subsubsection{Vanderbilt Prostheses}
 \begin{description}
-    \item[MIT Cheetah]
-    \item[Atrias]
+    \item[Vanderbilt gen 1] ~\\
+        \begin{itemize}
+            \item ball screw transmission not back driveable
+            \item torque sensing via load cells
+            \item parallel spring for capturing conservative region of ankle
+                torque 
+        \end{itemize} 
+        \citep{sup2009preliminary}
+    \item[Vanderbilt gen 2 \& 3] ~\\
+        \begin{itemize}
+            \item backdriveable gear/pully transmissions
+            \item high reflected inertia
+            \item torque sensing via current 
+            \item parallel spring for capturing conservative region of ankle
+                torque 
+        \end{itemize} 
+        \citep{lawson2013control, lawson2014robotic, shultz2014walking}
 \end{description}
 
-\subsection{Design of Prostheses}
-\subsubsection{Vanderbilt's prostheses}
+\subsubsection{Amparo}
+\subsubsection{Ossur Power Knee}
+
+\subsection{Design of Dynamic Prostheses}
+First consider two dynamic robots
+\subsubsection{MIT Cheetah}
+\subsubsection{Atrias}
+
+\subsubsection{Springs for bandwidth and shock tolerance}
+\begin{description}
+    \item[Biom lineage]
+        series springs for shock tolerance parallel spring for bandwidth] powered ankle
+        prostheses with series elastic spring for shock tolerance and parallel spring
+        for large force bandwidth improvement. Eventually developed into biom ankle
+        prosthesis \citep{au2007biomechanical, au2008powered}.
+    \item[Prosthesis emulators]
+\end{description}
+
+\subsubsection{Springs for energy efficiency}
+\begin{description}
+\item[Sparky series] use series springs for energy
+efficiency\citep{hitt2007sparky} later version added inversion
+eversion\citep{bellman2008sparky}.
+\item[MIT transfemoral prostheses] 
     \begin{description}
-        \item[gen 1] Monopropellant based transfemoral prosthesis
-        \item[gen 2] \phantom{text} ~\\
-        \begin{itemize}
-                \item maxon motors
-                \item ball screw transmission
-                \item parallel spring in ankle
-                \item load cells to measure torque.
-            \end{itemize}
-        \item[gen 3] ~\\
-            \begin{itemize}
-                \item maxon flat motors
-                \item custom spur gear transmission - high gear ratio
-                \item torque sensing ?
-            \end{itemize}
-        \item[gen 4] ~\\
-            \begin{itemize}
-                \item maxon flat motors
-                \item custom spur gear transmission - high gear ratio
-                \item torque sensing ?
-            \end{itemize}
+        \item[Agonist-Antagonist Active Knee Prosthesis] allows for simultaneous
+        adjustment of joint position and stiffness \citep{martinez2008design}
+        \item[CSEA] knee spring to capture conservative torque
+        \citep{rouse2014clutchable} 
     \end{description}
-\subsubsection{Hugh Herr's prostheses}
-    \begin{description}
-        \item[rheo knee]
-        \item[biom ankle]
-        \item[antagonistic knee]
-        \item[CSEA knee]
-    \end{description}
+\end{description}
+
+
+We take inspiration from Biom, Atrias, Emulators  
 
 \section{Balance Recovery for Prostheses}
