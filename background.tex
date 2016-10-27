@@ -452,12 +452,27 @@ that of a normal human leg. This will ensure that the prosthesis will emulate
 the energy efficient gaits of normal walking and remain compliant to unforseen
 disturbances and uneven terrain.
 
-\subsection{Gearmotor Transfemoral Prostheses}
+\subsection{Direct Drive Transfemoral Prostheses}
 
-The first set of active prostheses we will look at employ electric motors and
-gear reductions in order to provide high enough torques at the speeds required
-for walking. This category includes three generations of prostheses from
-Vanderbilt University. 
+The most common approach for active transfemoral prosthesis design employs
+electric motors, coupled to transmissions, that directly drive the knee and
+ankle joints. The transmissions may utilize a combination of gears, chains,
+belts, ball screws, and four-bar-mechanisms in order to increase the torque
+output of the actuator, at the expense of speed, in order to satisfy the
+requirements listed in \cref{tab:walking_requirements}. A successful line of
+transfemoral prostheses following this design paradigm comes from Vanderbilt
+university. The first prosthesis in this line used ball screw transmissions and
+a pair of brushless motors capable of 200 W continuous power output. 
+
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{ankle_torque_vs_angle}
+    \caption{Torque vs angle relationship for the ankle during level ground
+    walking (blue solid). A linear spring relationship captures a significant
+    portion of ankle function (purple dashed). Data from
+    \citet{winter2009biomechanics} scaled to 85 kg subject.}
+    \label{fig:ankle_torque_v_angle}
+\end{marginfigure}
 
 \subsubsection{Vanderbilt Prostheses}
 \begin{description}
@@ -485,6 +500,12 @@ amparo prosthesis from robert gregg
 \subsubsection{Commercial Prostheses}
 ossur power knee, proprio foot
 
+%Reflected Inertia
+%Vanderbilt gen 3 ankle = 1210 g*cm^2 * 115^2 in kg*m^2 = 1.6 kg*m^2
+%Vanderbilt gen 3 knee = 35 g*cm^2 * 176^2 in kg*m^2 = 0.1 kg*m^2
+
+%human foot for 1.7m 85 kg = 0.0187 kg*m^2
+%human leg for 1.7 85 kg = 0.6575 kg*m^2
 
 \subsection{Design of Dynamic Prostheses}
 
