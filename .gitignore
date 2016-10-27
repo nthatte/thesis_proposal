@@ -203,3 +203,4 @@ TSWLatexianTemp*
 
 #temp files
 .DS_Store
+~$*.xlsx

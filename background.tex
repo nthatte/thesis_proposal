@@ -423,12 +423,42 @@ knee ankle prostheses has been spurred by hardware improvements that allow
 designs to approach the strength, speed, and low weight of the biological leg.
 Enabling technologies include power-dense brushless motors, motor controllers,
 and lithium-ion batteries, inexpensive microcontrollers and inertial measurement
-units (IMUs), and strong but light composite materials such as carbon fiber. In
-this \namecref{sec:pros_design} we review a number of recent prosthesis designs
-and compare them to the design of other dynamic walking machines.
+units (IMUs), and strong but light composite materials such as carbon fiber.
+With these advancements, engineers have successfully designed prostheses to meet
+or exceed the requirements for walking~(\cref{tab:walking_requirements}).
+\begin{margintable}
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    & Ankle Max & Knee Max \\
+    \midrule
+    Velocity & \unitfrac[0.72]{rev}{s} & \unitfrac[1.17]{rev}{s}\\
+    Torque & $\unit[130]{N \cdot m}$ & $\unit[57]{N \cdot m}$\\
+    Power & \unit[350]{W} & \unit[120]{W}\\
+    \bottomrule
+  \end{tabular}
+  \caption{Required knee and ankle torque, velocity, and power for walking
+  (\unitfrac[1.40]{m}{s} average speed, scaled to \unit[85]{kg} subject,
+  data from \citet{winter2009biomechanics})}.
+  \label{tab:walking_requirements}
+\end{margintable}
 
-\subsection{Existing Transfemoral Prostheses}
-Prostheses without springs or springs for conservative torque capture
+In this \namecref{sec:pros_design}, we review a number of recent prosthesis
+designs and analyze their ability to enable dynamic locomotion
+(\hyperref[sec:challenges]{challenge 1} of transfemoral prosthesis locomotion).
+To address this challenge, prostheses should be able to regulate their output
+joint torques and behave as though they have intertial properties similar to
+that of a normal human leg. This will ensure that the prosthesis will emulate
+the energy efficient gaits of normal walking and remain compliant to unforseen
+disturbances and uneven terrain.
+
+\subsection{Gearmotor Transfemoral Prostheses}
+
+The first set of active prostheses we will look at employ electric motors and
+gear reductions in order to provide high enough torques at the speeds required
+for walking. This category includes three generations of prostheses from
+Vanderbilt University. 
+
 \subsubsection{Vanderbilt Prostheses}
 \begin{description}
     \item[Vanderbilt gen 1] ~\\
@@ -451,14 +481,24 @@ Prostheses without springs or springs for conservative torque capture
 \end{description}
 
 \subsubsection{Amparo}
-\subsubsection{Ossur Power Knee}
+amparo prosthesis from robert gregg
+\subsubsection{Commercial Prostheses}
+ossur power knee, proprio foot
+
 
 \subsection{Design of Dynamic Prostheses}
+
 First consider two dynamic robots
-\subsubsection{MIT Cheetah}
-\subsubsection{Atrias}
+\begin{description}
+    \item[MIT Cheetah]~\\
+        \citep{seok2015design}
+    \item[Atrias]~\\
+        \citep{grimes2013atrias}
+\end{description}
 
 \subsubsection{Springs for bandwidth and shock tolerance}
+
+Prostheses
 \begin{description}
     \item[Biom lineage]
         series springs for shock tolerance parallel spring for bandwidth] powered ankle
@@ -481,7 +521,6 @@ eversion\citep{bellman2008sparky}.
         \citep{rouse2014clutchable} 
     \end{description}
 \end{description}
-
 
 We take inspiration from Biom, Atrias, Emulators  
 
