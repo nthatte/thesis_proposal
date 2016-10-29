@@ -439,7 +439,7 @@ that of a normal human leg. This will ensure that the prosthesis will emulate
 the energy efficient gaits of normal walking and remain compliant to unforeseen
 disturbances and uneven terrain.
 
-\subsection{Direct Drive Transfemoral Prostheses}
+\subsection{Direct Drive Transfemoral Prostheses}\label{sec:direct_drive}
 
 The most common approach for active transfemoral prosthesis design employs
 electric motors, coupled to transmissions, that directly drive the knee and
@@ -527,8 +527,8 @@ and flexion during walking. The Proprio Foot also features electric actuation
 that allows it to adapt to terrain and dorsiflex the ankle during swing to help
 avoid trips. 
 
-\subsubsection{Torque Control Strategies for Direct Drive Prostheses}
-In order to achieve dynamic locomotion capabilities, it is crucial that
+\subsubsection{Torque Control Strategies for Direct Drive
+Prostheses}In order to achieve dynamic locomotion capabilities, it is crucial that
 prosthesis designs allow for closed loop control of torques. To do this control
 system must be able to accurately measure the torque at the joint output. There
 are two main strategies for torque measurement used by direct drive prostheses.
@@ -600,22 +600,22 @@ prosthesis and compares the values to the estimated inertia of the shank and
 foot about the knee and the foot about its center of mass. We see that at the
 knee, the reflected inertia is roughly 17\% of that of the human shank and foot.
 In practice, this value is likely several times higher after including the
-inertia of the encoder, bearings, and gearing. Consequently, we can expect
+inertia of the encoder, bearings, and gearing. Consequently, we can estimate
 that the reflected inertia may be on the order of the leg itself. At the ankle,
 the reflected inertia of the rotor alone is several orders of magnitude more
 than that of the foot and more than twice that of the shank and foot. When we
 also consider reflected damping and friction, the dynamics of prosthesis system
 may be significantly slower than assumed.
 
-This could present an issue when attempting to execute dynamic behaviors
-involving impact such as running or trip recovery. In an impact event, the
-impulse will move through the system at the speed of sound through metal,
-roughly \unitfrac[6420]{m}{s} for aluminum \citep{lide2004crc}. If the
-prosthesis is \unit[0.5]{m} long, the shock will traverse its length in
-\unit[0.00008]{seconds}. This is about 10 times faster than the typical 1000 Hz
-control frequency of prosthesis control systems, rendering closed loop torque
-control with load cells unresponsive. Consequently, the impact could cause
-damage to gearing and discomfort for the amputee.
+The increase in joint impedance that transmissions create could present an issue
+when attempting to execute dynamic behaviors involving impact such as running or
+trip recovery. In an impact event, the impulse will move through the system at
+the speed of sound through metal, roughly \unitfrac[6420]{m}{s} for aluminum
+\citep{lide2004crc}. If the prosthesis is \unit[0.5]{m} long, the shock will
+traverse its length in \unit[0.00008]{seconds}. This is about 10 times faster
+than the typical 1000 Hz control frequency of prosthesis control systems,
+rendering closed loop torque control with load cells unresponsive. Consequently,
+the impact could cause damage to gearing and discomfort for the amputee.
 
 %Reflected Inertia
 %Vanderbilt gen 3 ankle = 1210 g*cm^2 * 115^2 in kg*m^2 = 1.6 kg*m^2
@@ -626,17 +626,51 @@ damage to gearing and discomfort for the amputee.
 
 \subsection{Design of Dynamic Prostheses}
 
-First consider two dynamic robots
-\begin{description}
-    \item[MIT Cheetah]~\\
-        \citep{seok2015design}
-    \item[Atrias]~\\
-        \citep{grimes2013atrias}
-\end{description}
+In contrast to the direct drive actuation discussed in the previous subsection,
+prostheses that employ series elastic actuation may be better poised to achieve
+dynamic locomotion \citep{pratt1995series}. This actuation scheme (illustrated
+in \cref{fig:sea_diagram}) aims to solve the torque measurement and impedance
+amplification caused by transmissions by placing a spring in series with the
+actuator. Measuring the deflection of the spring allows for accurate closed-loop
+control of the joint torque. Moreover, the spring low-pass filters external
+impulses, granting the control system more time to move the motor rotor in
+response to the external load. In addition to finding use in prostheses, series
+elastic actuators have been employed on a number of bipedal robots that seek to
+achieve dynamic locomotion such as M2V2 \citep{pratt2008design} and ATRIAS
+\citep{grimes2013atrias}.
 
-\subsubsection{Springs for bandwidth and shock tolerance}
+\begin{marginfigure}
+    \centering
+    \includegraphics[height=6.25in]{sea_diagram}
+    \caption{Series elastic actuation inserts a spring between the gear output
+    and the load (here drawn as linear actuator for simplicity). Torque is
+    measured via the spring deflection, $\tau = k(\theta_l - \theta_m -
+    \theta_0)$ where $\tau$ is the output joint torque, $k$ is the spring
+    constant, and $\theta_l$ and $\theta_m$ are the load and motor positions and
+    $\theta_0$ is the spring's rest length.}
+    \label{fig:sea_diagram}
+\end{marginfigure}
 
-Prostheses
+Series elastic actuators have found use in a variety of transtibial and
+transfemoral prostheses. We can further split these applications into two
+categories, those that optimize the spring stiffness for control bandwidth
+subject to shock tolerance, and those that optimize spring stiffness to optimize
+efficiency.
+
+\subsubsection{Springs for Bandwidth and Shock Tolerance}
+
+Adding a spring between the gear and load introduces additional dynamics between
+external torques and torques applied to the gearbox as external torques must
+physically displace the load before the generate torque on the motor. This
+property can improve the shock tolerance of SEA actuators over that of direct
+drive motors~\citep{robinson2000design}. However, by the same token, the SEA
+also introduces additional dynamics between motor torque and load torque, hence
+reducing force control bandwidth. Therefore, a trade-off exists between the
+compliance of the actuator and speed with which it can generate desired torques.
+
+\citet{au2007biomechanical, au2008powered} design a powered ankle prosthesis
+with this trade off in mind. In this work, the authors find that 
+
 \begin{description}
     \item[Biom lineage]
         series springs for shock tolerance parallel spring for bandwidth] powered ankle
