@@ -45,12 +45,14 @@ ax = plt.axes()
 
 #add lines connecting medians
 markersize = 4
-p0, = ax.plot(winter_data[:,0]*180/np.pi, winter_data[:,1]*scale_factor,
+p0, = ax.plot(winter_data[:,2]*180/np.pi, winter_data[:,3]*scale_factor,
     linewidth=2, color=color0)
-p1, = ax.plot([-10, 9], [0, 100], '--' ,linewidth=2, color=color2)
+p1, = ax.plot([5, 17], [0, -60], '--' ,linewidth=2, color=color1)
+p2, = ax.plot([0, 70], [10, -10], ls=(0, (2.5,2)) ,linewidth=2, color=color2)
 
-ax.legend((p0, p1), ('torque', 'stance spring'), 
-    frameon = False, loc = (-0.3, 0.75), fontsize=8, handlelength=3)
+fontsize = ax.xaxis.get_label().get_fontsize()
+ax.legend((p0, p1, p2), ('torque', 'early stance spring', 'pre-swing/swing spring'), 
+    frameon = False, loc = (0.15, 0.75), fontsize=6, handlelength=3)
 
 ax.xaxis.set_label_text('Angle (deg)')
 ax.yaxis.set_label_text('Torque (N-m)')
@@ -66,22 +68,22 @@ ax.yaxis.set_ticks_position('left')
 
 #ax.axis([-5, 10, -25, 160])
 
-ax.spines['left'].set_bounds(0, 50)
-ax.set_yticks(np.arange(0, 100, 50))
+ax.spines['left'].set_bounds(-50, 50)
+ax.set_yticks(np.arange(-50, 100, 50))
 #ax.set_yticklabels([0, 0.001, 0.01, 0.1, 1, 10])
 
-ax.spines['bottom'].set_bounds(-15, 0)
-ax.set_xticks(np.arange(-15,15,15))
+ax.spines['bottom'].set_bounds(0, 50)
+ax.set_xticks(np.arange(0,100,50))
 #ax.set_xticklabels(xtickloc+1)
 
 #adjust label pos
 ylabelpos = ax.yaxis.get_label().get_position()
-ylabelpos = (ylabelpos[0], ylabelpos[1] - 0.2)
+ylabelpos = (ylabelpos[0], ylabelpos[1] + 0.025)
 ax.yaxis.get_label().set_position(ylabelpos)
 
 xlabelpos = ax.xaxis.get_label().get_position()
-xlabelpos = (xlabelpos[0] - 0.075, xlabelpos[1])
+xlabelpos = (xlabelpos[0] - 0.05, xlabelpos[1])
 ax.xaxis.get_label().set_position(xlabelpos)
 
-filename = 'ankle_torque_vs_angle.pdf'
+filename = 'knee_torque_vs_angle.pdf'
 fig.savefig(filename, bbox_inches='tight')
