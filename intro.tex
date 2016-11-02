@@ -1,6 +1,6 @@
 \chapter{Introduction}
 
-\section{Motivation}
+\section{Motivation}\label{sec:intro_motivation}
 \begin{marginfigure}[0.8in]
     \centering
 	\begin{subfigure}[b]{\textwidth}
@@ -177,15 +177,6 @@ explained via passive dynamics as evidenced by passive-dynamic walkers
 inclines with no onboard power source~\citep{mcgeer1990passive,
 collins2005efficient}.
 
-\begin{marginfigure}
-    \centering
-    %\includegraphics{}
-    \missingfigure{Rheo Knee}
-    \caption{Honda's Asimo Robot uses position control and statically
-    stable gaits.}
-    \label{fig:asimo}
-\end{marginfigure}
-
 Consequently, in order to ensure that amputee gaits are natural and efficient,
 but still robust, it is essential that robotic prosthesis controllers not only
 admit, but leverage the inherent dynamics of walking.  Therefore, the required
@@ -194,6 +185,15 @@ control paradigm cannot follow strategies often used for humanoid locomotion
 control in order to track preplanned, statically-stable gaits. Rather, the
 control strategy should interact dynamically with the amputee by governing
 interaction forces instead of mandating kinematic objectives.
+
+\begin{marginfigure}
+    \centering
+    %\includegraphics{}
+    \missingfigure{Rheo Knee}
+    \caption{Honda's Asimo Robot uses position control and statically
+    stable gaits.}
+    \label{fig:asimo}
+\end{marginfigure}
 
 \paragraph{Challenge 2: We have incomplete state information}
 
@@ -325,7 +325,7 @@ testing data to learn and evaluate the trip recovery policies using the Push Bot
 robot (\cref{fig:push_bot}) which can apply tripping forces to subjects via
 actuated tethers.
 
-\begin{marginfigure}
+\begin{marginfigure}[-3in]
     \centering
     %\includegraphics{}
     \missingfigure{push bot}

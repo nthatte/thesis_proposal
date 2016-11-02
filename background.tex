@@ -1,6 +1,6 @@
 \chapter{Background}
 
-\section{Fundamental Walking Dynamics and Control}
+\section{Fundamental Walking Dynamics and Control}\label{sec:walking_review}
 \subsection{Simple Models}
 \subsubsection{Rimless wheel}
 \subsubsection{Inverted Pendulum}
@@ -95,7 +95,7 @@ This motivates alternative heuristic decentralized controllers.
         \end{itemize}
    \end{itemize}
 
-\section{Bioinspired Control for Prostheses}
+\section{Bioinspired Control for Prostheses}\label{sec:bioinspired_pros_control}
 \subsection{Impedance Control}
 
 \subsection{Central Pattern Generators}
@@ -189,7 +189,7 @@ prostheses generate desired joint kinematics instead of torques. Consequently,
 these controllers may not allow prostheses to exhibit the dynamism and
 compliance we desire.
 
-\subsection{Neuromuscular Reflexes}
+\subsection{Neuromuscular Reflexes}\label{sec:neuromuscular_background}
 \subsubsection{Neuromuscular Reflexes in biology}
 Around the same time \citeauthor{brown1911intrinsic} hypothesized the existence
 of central pattern generators, \citet{sherrington1910integrative,
@@ -503,7 +503,8 @@ sup2011upslope, lawson2013control, lawson2014robotic}, EMG-based control
         %\includegraphics{}
         \missingfigure{Gen 2}
         \caption{Generation 2 replaced ball screws with custom gear-based
-        transmission that is less noisy and durable \citep{lawson2013control}.}
+        transmission that is less noisy and more durable
+        \citep{lawson2013control}.}
 	\end{subfigure}
 	\begin{subfigure}[t]{0.3\textwidth}
     	\centering
@@ -565,7 +566,7 @@ the motor. Plugging in $\theta_i = n \theta_o$ and $\tau_i = \frac{1}{n}
     J_i n^2 \ddot{\theta}_o &= \tau_o - b_i n^2 \dot{\theta}_o \\
     \implies \quad J_o \ddot{\theta}_o &= \tau_o - b_o \dot{\theta}_o.
 \end{align}
-These equations show that the inertia and damping of the motor rotor get
+These equations show that the inertia and damping of the motor rotor are
 amplified by the square of the gear ratio. As prostheses may often use gear
 ratios in excess of 100:1, this effect can be substantial. 
 
@@ -589,7 +590,7 @@ ratios in excess of 100:1, this effect can be substantial.
   Motors Catalog\citep{maxon_flat_motor,
   maxon_ec4pole} Knee reflected inertia compared to inertia of human shank and
   foot about knee. Ankle inertia compared to human foot about its center of
-  mass. Human inertias estimated from \citet{winter2009biomechanics} for a
+  mass. Human inertias estimated from \citet{winter2009biomechanics} for an
   \unit[85]{kg}, \unit[1.7]{m} tall person.}
   \label{tab:vanderbilt_reflec_interita}
 \end{table}
@@ -613,9 +614,10 @@ trip recovery. In an impact event, the impulse will move through the system at
 the speed of sound through metal, roughly \unitfrac[6420]{m}{s} for aluminum
 \citep{lide2004crc}. If the prosthesis is \unit[0.5]{m} long, the shock will
 traverse its length in \unit[0.00008]{seconds}. This is about 10 times faster
-than the typical 1000 Hz control frequency of prosthesis control systems,
-rendering closed loop torque control with load cells unresponsive. Consequently,
-the impact could cause damage to gearing and discomfort for the amputee.
+than the typical \unit[1000]{Hz} control frequency of prosthesis control
+systems, rendering closed loop torque control with load cells unresponsive.
+Consequently, the impact could cause damage to gearing and discomfort for the
+amputee.
 
 %Reflected Inertia
 %Vanderbilt gen 3 ankle = 1210 g*cm^2 * 115^2 in kg*m^2 = 1.6 kg*m^2
@@ -762,3 +764,53 @@ bandwidth. Therefore, while prostheses tuned for efficiency can consume less
 energy, which is desirable for a product needing long battery life, they may
 not represent the most versatile design for evaluating new control ideas or
 different gait modes. 
+
+\section{Balance Recovery for Prostheses} 
+The prosthesis controls we reviewed in
+\cref{sec:walking_review,sec:bioinspired_pros_control} primarily sought to
+reproduce typical walking kinematics and controls. Some control strategies, such
+as neuromuscular control (\cref{sec:neuromuscular_background}) also demonstrated
+the ability to generalize to sloped walking and changes in speed by generating
+more push off work in these situations\citep{eilenberg2010control,
+markowitz2011speed}. However, it is not clear that the low-level reflexes in the
+neuromuscular control model will generate trip recovery responses, which in
+human control likely utilize more complex supraspinal and cortical reflexes
+\citep{eng1994strategies, schillings2000muscular, hofstad2009evidence}.
+
+As discussed in \cref{sec:intro_motivation}, falling and the fear of physical
+activity it engenders are two major issues amputees face
+\citep{miller2001prevalence}. Avoidance of physical activity can potentially
+cause deterioration of strength, balance and control, which may lead to further
+inactivity, debilitation, and social isolation. Currently, the microprocessor
+controlled, mechanically-passive prostheses feature trip recovery modes
+that ``lock'' or highly damp knee movement. However,
+\citet{bellmann2010comparative} show that these modes fail to adequately respond
+to trips during a large portion of swing due to knee buckling at touch-down.
+Moreover, it is unclear that the locking responses of mechanically-passive
+prostheses are intuitive for amputees or coordinate well with innate trip
+recovery responses, which can require positive joint power
+\citep{cordero2005energy}. In contrast, the advent of active transfemoral
+prostheses give us the opportunity to replicate amputee's preferred responses,
+which will hopefully yield more effective and intuitive fall-prevention actions.
+
+\subsection{Responses to Trips}
+
+\begin{itemize}
+    \item Able-bodied subjects use two fundamental strategies: elevating and
+    lowering. Elevating is used in early swing and lowering in late swing but
+    there is a cross-over region. Also these strategies can be combined in
+    succession to achieve delayed lowering: an aborted elevating strategy.
+
+    \item Stance control is important too for keeping angular momentum from
+    increasing too much and increasing push off and leg clearance.
+
+    \item Amputees also use these fundamental strategies albeit in
+    different proportions in the various phases of swing. Amputees also use
+    hopping and skipping strategies
+\end{itemize}
+
+\subsection{Proposed Trip Recovery Controllers}
+
+\begin{itemize}
+    \item \citep{lawson2010stumble}.
+\end{itemize}
