@@ -776,6 +776,8 @@ markowitz2011speed}. However, it is not clear that the low-level reflexes in the
 neuromuscular control model will generate trip recovery responses, which in
 human control likely utilize more complex supraspinal and cortical reflexes
 \citep{eng1994strategies, schillings2000muscular, hofstad2009evidence}.
+Consequently, we seek to improve upon neuromuscular control's inherent stability
+by augmenting it with explicit trip detection and recovery actions.
 
 As discussed in \cref{sec:intro_motivation}, falling and the fear of physical
 activity it engenders are two major issues amputees face
@@ -834,18 +836,50 @@ amputees more easily realize the elevating strategy, normalize amputee trip
 recovery strategy selection, and allow them to recover from a larger range of
 disturbances.
 
-\subsection{Proposed Trip Recovery Controllers}
+\subsection{Trip Detection and Classification}
 
-\begin{itemize}
-    \item trip recovery strategy selection is likely influenced by high level
-    cortical data processing and commands.
-    \item To represent the complex relationship between sensory data and
-    strategy selection people have turned to machine learning/classification
-    \item \citep{lawson2010stumble} uses FFT features to come up with threshold
-    \item \citep{zhang2011towards} uses foot acceleration and EMG. No stumbles
-    in training just 
-    \item \citep{shirota2014recovery} Most advanced LDA classifier based on
-    kinematic features. 
-    \item all work classify offline no online error reporting no one has
-    implemented these strategies on a prosthesis.
-\end{itemize}
+Human responses to gait disturbances likely involve signal processing at the
+supraspinal and cortical level. This is evidenced by the relatively high latency
+($>\unit[100]{ms}$) of EMG signals relevant to the utilized strategy, the
+utilization of both elevating and lowering strategies in mid-swing, the
+existence of the delayed lowering strategy \citep{schillings2000muscular}, and
+the inconsistent resolution of motor redundancy during the lowering strategy
+\citep{eng1994strategies}. Furthermore, \citet{hofstad2009evidence} found that
+latencies are further increased for amputee subjects executing obstacle
+avoidance tasks, suggesting that amputee trip recovery may require additional
+data processing and cognitive control as compared to able-bodied persons. 
+
+A control system that seeks to be intuitive and effective for amputees by
+mimicking their responses to trips needs to be able to model these complexities.
+Consequently, researchers have relied on data-driven and machine learning
+approaches to detect and classify trips so that prostheses can take the
+appropriate actions. All systems designed to date use a two-layer classification
+scheme, where the first layer classifies trips from normal walking, and the
+second layer classifies the recovery strategy as either elevating or lowering.
+The first such system by \citet{lawson2010stumble} used Fast Fourier Transform
+features of data collected from six accelerometers placed on the lower limb. To
+collect training data, the author's outfitted healthy subjects with sensors, and
+randomly subjected them to trips. They classified stumbles from normal walking
+via a threshold on power between 10 and \unit[40]{Hz} and classified elevating
+versus lowering strategies based on the root-mean-squared thigh acceleration in
+a \unit[50]{ms} window before the stumble. \citet{zhang2011towards} further add
+EMG sensors to the trip detection system, and employ outlier detection methods
+so that the trips were not required in the training dataset. They find EMG sensors
+improve the false alarm rate, at the expense of classification latency. However,
+the false alarm rate is still quite high, corresponding to an incorrect positive
+classification every \unit[1.6]{min}. Finally, \citet{shirota2014recovery} use
+linear discriminant analysis on kinematic features from the tripped leg. They
+find evidence supporting the use of the two-stage classification scheme, and
+identify the optimal update frequency and length for the window in which they
+compute features.
+
+A major drawback of these previous works is that they report error rates based
+on offline validation results; \ie they collect data from subjects who are
+responding to trips and then evaluate how well the classifier would have
+performed on the collected data. This is fundamentally different than online
+validation, in which one reports the error rate obtained when using the
+learned classifier to control the system. Previous work on a classifier for
+recognizing gait modes such as level walking and stair and ramp ascent and
+descent found that online error rates were significantly higher than offline
+error rates \citep{hargrove2015intuitive}. It is likely this trend will hold
+true for stumble classification as well.
