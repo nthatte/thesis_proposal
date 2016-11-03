@@ -1,15 +1,28 @@
 \chapter{Background}
+The main goal of this thesis is to improve transfemoral amputee gait robustness
+and naturalness by applying neuromuscular models of human locomotion to control
+prosthesis hardware capable of dynamic locomotion. Existing approaches to
+walking control in humanoid robots and prostheses have largely failed to reach
+the levels of stability and dynamism required to match that of an amputee's lost
+limb. \Cref{sec:back_walking_review} provides an overview of those approaches,
+their strengths, and weaknesses. \Cref{sec:back_bioinspired_pros_control} dives
+deeper into bioinspired control approaches that are particularly well suited for
+prosthesis control as the are capable of addressing challenges 1 and 2 of
+amputee locomotion (\cref{sec:intro_challenges}). \Cref{sec:back_pros_design}
 
-\section{Fundamental Walking Dynamics and Control}\label{sec:walking_review}
-\subsection{Simple Models}
+
+\section{Fundamental Walking Dynamics and
+Control}\label{sec:back_walking_review}
+\subsection{Dynamics of Human Locomotion}\label{sec:back_simple_models}
 \subsubsection{Rimless wheel}
 \subsubsection{Inverted Pendulum}
 \subsubsection{Bipedal Spring Mass}
 
-\subsection{Walking Controllers}
+\subsection{Walking Controllers}\label{sec:back_walk_control}
 Shaping walking Dynamics through control
 
-\subsubsection{Kinematic Centralized Controllers}
+\subsubsection{Kinematic Centralized
+Controllers}\label{sec:back_kinematic_centralized}
 
 These approaches are usually model based and try to force the full system to
 behave like a lower dimensional system. We can derive provably stable
@@ -21,7 +34,8 @@ order system it will not fall.
     model
 \end{itemize}
 
-\subsubsection{Dynamic Centralized Controllers}
+\subsubsection{Dynamic Centralized
+Controllers}\label{sec:back_dynamic_centralized} 
 Force control allows robots to be compliant to external disturbances.
 
 \begin{itemize}
@@ -61,11 +75,13 @@ dynamics.
 \end{enumerate}
 This motivates alternative heuristic decentralized controllers.
 
-\subsubsection{Kinematic Decentralized Controllers}
+\subsubsection{Kinematic Decentralized
+Controllers}\label{sec:back_kinematic_decentralized}
     \begin{itemize}
         \item echo control
     \end{itemize}
-\subsubsection{Dynamic Decentralized Controllers}
+\subsubsection{Dynamic Decentralized Controllers}\label{sec:back_dynamic_decentralized}
+
     \begin{itemize}
         \item raibert - motivation for landing leg angles
         \item virtual model control
@@ -95,7 +111,9 @@ This motivates alternative heuristic decentralized controllers.
         \end{itemize}
    \end{itemize}
 
-\section{Bioinspired Control for Prostheses}\label{sec:bioinspired_pros_control}
+\section{Bioinspired Control for
+Prostheses}\label{sec:back_bioinspired_pros_control} 
+
 \subsection{Impedance Control}
 
 \subsection{Central Pattern Generators}
@@ -189,7 +207,7 @@ prostheses generate desired joint kinematics instead of torques. Consequently,
 these controllers may not allow prostheses to exhibit the dynamism and
 compliance we desire.
 
-\subsection{Neuromuscular Reflexes}\label{sec:neuromuscular_background}
+\subsection{Neuromuscular Reflexes}\label{sec:back_neuromuscular_reflexs}
 \subsubsection{Neuromuscular Reflexes in biology}
 Around the same time \citeauthor{brown1911intrinsic} hypothesized the existence
 of central pattern generators, \citet{sherrington1910integrative,
@@ -338,8 +356,7 @@ Additionally, \citet{markowitz2011speed} found that a similar neuromuscular
 reflex model automatically produced more ankle plantarflexion work as the
 amputee increased his gait speed.
 
-\subsubsection{EMG-based Control}\label{sec:emg_control}
-
+\subsubsection{EMG-based Control}\label{sec:back_emg_control}
 The inclusion of user intent recognition via surface electromyography (EMG)
 signals represents an interesting extension of neuromuscular reflex prosthesis
 control. In these approaches, muscle activity in the residual limb is directly
@@ -384,9 +401,9 @@ sensor feedback from amputees' residual limbs, enabling intuitive low-level
 prosthesis control. In contrast, other control approaches for prostheses such as
 impedance control have not demonstrated these properties. Importantly,
 neuromuscular control addresses challenges 1 and 2 of amputee
-locomotion~(\cref{sec:challenges}) as we can implement them via a decentralized,
-sparse set of reflexes and they allow for dynamism by providing joint torque
-commands via muscle models.
+locomotion~(\cref{sec:intro_challenges}) as we can implement them via a
+decentralized, sparse set of reflexes and they allow for dynamism by providing
+joint torque commands via muscle models.
 
 As yet, there have not been any published works applying neuromuscular reflex
 control to active knee and ankle transfemoral prostheses. Therefore, in this
@@ -394,8 +411,7 @@ thesis, we work towards this goal with the hope of improving transfemoral
 amputee gait robustness and naturalness. \Cref{sec:neuro_model} will review the
 details of the particular neuromuscular implementation used in this thesis.
 
-\section{Prosthesis Design}\label{sec:pros_design}
-
+\section{Prosthesis Design}\label{sec:back_pros_design}
 We can trace efforts to build an active knee-ankle prostheses to the seventies
 when \citet{flowers1974use} created an active knee-ankle prosthesis emulator in
 order simulate potential control schemes. This prosthesis used a hydraulic
@@ -403,8 +419,8 @@ actuator capable of producing $\unit[90]{N \cdot m}$ of torque and
 $\unitfrac[0.5]{rev}{s}$ of no-load speed, sufficient for simulation of passive
 prostheses. With this device, \citet{donath1974proportional} tested proportional
 EMG control, a problem researchers are still investigating today
-(see~\cref{sec:emg_control}). Indeed, this line of research proved to be far
-ahead of its time, as most relevant research in active lower-limb prostheses
+(see~\cref{sec:back_emg_control}). Indeed, this line of research proved to be
+far ahead of its time, as most relevant research in active lower-limb prostheses
 design has occurred only in the last ten years. The recent interest in active
 knee ankle prostheses has been spurred by hardware improvements that allow
 designs to approach the strength, speed, and low weight of the biological leg.
@@ -430,17 +446,16 @@ or exceed the requirements for walking~(\cref{tab:walking_requirements}).
   \label{tab:walking_requirements}
 \end{margintable}
 
-In this \namecref{sec:pros_design}, we review a number of recent prosthesis
+In this \namecref{sec:back_pros_design}, we review a number of recent prosthesis
 designs and analyze their ability to enable dynamic locomotion
-(\hyperref[sec:challenges]{challenge 1} of transfemoral prosthesis locomotion).
-To address this challenge, prostheses should be able to regulate their output
-joint torques and behave as though they have inertial properties similar to
-that of a normal human leg. This will ensure that the prosthesis will emulate
-the energy efficient gaits of normal walking and remain compliant to unforeseen
-disturbances and uneven terrain.
+(\hyperref[sec:intro_challenges]{challenge 1} of transfemoral prosthesis
+locomotion).  To address this challenge, prostheses should be able to regulate
+their output joint torques and behave as though they have inertial properties
+similar to that of a normal human leg. This will ensure that the prosthesis will
+emulate the energy efficient gaits of normal walking and remain compliant to
+unforeseen disturbances and uneven terrain.
 
-\subsection{Direct Drive Transfemoral Prostheses}\label{sec:direct_drive}
-
+\subsection{Direct Drive Transfemoral Prostheses}\label{sec:back_direct_drive}
 The most common approach for active transfemoral prosthesis design employs
 electric motors, coupled to transmissions, that directly drive the knee and
 ankle joints. The transmissions may utilize a combination of gears, chains,
@@ -528,8 +543,8 @@ and flexion during walking. The Proprio Foot also features electric actuation
 that allows it to adapt to terrain and dorsiflex the ankle during swing to help
 avoid trips. 
 
-\subsubsection{Torque Control Strategies for Direct Drive
-Prostheses}In order to achieve dynamic locomotion capabilities, it is crucial that
+\subsubsection{Torque Control Strategies for Direct Drive Prostheses}
+In order to achieve dynamic locomotion capabilities, it is crucial that
 prosthesis designs allow for closed loop control of torques. To do this control
 system must be able to accurately measure the torque at the joint output. There
 are two main strategies for torque measurement used by direct drive prostheses.
@@ -627,7 +642,6 @@ amputee.
 %human foot for 1.7m 85 kg = 0.0187 kg*m^2
 
 \subsection{Design of Dynamic Prostheses}
-
 In contrast to the direct drive actuation discussed in the previous subsection,
 prostheses that employ series elastic actuation may be better poised to achieve
 dynamic locomotion \citep{pratt1995series}. This actuation scheme (illustrated
@@ -660,7 +674,6 @@ subject to shock tolerance and those that optimize spring stiffness to optimize
 efficiency.
 
 \subsubsection{Springs for Bandwidth and Shock Tolerance}
-
 Adding a spring between the gear and load introduces additional dynamics between
 external torques and torques applied to the gearbox as external torques must
 physically displace the load before they generate torque on the motor. This
@@ -675,7 +688,7 @@ this trade off in mind. In these works, the authors find that using an SEA
 spring soft enough to protect the ball screw transmission results in
 insufficient closed loop torque control bandwidth. To overcome this shortcoming,
 the authors incorporate a parallel spring into the ankle as was done for some of
-the knee and ankle prostheses discussed in \cref{sec:direct_drive}. Because the
+the knee and ankle prostheses discussed in \cref{sec:back_direct_drive}. Because the
 parallel spring offsets the motor's torque requirements,
 \citeauthor{au2008powered} find that it also improves the bandwidth of the
 system from 4 Hz to 20 Hz, thereby exceeding the requirement for walking. 
@@ -765,16 +778,17 @@ energy, which is desirable for a product needing long battery life, they may
 not represent the most versatile design for evaluating new control ideas or
 different gait modes. 
 
-\section{Balance Recovery for Prostheses} 
+\section{Stumble Recovery for Prostheses} 
 The prosthesis controls we reviewed in
-\cref{sec:walking_review,sec:bioinspired_pros_control} primarily sought to
-reproduce typical walking kinematics and dynamics. Some control strategies, such
-as neuromuscular control (\cref{sec:neuromuscular_background}) also demonstrated
-the ability to generalize to sloped walking and changes in speed by producing
-more push off work in these situations\citep{eilenberg2010control,
-markowitz2011speed}. However, it is not clear that the low-level reflexes in the
-neuromuscular control model will generate trip recovery responses, which in
-human control likely utilize more complex supraspinal and cortical reflexes
+\cref{sec:back_walking_review,sec:back_bioinspired_pros_control} primarily
+sought to reproduce typical walking kinematics and dynamics. Some control
+strategies, such as neuromuscular reflex control
+(\cref{sec:back_neuromuscular_reflexs}) also demonstrated the ability to
+generalize to sloped walking and changes in speed by producing more push off
+work in these situations\citep{eilenberg2010control, markowitz2011speed}.
+However, it is not clear that the low-level reflexes in the neuromuscular
+control model will generate trip recovery responses, which in human control
+likely utilize more complex supraspinal and cortical reflexes
 \citep{eng1994strategies, schillings2000muscular, hofstad2009evidence}.
 Consequently, we seek to improve upon neuromuscular control's inherent stability
 by augmenting it with explicit trip detection and recovery actions.
@@ -837,7 +851,6 @@ recovery strategy selection, and allow them to recover from a larger range of
 disturbances.
 
 \subsection{Trip Detection and Classification}
-
 Human responses to gait disturbances likely involve signal processing at the
 supraspinal and cortical level. This is evidenced by the relatively high latency
 ($>\unit[100]{ms}$) of EMG signals relevant to the utilized strategy, the
@@ -881,5 +894,6 @@ validation, in which one reports the error rate obtained when using the
 learned classifier to control the system. Previous work on a classifier for
 recognizing gait modes such as level walking and stair and ramp ascent and
 descent found that online error rates were significantly higher than offline
-error rates \citep{hargrove2015intuitive}. It is likely this trend will hold
-true for stumble classification as well.
+error rates \citep{hargrove2015intuitive}. As we discuss in
+\cref{sec:proposed_trip_recovery}, it is likely this trend will hold true for
+stumble classification as well.
