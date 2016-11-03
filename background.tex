@@ -768,9 +768,9 @@ different gait modes.
 \section{Balance Recovery for Prostheses} 
 The prosthesis controls we reviewed in
 \cref{sec:walking_review,sec:bioinspired_pros_control} primarily sought to
-reproduce typical walking kinematics and controls. Some control strategies, such
+reproduce typical walking kinematics and dynamics. Some control strategies, such
 as neuromuscular control (\cref{sec:neuromuscular_background}) also demonstrated
-the ability to generalize to sloped walking and changes in speed by generating
+the ability to generalize to sloped walking and changes in speed by producing
 more push off work in these situations\citep{eilenberg2010control,
 markowitz2011speed}. However, it is not clear that the low-level reflexes in the
 neuromuscular control model will generate trip recovery responses, which in
@@ -786,31 +786,66 @@ controlled, mechanically-passive prostheses feature trip recovery modes
 that ``lock'' or highly damp knee movement. However,
 \citet{bellmann2010comparative} show that these modes fail to adequately respond
 to trips during a large portion of swing due to knee buckling at touch-down.
-Moreover, it is unclear that the locking responses of mechanically-passive
-prostheses are intuitive for amputees or coordinate well with innate trip
-recovery responses, which can require positive joint power
-\citep{cordero2005energy}. In contrast, the advent of active transfemoral
-prostheses give us the opportunity to replicate amputee's preferred responses,
-which will hopefully yield more effective and intuitive fall-prevention actions.
+Moreover, it is unclear that passive, locking responses are intuitive for
+amputees or coordinate well with innate trip recovery responses, which can
+require positive joint power \citep{cordero2005energy}. In contrast, the advent
+of active transfemoral prostheses give us the opportunity to replicate amputee's
+preferred responses, which will hopefully yield more effective and intuitive
+fall-prevention actions.
 
 \subsection{Responses to Trips}
 
-\begin{itemize}
-    \item Able-bodied subjects use two fundamental strategies: elevating and
-    lowering. Elevating is used in early swing and lowering in late swing but
-    there is a cross-over region. Also these strategies can be combined in
-    succession to achieve delayed lowering: an aborted elevating strategy.
+Able-bodied persons primarily use two strategies to recover from trips to their
+swing legs: When the tripped in early swing, people usually use an
+\emph{elevating strategy}, in which the knee is actively flexed to lift the foot
+over and in front of the obstacle. In late swing, people typically use a
+\emph{lowering strategy}, in which knee extensor muscles rapidly bring the foot
+in contact with the ground in front of the obstacle \citep{eng1994strategies}.
+In response to mid-swing trips, people may use either strategy
+\citep{schillings2000muscular}. Finally, the \emph{delayed lowering} can also be
+used in early swing. This strategy is an aborted attempt at an elevating
+strategy, followed by a lowering strategy, and is used when the toe catches
+on the obstacle \citep{eng1994strategies}.
 
-    \item Stance control is important too for keeping angular momentum from
-    increasing too much and increasing push off and leg clearance.
+Interestingly, \citet{shirota2015transfemoral} show that transfemoral amputees
+using mechanically-passive prostheses utilize these same strategies despite the
+lack of control and positive power production at the knee joint. Amputees
+compensated for these deficiencies and achieved elevating, lowering, and delayed
+lowering foot trajectories via movements of the hip and sound side leg. The lack
+of sensory feedback information from the prosthesis leg to the nervous system
+did not seem to impede utilization of these strategies.  Consequently, the
+authors hypothesize that mimicking able-bodied responses to trips may also be
+intuitive for amputee subjects. 
 
-    \item Amputees also use these fundamental strategies albeit in
-    different proportions in the various phases of swing. Amputees also use
-    hopping and skipping strategies
-\end{itemize}
+While amputees using mechanically-passive prostheses exploit the same strategies
+as able-bodied subjects for trip recovery, they do not use these strategies in
+the same proportions during the phases of swing as do able-bodied subjects.
+Amputees typically use elevating strategies less frequently and lowering
+strategies more frequently. This difference increases when the prosthesis is the
+stance leg, and the intact leg is tripped. A possible reason for decreased
+reliance on the elevating strategy may stem from the inability of
+mechanically-passive prostheses to produce positive joint power.
+\citet{cordero2005energy} show that in an elevating strategy, positive power is
+required in the swing-leg's knee joint in order to rapidly flex the knee to
+achieve obstacle clearance. Likewise, \citet{pijnappels2004contribution} show
+that powered stance leg push-off helps raise the foot during the elevating
+strategy. Empowering transfemoral prostheses with active joints may help
+amputees more easily realize the elevating strategy, normalize amputee trip
+recovery strategy selection, and allow them to recover from a larger range of
+disturbances.
 
 \subsection{Proposed Trip Recovery Controllers}
 
 \begin{itemize}
-    \item \citep{lawson2010stumble}.
+    \item trip recovery strategy selection is likely influenced by high level
+    cortical data processing and commands.
+    \item To represent the complex relationship between sensory data and
+    strategy selection people have turned to machine learning/classification
+    \item \citep{lawson2010stumble} uses FFT features to come up with threshold
+    \item \citep{zhang2011towards} uses foot acceleration and EMG. No stumbles
+    in training just 
+    \item \citep{shirota2014recovery} Most advanced LDA classifier based on
+    kinematic features. 
+    \item all work classify offline no online error reporting no one has
+    implemented these strategies on a prosthesis.
 \end{itemize}
