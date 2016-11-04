@@ -1,41 +1,97 @@
-\chapter{Background}
+\chapter{Background}\label{sec:back}
 The main goal of this thesis is to improve transfemoral amputee gait robustness
 and naturalness by applying neuromuscular models of human locomotion to control
 prosthesis hardware capable of dynamic locomotion. Existing approaches to
 walking control in humanoid robots and prostheses have largely failed to reach
 the levels of stability and dynamism required to match that of an amputee's lost
-limb. \Cref{sec:back_walking_review} provides an overview of those approaches,
-their strengths, and weaknesses. \Cref{sec:back_bioinspired_pros_control} dives
-deeper into bioinspired control approaches that are particularly well suited for
-prosthesis control as the are capable of addressing challenges 1 and 2 of
-amputee locomotion (\cref{sec:intro_challenges}). \Cref{sec:back_pros_design}
+limb. In this \namecref{sec:back}, we will review these existing approaches,
+examine their strengths and weaknesses, and motivate our specific control and
+design choices.
 
+\Cref{sec:back_walking_review} categorizes approaches to walking control into
+four major groups based on their ability to produce dynamic interactions with
+the environment (dynamic vs kinematic) and whether they can produce control
+commands using only a subset of state (decentralized vs centralized). As
+mentioned earlier, only dynamic, decentralized controls address challenges 1 and
+2 of amputee locomotion (see \cref{sec:intro_challenges}) and are thus suitable
+for prosthesis control.  \Cref{sec:back_bioinspired_pros_control} dives deeper
+into a subset of dynamic decentralized control: bioinspired approaches that seek
+to model the function of the lost limb and are thus particularly well suited for
+prosthesis control.  \Cref{sec:back_pros_design} reviews existing mechanical
+designs of active prostheses and examines their ability to enable dynamic
+locomotion. Finally, \cref{sec:back_stumble_recovery} will discuss previous work
+towards empowering prostheses with active trip recovery modes via explicit
+detection and classification of stumbles. 
 
 \section{Fundamental Walking Dynamics and
 Control}\label{sec:back_walking_review}
-\subsection{Dynamics of Human Locomotion}\label{sec:back_simple_models}
-\subsubsection{Rimless wheel}
-\subsubsection{Inverted Pendulum}
-\subsubsection{Bipedal Spring Mass}
 
-\subsection{Walking Controllers}\label{sec:back_walk_control}
-Shaping walking Dynamics through control
+Simplified, point-mass models of walking can help us understand the fundamental
+dynamics that control must shape in order to achieve stable locomotion gaits.
+The simplest model that reproduces the center of mass trajectory and ground
+reaction forces seen during human walking is the bipedal spring mass model
+\citep{geyer2006compliant}. This model, illustrated in \cref{fig:bipedal spring
+mass}, simplifies locomotion to a pair of compliant unidirectional springs
+connected to a point mass. When initialized with human-like mass and leg length,
+the model can generate characteristic features of human locomotion such as
+sinusoidal center of mass trajectories, M-shaped vertical ground reaction
+forces, S-shaped horizontal ground reaction forces, and the sequence of double
+and single support. 
 
-\subsubsection{Kinematic Centralized
-Controllers}\label{sec:back_kinematic_centralized}
+We will look at two paradigms for walking control: centralized approaches that
+use full state information and decentralized approaches that use a subset of
+state information. Centralized approaches typically utilize a model of the full
+system in order to compute control commands that project the full system's
+dynamics onto those of the simplified model. Usually, centralized approaches
+also place additional constraints on the COM dynamics in order to facilitate
+planning. In contrast, decentralized approaches typically do not explicitly
+model either the full system or the fundamental dynamics. Rather, these
+approaches use heuristics to generate motions and forces similar to those of the
+fundamental model.
 
-These approaches are usually model based and try to force the full system to
-behave like a lower dimensional system. We can derive provably stable
-controllers for lower order systems so if full order system behaves like lower
-order system it will not fall.
+\subsection{Centralized Control}\label{sec:back_centralized_control}
 
-\begin{itemize}
-    \item ZMP preview control - forces robot to follow kinematics of lipm
-    model
-\end{itemize}
+Kinematic, centralized control was one of the earliest forms of locomotion
+control. The predominant approach in this category is based on the linear
+inverted pendulum model (LIPM) \citep{kajita1991study, kajita20013d}. This
+simplified locomotion model applies additional reductions to the bipedal
+spring-mass model, replacing spring legs with ideal prismatic force sources and
+constraining the center of mass to move on a plane. The resulting simplified
+model features linear COM dynamics with respect to the zero moment point (ZMP).
+The ZMP is the point on the ground about which no horizontal moments are needed
+in order to counteract the total reaction forces on the system. When the ZMP
+lies within the support polygon (SP) \sidenote{the convex hull of contact points
+on the ground}, it is coincident with the center of pressure (COP). On the other
+hand, if the ZMP goes beyond the support polygon, the system will begin to tip
+over the edge of the SP. In one dimension,
+\begin{align} 
+    x_\textrm{ZMP} = x_\textrm{COM} - \frac{z_\textrm{COM}
+        \ddot{x}_\textrm{COM}}{g}. \label{eq:ZMP}
+\end{align}
+This equation relates the horizontal COM $(x_\textrm{COM})$ dynamics to the
+location of the ZMP $(x_\textrm{ZMP})$.
 
-\subsubsection{Dynamic Centralized
-Controllers}\label{sec:back_dynamic_centralized} 
+Based on this insight, researchers have developed numerous ZMP-trajectory
+methods that follow three basic steps:
+\begin{enumerate}
+    \item Plan a series of foot steps given the terrain and task such that
+    the induced sequence of support polygons contains no gaps.
+    \item Generate a ZMP trajectory that lies within the support polygons.
+    Typically, it is desirable that the trajectory maintains its distance from
+    the edges of the support polygons in order to provide a margin of stability.
+    \item Solve for the COM trajectory given the desired ZMP trajectory. This
+    step requires inverting the solution to a differential equation
+    (\cref{eq:ZMP}) to solve for $x_\textrm{COM}$. Researchers have proposed
+    numerous solutions to this problem including preview control
+    \citep{kajita2003biped}, and differential dynamic programming
+    \citep{feng2015optimization}, the latter of which can solve for the ZMP and
+    COM trajectories simultaneously.
+    \item Use inverse kinematics to calculate joint velocities that track
+    the COM trajectory.
+    \item Track the desired joint velocities with servo controls.
+\end{enumerate}
+
+
 Force control allows robots to be compliant to external disturbances.
 
 \begin{itemize}
@@ -56,13 +112,6 @@ Force control allows robots to be compliant to external disturbances.
             \item Hybrid zero dynamics for full robots reduce dynamics to
             those of a single degree of freedom theo jansen walker
         \end{itemize}
-
-    \item Heuristic Centralized/dynamic approaches
-    \begin{itemize}
-        \item Neural Network Dog controller - high level centralized neural
-        network for commanding parameters of decentralized lower-level
-        impedance controllers
-    \end{itemize}
 \end{itemize}
 
 Centralized controllers rely heavily on models causes two problems
@@ -75,12 +124,10 @@ dynamics.
 \end{enumerate}
 This motivates alternative heuristic decentralized controllers.
 
-\subsubsection{Kinematic Decentralized
-Controllers}\label{sec:back_kinematic_decentralized}
+\subsection{Decentralized Controllers}\label{sec:back_decentralized_control}
     \begin{itemize}
         \item echo control
     \end{itemize}
-\subsubsection{Dynamic Decentralized Controllers}\label{sec:back_dynamic_decentralized}
 
     \begin{itemize}
         \item raibert - motivation for landing leg angles
@@ -778,7 +825,7 @@ energy, which is desirable for a product needing long battery life, they may
 not represent the most versatile design for evaluating new control ideas or
 different gait modes. 
 
-\section{Stumble Recovery for Prostheses} 
+\section{Stumble Recovery for Prostheses}\label{sec:back_stumble_recovery}
 The prosthesis controls we reviewed in
 \cref{sec:back_walking_review,sec:back_bioinspired_pros_control} primarily
 sought to reproduce typical walking kinematics and dynamics. Some control
