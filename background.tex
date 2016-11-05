@@ -30,13 +30,23 @@ Simplified, point-mass models of walking can help us understand the fundamental
 dynamics that control must shape in order to achieve stable locomotion gaits.
 The simplest model that reproduces the center of mass trajectory and ground
 reaction forces seen during human walking is the bipedal spring mass model
-\citep{geyer2006compliant}. This model, illustrated in \cref{fig:bipedal spring
-mass}, simplifies locomotion to a pair of compliant unidirectional springs
-connected to a point mass. When initialized with human-like mass and leg length,
-the model can generate characteristic features of human locomotion such as
-sinusoidal center of mass trajectories, M-shaped vertical ground reaction
-forces, S-shaped horizontal ground reaction forces, and the sequence of double
-and single support. 
+\citep{geyer2006compliant}. This model, illustrated in \cref{fig:ssm_diagram},
+simplifies locomotion to a pair of compliant unidirectional springs connected to
+a point mass. When initialized with human-like mass and leg length, the model
+can generate characteristic features of human locomotion such as sinusoidal
+center of mass trajectories, M-shaped vertical ground reaction forces, S-shaped
+horizontal ground reaction forces, and the sequence of double and single
+support. 
+
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{spring_mass_model_diagram}
+    \caption{The bipedal spring mass model captures many fundamental features of
+    human walking such as the M-shaped vertical ground reaction profile,
+    S-shaped horizontal ground reaction profile and sinusoidal center of mass
+    trajectory. Figure adapted from \citet{geyer2006compliant}.}
+    \label{fig:ssm_diagram}
+\end{marginfigure}
 
 We will look at two paradigms for walking control: centralized approaches that
 use full state information and decentralized approaches that use a subset of
@@ -51,7 +61,7 @@ fundamental model.
 
 \subsection{Centralized Control}\label{sec:back_centralized_control}
 
-Kinematic, centralized control was one of the earliest forms of locomotion
+\emph{Kinematic, centralized control} was one of the earliest forms of locomotion
 control. The predominant approach in this category is based on the linear
 inverted pendulum model (LIPM) \citep{kajita1991study, kajita20013d}. This
 simplified locomotion model applies additional reductions to the bipedal
@@ -60,19 +70,20 @@ constraining the center of mass to move on a plane. The resulting simplified
 model features linear COM dynamics with respect to the zero moment point (ZMP).
 The ZMP is the point on the ground about which no horizontal moments are needed
 in order to counteract the total reaction forces on the system. When the ZMP
-lies within the support polygon (SP) \sidenote{the convex hull of contact points
+lies within the support polygon (SP)\sidenote{the convex hull of contact points
 on the ground}, it is coincident with the center of pressure (COP). On the other
-hand, if the ZMP goes beyond the support polygon, the system will begin to tip
-over the edge of the SP. In one dimension,
+hand, if the ZMP moves beyond the SP, the system will begin to tip
+over the edge of the SP. In one dimension, the location of the ZMP is given by,
 \begin{align} 
     x_\textrm{ZMP} = x_\textrm{COM} - \frac{z_\textrm{COM}
-        \ddot{x}_\textrm{COM}}{g}. \label{eq:ZMP}
+        \ddot{x}_\textrm{COM}}{g}. 
+    \label{eq:ZMP}
 \end{align}
 This equation relates the horizontal COM $(x_\textrm{COM})$ dynamics to the
 location of the ZMP $(x_\textrm{ZMP})$.
 
 Based on this insight, researchers have developed numerous ZMP-trajectory
-methods that follow three basic steps:
+methods that follow five basic steps:
 \begin{enumerate}
     \item Plan a series of foot steps given the terrain and task such that
     the induced sequence of support polygons contains no gaps.
@@ -91,8 +102,24 @@ methods that follow three basic steps:
     \item Track the desired joint velocities with servo controls.
 \end{enumerate}
 
+This general strategy has been successfully applied to a large number of robots
+to walk \citep{hirai1998development}, traverse uneven ground
+\citep{shimmyo2010biped}, and run \citep{kajita2007zmp}. Moreover, the method
+guarantees that for the nominal gait, the COP will remain in the SP, and thus
+the system will maintain its stability.
 
-Force control allows robots to be compliant to external disturbances.
+However, there are several key issues to this approach. One issue stems for
+steps 4 and 5 listed above.  These steps generate and precisely follow via servo
+control a kinematic trajectory of joint angles. When perturbed by unforeseen
+external forces, stiff position control in this manner may generate large
+reaction forces and thus move the COP outside of the SP, resulting
+in a fall. 
+
+\emph{Dynamic, centralized control} seeks to combat this issue by using torque
+control, instead of position control, to ensure compliance to unmodeled
+disturbances.
+
+
 
 \begin{itemize}
     \item Model reduction approaches:        
