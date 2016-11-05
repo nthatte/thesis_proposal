@@ -11,14 +11,14 @@ pgf_with_custom_preamble = {
     "text.usetex": False,    # use inline math for ticks
     "pgf.rcfonts": True,   
     "pgf.preamble": [
-         r"\usepackage{amsmath}",
-         r"\usepackage{fontspec}",
-         r"\usepackage{xunicode} %Unicode extras!",
-         r"\usepackage{xltxtra}  %Fixes",
-         r"\setmainfont[Ligatures={Common,TeX}]{Times}",
-         r"\setsansfont[Ligatures={Common,TeX}]{Avenir Next}",
-         r"\usepackage{sfmath}"
-         ]
+        r"\usepackage{amsmath}",
+        r"\usepackage{fontspec}",
+        r"\usepackage{xunicode} %Unicode extras!",
+        r"\usepackage{xltxtra}  %Fixes",
+        r"\setmainfont[Ligatures={Common,TeX}]{Times}",
+        r"\setsansfont[Ligatures={Common,TeX}]{Avenir Next}",
+        r"\usepackage{sfmath}"
+        ]
 }
 mpl.rcParams.update(pgf_with_custom_preamble)
 

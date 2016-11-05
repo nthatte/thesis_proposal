@@ -117,10 +117,28 @@ in a fall.
 
 \emph{Dynamic, centralized control} seeks to combat this issue by using torque
 control, instead of position control, to ensure compliance to unmodeled
-disturbances.
+disturbances. Commonly, in this approach the dynamics model of the full
+system\sidenote{Where $q$, $\dot{q}$, and $\ddot{q}$ describe the generalized
+coordinates, velocities, and accelerations of the system configuration, $M(q)$
+is the mass matrix, $C(q, \dot{q})$ is a matrix of centripetal and Coriolis
+force coefficients, $N(q)$ represents the gravitational forces, $S$ is a
+selection matrix that assigns joint torques $\tau$ to coordinates $q$, $J(q)$ is
+the Jacobian between joint angles and contact points, and $\lambda$ is a vector
+of external forces},
+\begin{align}
+    M(q) \ddot{q} + C(q, \dot{q}) \dot{q} + N(q) = S\tau + J^T(q) \lambda,
+\end{align}
+is used as an equality constraint in a quadratic program that minimizes torques,
+reaction forces, and deviation from the desired trajectory. Additionally, the
+quadratic program can include inequality contraints representing torque
+saturations and friction limits \citep{hutter2013hybrid, herzog2014balancing,
+saab2013dynamic, wensing2013generation}. Recently, at the DARPA Robotics
+Challenge (DRC) several robots used quadratic-program-based dynamic centralized
+approaches to control humanoid robots through a disaster relief scenario
+\citep{feng2015optimization, kuindersma2014efficiently,
+englsberger2014trajectory}. 
 
-
-
+While the 
 \begin{itemize}
     \item Model reduction approaches:        
         \begin{itemize}
