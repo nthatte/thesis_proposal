@@ -1,12 +1,12 @@
 \chapter{Background}\label{sec:back}
-The main goal of this thesis is to improve transfemoral amputee gait robustness
-and naturalness by applying neuromuscular models of human locomotion to control
-prosthesis hardware capable of dynamic locomotion. Existing approaches to
-walking control in humanoid robots and prostheses have largely failed to reach
-the levels of stability and dynamism required to match that of an amputee's lost
-limb. In this \namecref{sec:back}, we will review these existing approaches,
-examine their strengths and weaknesses, and motivate our specific control and
-design choices.
+\newthought{The main goal of this thesis} is to improve transfemoral amputee
+gait robustness and naturalness by applying neuromuscular models of human
+locomotion to control prosthesis hardware capable of dynamic locomotion.
+Existing approaches to walking control in humanoid robots and prostheses have
+largely failed to reach the levels of stability and dynamism required to match
+that of an amputee's lost limb. In this \namecref{sec:back}, we will review
+these existing approaches, examine their strengths and weaknesses, and motivate
+our specific control and design choices.
 
 \Cref{sec:back_walking_review} categorizes approaches to walking control into
 four major groups based on their ability to produce dynamic interactions with
@@ -16,7 +16,7 @@ mentioned earlier, only dynamic, decentralized controls address
 \cref{chal:dynamic,chal:incomplete_state} of amputee locomotion
 (\cref{sec:intro_challenges}) and are thus suitable for prosthesis control.
 \Cref{sec:back_bioinspired_pros_control} dives deeper into a subset of dynamic
-decentralized control: bio-inspired approaches that seek to model the function of
+decentralized control: bioinspired approaches that seek to model the function of
 the lost limb and are thus particularly well suited for prosthesis control.
 \Cref{sec:back_pros_design} reviews existing mechanical designs of active
 prostheses and examines their ability to enable dynamic locomotion. Finally,
@@ -27,7 +27,7 @@ classification of stumbles.
 \section{Fundamental Walking Dynamics and
 Control}\label{sec:back_walking_review}
 
-Simplified, point-mass models of walking can help us understand the fundamental
+Simple point-mass models of walking can help us understand the fundamental
 dynamics that control must shape in order to achieve stable locomotion gaits.
 The simplest model that reproduces the center of mass trajectory and ground
 reaction forces seen during human walking is the bipedal spring mass model
@@ -148,47 +148,40 @@ englsberger2014trajectory}.
 
 While the replacing \cref{lipm_step_ik,lipm_step_servo} with a QP-based torque
 control can help improve dynamism and compliance, the resulting biped gaits of
-these strategies do not resemble human gaits for two reasons: First, the 
-linear inverted pendulum model does not produce center of mass trajectories or
-ground reaction force profiles similar to those seen during human locomotion.
-Recently, to overcome this issue and produce more human like gaits, researchers
+these strategies do not resemble human gaits for two reasons: First, the linear
+inverted pendulum model does not produce center of mass trajectories or ground
+reaction force profiles similar to those seen during human locomotion.  Second,
+human gaits do not constrain the ZMP to the support polygon as we spend
+significant time on the heel and balls of our feet during stance
+\citep{perry1992gait}.
+
+To overcome these issues and produce more human like gaits, recently researchers
 have investigated applying dynamic centralized control approaches to enforce
-spring-mass model dynamics for walking and running \citep{}. A second problem
-results from constraining the ZMP to lie within the support polygon. Human gaits
-do not satisfy this constraint and we spend significant time on the heel and
-balls of our feet during stance. Recently, an approach
+spring-mass model dynamics instead of LIPM dynamics. With this approach,
+researchers have developed robust controllers for both walking
+\citep{wensing2013generation} and running \citep{martin2015robust} for humanoid
+robots. Alternatively, \citet{sreenath2011compliant} also explored replacing the
+LIPM model with a one-degree-of-freedom walking mechanical linkage. In this
+control, all joint angles are parameterized with respect to a single phase
+variable, usually the leg angle. As the phase variable progresses via its
+passive dynamics, control Lyapunov functions impose virtual constraints that
+force joints to follow a walking gait trajectory. The control expresses dynamic,
+human-like behavior as it is automatically maintains its balance in response to
+external perturbations by stepping forward or backwards.
 
-\begin{itemize}
-    \item Model reduction approaches:        
-        \begin{itemize}
-            \item DRC  QP controllers force robots to follow dynamics of
-                point mass systems
-            \begin{itemize}
-                \item Gaits are still statically stable
-                \item dynamic in the sense that these controllers command forces
-                    not kinematics
-            \end{itemize}
-
-
-            \item Spring mass model similar to previous approaches but force
-            the robot to follow the dynamics of spring mass model
-
-            \item Hybrid zero dynamics for full robots reduce dynamics to
-            those of a single degree of freedom theo jansen walker
-        \end{itemize}
-\end{itemize}
-
-Centralized controllers rely heavily on models causes two problems
-\begin{enumerate}
-\item QPs and inverse dynamics result in unnatural, inefficient gaits to avoid
-singularity which causes
-\item Its unlikely we can model the diverse population of amputees in order
-to derive centralized controllers that consider the joint amputee/prosthesis
-dynamics.
-\end{enumerate}
-This motivates alternative heuristic decentralized controllers.
+While these recent advances have helped close the gap in dynamism and
+reactiveness displayed by humans and control robotic systems while still
+ensuring robustness, these methods are largely inapplicable to prosthesis
+control due to their reliance on full state information and accurate system
+models.  Consequently, researchers have explored decentralized control methods
+that use only a subset of the state and generally rely on heuristic control
+strategies instead of deriving control actions from a detailed system model. 
 
 \subsection{Decentralized Controllers}\label{sec:back_decentralized_control}
+In contrast to the centralized control methods discussed in the previous
+\namecref{sec:back_centralized_control}, 
+
+
     \begin{itemize}
         \item echo control
     \end{itemize}
@@ -579,6 +572,16 @@ used a pair of ball screw transmissions and brushless motors capable of
 \unit[200]{W} of continuous power output to drive its knee and ankle joints
 \citep{sup2009preliminary}. 
 
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{ankle_torque_vs_angle}
+    \caption{Torque vs angle relationship for the ankle during level ground
+    walking. A linear spring relationship captures a significant portion of
+    ankle function during stance. Data from \citet{winter2009biomechanics}
+    scaled to 85 kg subject.}
+    \label{fig:ankle_torque_vs_angle}
+\end{marginfigure}
+
 With these actuators, the knee motor can achieve the required peak torque and
 peak power intermittently (\cref{tab:walking_requirements}). However, the ankle
 motor may be overly stressed due to the high requirements of walking. To remedy
@@ -591,15 +594,6 @@ portion of the torque from the motor. The ankle motor only needs to provide the
 delta between the desired output torque and the linear spring. As a result, the
 spring reduces motor energy consumption, heat generation, and transmission wear.
 
-\begin{marginfigure}
-    \centering
-    \includegraphics[width=\linewidth]{ankle_torque_vs_angle}
-    \caption{Torque vs angle relationship for the ankle during level ground
-    walking. A linear spring relationship captures a significant portion of
-    ankle function during stance. Data from \citet{winter2009biomechanics}
-    scaled to 85 kg subject.}
-    \label{fig:ankle_torque_vs_angle}
-\end{marginfigure}
 
 Further improvements resulted in two more generations of prostheses
 (\cref{fig:vanderbilt_prostheses}b \& c) \citep{lawson2013control,
@@ -613,9 +607,9 @@ sup2011upslope, lawson2013control, lawson2014robotic}, EMG-based control
 \citep{lenzi2014minimum}, and virtual constraint control
 \citep{gregg2014virtual}. 
 
-\begin{figure*}[t]
+\begin{marginfigure}
     \centering
-	\begin{subfigure}[t]{0.3\textwidth}
+	\begin{subfigure}[t]{\linewidth}
     	\centering
         %\includegraphics{}
         \missingfigure{Gen 1}
@@ -624,7 +618,8 @@ sup2011upslope, lawson2013control, lawson2014robotic}, EMG-based control
         reduced motor torque requirements \citep{sup2009preliminary}.}
         \label{fig:vanderbilt_gen_1}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.3\textwidth}
+
+	\begin{subfigure}[t]{\linewidth}
     	\centering
         %\includegraphics{}
         \missingfigure{Gen 2}
@@ -632,7 +627,8 @@ sup2011upslope, lawson2013control, lawson2014robotic}, EMG-based control
         transmission that is less noisy and more durable
         \citep{lawson2013control}.}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.3\textwidth}
+
+	\begin{subfigure}[t]{\linewidth}
     	\centering
         %\includegraphics{}
         \missingfigure{Gen 3}
@@ -641,7 +637,7 @@ sup2011upslope, lawson2013control, lawson2014robotic}, EMG-based control
 	\end{subfigure}
     \caption{Vanderbilt University's Robotic Transfemoral Prostheses.}
     \label{fig:vanderbilt_prostheses}
-\end{figure*}
+\end{marginfigure}
 
 Additional prostheses in the direct drive category include AMPRO
 \citep{zhao2016first}, and commercially available active knee and ankle
