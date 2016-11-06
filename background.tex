@@ -12,16 +12,17 @@ design choices.
 four major groups based on their ability to produce dynamic interactions with
 the environment (dynamic vs kinematic) and whether they can produce control
 commands using only a subset of state (decentralized vs centralized). As
-mentioned earlier, only dynamic, decentralized controls address challenges 1 and
-2 of amputee locomotion (see \cref{sec:intro_challenges}) and are thus suitable
-for prosthesis control.  \Cref{sec:back_bioinspired_pros_control} dives deeper
-into a subset of dynamic decentralized control: bioinspired approaches that seek
-to model the function of the lost limb and are thus particularly well suited for
-prosthesis control.  \Cref{sec:back_pros_design} reviews existing mechanical
-designs of active prostheses and examines their ability to enable dynamic
-locomotion. Finally, \cref{sec:back_stumble_recovery} will discuss previous work
-towards empowering prostheses with active trip recovery modes via explicit
-detection and classification of stumbles. 
+mentioned earlier, only dynamic, decentralized controls address
+\cref{chal:dynamic,chal:incomplete_state} of amputee locomotion
+(\cref{sec:intro_challenges}) and are thus suitable for prosthesis control.
+\Cref{sec:back_bioinspired_pros_control} dives deeper into a subset of dynamic
+decentralized control: bioinspired approaches that seek to model the function of
+the lost limb and are thus particularly well suited for prosthesis control.
+\Cref{sec:back_pros_design} reviews existing mechanical designs of active
+prostheses and examines their ability to enable dynamic locomotion. Finally,
+\cref{sec:back_stumble_recovery} will discuss previous work towards empowering
+prostheses with active trip recovery modes via explicit detection and
+classification of stumbles. 
 
 \section{Fundamental Walking Dynamics and
 Control}\label{sec:back_walking_review}
@@ -83,24 +84,31 @@ This equation relates the horizontal COM $(x_\textrm{COM})$ dynamics to the
 location of the ZMP $(x_\textrm{ZMP})$.
 
 Based on this insight, researchers have developed numerous ZMP-trajectory
-methods that follow five basic steps:
-\begin{enumerate}
-    \item Plan a series of foot steps given the terrain and task such that
-    the induced sequence of support polygons contains no gaps.
+methods that follow \labelcref{lipm_step_servo} basic steps:
+\begin{steps}
+    \item Plan a series of foot steps given the terrain and task such that the
+    induced sequence of support polygons contains no
+    gaps.\label{lipm_step_foot_plan}
+
     \item Generate a ZMP trajectory that lies within the support polygons.
     Typically, it is desirable that the trajectory maintains its distance from
-    the edges of the support polygons in order to provide a margin of stability.
+    the edges of the support polygons in order to provide a margin of
+    stability.\label{lipm_step_zmp_traj}
+
     \item Solve for the COM trajectory given the desired ZMP trajectory. This
-    step requires inverting the solution to a differential equation
-    (\cref{eq:ZMP}) to solve for $x_\textrm{COM}$. Researchers have proposed
+    step requires inverting the solution to a differential equation,
+    \cref{eq:ZMP}, to solve for $x_\textrm{COM}$. Researchers have proposed
     numerous solutions to this problem including preview control
     \citep{kajita2003biped}, and differential dynamic programming
     \citep{feng2015optimization}, the latter of which can solve for the ZMP and
-    COM trajectories simultaneously.
-    \item Use inverse kinematics to calculate joint velocities that track
-    the COM trajectory.
-    \item Track the desired joint velocities with servo controls.
-\end{enumerate}
+    COM trajectories simultaneously.\label{lipm_step_com_traj}
+    
+    \item Use inverse kinematics to calculate joint velocities that track the
+    COM trajectory.\label{lipm_step_ik}
+
+    \item Track the desired joint velocities with servo
+    controls.\label{lipm_step_servo}
+\end{steps}
 
 This general strategy has been successfully applied to a large number of robots
 to walk \citep{hirai1998development}, traverse uneven ground
@@ -108,12 +116,12 @@ to walk \citep{hirai1998development}, traverse uneven ground
 guarantees that for the nominal gait, the COP will remain in the SP, and thus
 the system will maintain its stability.
 
-However, there are several key issues to this approach. One issue stems for
-steps 4 and 5 listed above.  These steps generate and precisely follow via servo
-control a kinematic trajectory of joint angles. When perturbed by unforeseen
-external forces, stiff position control in this manner may generate large
-reaction forces and thus move the COP outside of the SP, resulting
-in a fall. 
+However, there are several key issues to this approach. One issue stems from
+\cref{lipm_step_ik,lipm_step_servo} listed above. These steps generate and
+precisely follow via servo control a kinematic trajectory of joint angles. When
+perturbed by unforeseen external forces, stiff position control in this manner
+may generate large reaction forces and thus move the COP outside of the SP,
+resulting in a fall. 
 
 \emph{Dynamic, centralized control} seeks to combat this issue by using torque
 control, instead of position control, to ensure compliance to unmodeled
@@ -128,17 +136,28 @@ of external forces},
 \begin{align}
     M(q) \ddot{q} + C(q, \dot{q}) \dot{q} + N(q) = S\tau + J^T(q) \lambda,
 \end{align}
-is used as an equality constraint in a quadratic program that minimizes torques,
-reaction forces, and deviation from the desired trajectory. Additionally, the
-quadratic program can include inequality contraints representing torque
+is used as an equality constraint in a quadratic program (QP) that minimizes
+torques, reaction forces, and deviation from the desired trajectory.
+Additionally, the QP can include inequality contraints representing torque
 saturations and friction limits \citep{hutter2013hybrid, herzog2014balancing,
 saab2013dynamic, wensing2013generation}. Recently, at the DARPA Robotics
-Challenge (DRC) several robots used quadratic-program-based dynamic centralized
-approaches to control humanoid robots through a disaster relief scenario
+Challenge (DRC) several robots used QP-based dynamic centralized approaches to
+control humanoid robots through a disaster relief scenario
 \citep{feng2015optimization, kuindersma2014efficiently,
 englsberger2014trajectory}. 
 
-While the 
+While the replacing \cref{lipm_step_ik,lipm_step_servo} with a QP-based torque
+control can help improve dynamism and compliance, the resulting biped gaits of
+these strategies do not resemble human gaits for two reasons: First, the 
+linear inverted pendulum model does not produce center of mass trajectories or
+ground reaction force profiles similar to those seen during human locomotion.
+Recently, to overcome this issue and produce more human like gaits, researchers
+have investigated applying dynamic centralized control approaches to enforce
+spring-mass model dynamics for walking and running \citep{}. A second problem
+results from constraining the ZMP to lie within the support polygon. Human gaits
+do not satisfy this constraint and we spend significant time on the heel and
+balls of our feet during stance. Recently, an approach
+
 \begin{itemize}
     \item Model reduction approaches:        
         \begin{itemize}
@@ -492,7 +511,7 @@ this control paradigm very attractive for application to transfemoral prostheses
 sensor feedback from amputees' residual limbs, enabling intuitive low-level
 prosthesis control. In contrast, other control approaches for prostheses such as
 impedance control have not demonstrated these properties. Importantly,
-neuromuscular control addresses challenges 1 and 2 of amputee
+neuromuscular control addresses \cref{chal:dynamic,chal:incomplete_state} of amputee
 locomotion~(\cref{sec:intro_challenges}) as we can implement them via a
 decentralized, sparse set of reflexes and they allow for dynamism by providing
 joint torque commands via muscle models.
@@ -540,12 +559,12 @@ or exceed the requirements for walking~(\cref{tab:walking_requirements}).
 
 In this \namecref{sec:back_pros_design}, we review a number of recent prosthesis
 designs and analyze their ability to enable dynamic locomotion
-(\hyperref[sec:intro_challenges]{challenge 1} of transfemoral prosthesis
-locomotion).  To address this challenge, prostheses should be able to regulate
-their output joint torques and behave as though they have inertial properties
-similar to that of a normal human leg. This will ensure that the prosthesis will
-emulate the energy efficient gaits of normal walking and remain compliant to
-unforeseen disturbances and uneven terrain.
+(\cref{chal:dynamic,chal:incomplete_state} of transfemoral prosthesis locomotion).  To address
+this challenge, prostheses should be able to regulate their output joint torques
+and behave as though they have inertial properties similar to that of a normal
+human leg. This will ensure that the prosthesis will emulate the energy
+efficient gaits of normal walking and remain compliant to unforeseen
+disturbances and uneven terrain.
 
 \subsection{Direct Drive Transfemoral Prostheses}\label{sec:back_direct_drive}
 The most common approach for active transfemoral prosthesis design employs

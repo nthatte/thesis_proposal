@@ -117,6 +117,25 @@
 \usepackage{subcaption}
 \captionsetup{compatibility=false}
 
+%list types
+\usepackage{enumitem}
+\newlist{steps}{enumerate}{10}
+\setlist[steps]{label*=\arabic*., ref=\arabic*}
+\crefname{stepsi}{step}{steps}
+\Crefname{stepsi}{Step}{Steps}
+
+\newlist{challenges}{enumerate}{10}
+\setlist[challenges]{label=\emph{Challenge \arabic*:}, ref=\arabic*, align=left, 
+    listparindent=\parindent, parsep=0pt}
+\crefname{challengesi}{challenge}{challenges}
+\Crefname{challengesi}{Challenge}{Challenges}
+
+\newlist{contributions}{enumerate}{10}
+\setlist[contributions]{label=\emph{Contribution \arabic*:}, ref=\arabic*, align=left, 
+    listparindent=\parindent, parsep=0pt}
+\crefname{contributionsi}{contribution}{contributions}
+\Crefname{contributionsi}{Contribution}{Contributions}
+
 \newcommand{\proposaltitle}{Robust and Natural Gait via Neuromuscular Control
 for Tansfemoral Prostheses}
 
