@@ -110,8 +110,8 @@ methods that follow \labelcref{lipm_step_servo} basic steps:
     controls.\label{lipm_step_servo}
 \end{steps}
 
-This general strategy has been successfully applied to a large number of robots
-to walk \citep{hirai1998development}, traverse uneven ground
+A large number of robots have successfully employed this general framework to
+walk \citep{hirai1998development}, traverse uneven ground
 \citep{shimmyo2010biped}, and run \citep{kajita2007zmp}. Moreover, the method
 guarantees that for the nominal gait, the COP will remain in the SP, and thus
 the system will maintain its stability.
@@ -160,12 +160,12 @@ have investigated applying dynamic centralized control approaches to enforce
 spring-mass model dynamics instead of LIPM dynamics. With this approach,
 researchers have developed robust controllers for both walking
 \citep{wensing2013generation} and running \citep{martin2015robust} for humanoid
-robots. Alternatively, \citet{sreenath2011compliant} also explored replacing the
-LIPM model with a one-degree-of-freedom walking mechanical linkage. In this
-control, all joint angles are parameterized with respect to a single phase
-variable, usually the leg angle. As the phase variable progresses via its
-passive dynamics, control Lyapunov functions impose virtual constraints that
-force joints to follow a walking gait trajectory. The control expresses dynamic,
+robots. Alternatively, \citet{sreenath2011compliant} explored replacing the LIPM
+model with a one-degree-of-freedom walking mechanical linkage. In this control,
+all joint angles are parameterized with respect to a single phase variable,
+usually the leg angle. As the phase variable progresses via its passive
+dynamics, control Lyapunov functions impose virtual constraints that force
+joints to follow a walking gait trajectory. The control expresses dynamic,
 human-like behavior as it is automatically maintains its balance in response to
 external perturbations by stepping forward or backwards.
 
@@ -173,52 +173,90 @@ While these recent advances have helped close the gap in dynamism and
 reactiveness displayed by humans and control robotic systems while still
 ensuring robustness, these methods are largely inapplicable to prosthesis
 control due to their reliance on full state information and accurate system
-models.  Consequently, researchers have explored decentralized control methods
-that use only a subset of the state and generally rely on heuristic control
-strategies instead of deriving control actions from a detailed system model. 
+models.  We should expect neither from the prosthesis-amputee system.
+Consequently, researchers have explored decentralized control methods that use
+only a subset of the state and generally rely on heuristic control strategies
+instead of deriving control actions from a detailed system model. 
 
-\subsection{Decentralized Controllers}\label{sec:back_decentralized_control}
+\subsection{Decentralized Controllers}\label{sec:back_decentralized_control} 
 In contrast to the centralized control methods discussed in the previous
-\namecref{sec:back_centralized_control}, 
+\namecref{sec:back_centralized_control}, decentralized methods generate walking
+gaits without requiring measurement of the full system state. Consequently,
+decentralized walking strategies typically do not involve
+planning\sidenote{\crefrange{lipm_step_foot_plan}{lipm_step_com_traj} of the
+centralized control framework} and do not enjoy stability guarantees. Rather,
+gait emerges naturally from the coupled dynamics of several closed-loop systems.
+In the case of prosthesis control, one system is the human neuromuscular
+system and the other is the closed-loop dynamics of the robotic prosthesis.
 
+For example, the earliest robotic prosthesis control strategy, termed \emph{echo
+control,} records the kinematics of the healthy leg and then executes an
+identical trajectory on the prosthesis on the following step
+\citep{grimes1977feasibility, grimes1979active}. This strategy, as with all
+robotic prosthesis controls we will review, does not require measurement of the
+torso, head, or arm movement. Also, during execution of the trajectory, the
+position servo controls only require measurement of the prosthesis joint angles,
+making it more practical for implementation on a prosthesis device. However,
+this control is an example of a \emph{kinematic decentralized control.}
+Consequently, it suffers from many of the same problems identified in
+centralized kinematic control. Namely, it does not comply to the environment,
+which can result in large and unnatural reaction forces. For example, if a
+prosthesis under this control strategy encountered an obstacle during swing, the
+knee would not to flex in response and thus the impact would induce a large
+moment on the amputee. Moreover, echo control suffers from the additional
+problem of not allowing the amputee to to start or stop with the prosthesis leg
+with their prosthesis leg.
 
-    \begin{itemize}
-        \item echo control
-    \end{itemize}
+As was the case for centralized control, commanding torques instead of joint
+angles helps alleviate this issue by allowing for dynamic interaction with the
+environment. \emph{Dynamic decentralized control} typically features a finite
+state machine with states representing different phases of gait such as stance
+and swing. Within each phase, a heuristic control law specifies the torque
+command. For example, the first robotic system to achieve stable, dynamic
+locomotion employed simple heuristics to regulate the height, velocity, and
+attitude of 2 dimensional one legged hopping robot
+\citep{raibert1983dynamically}. Specifically, to control the height of the
+robot, the control adjusts the duration of thrust generated by the prismatic leg
+actuator during stance. Researchers empirically determined the relationship
+mapping thrust duration to hopping apex height. To control horizontal velocity,
+first it is assumed that placing the foot in the center of the locus of points
+comprised of the center of gravity projected onto the floor will result in zero
+change in horizontal velocity. Then, a linear feedback gain on velocity error
+determines the offset from this nominal foot placement, which is achieved by a
+servo control on the leg angle during swing. Finally, the control regulates the
+torso attitude during stance via PD feedback. 
 
-    \begin{itemize}
-        \item raibert - motivation for landing leg angles
-        \item virtual model control
-        \item simbicon
-        \item bioinspired controllers
+Unlike a centralized control scheme, \citeauthor{raibert1983dynamically}'s
+scheme does not consider the interaction between these control modules,
+preferring instead to treat stabilization of each degree of freedom an
+independent task. Regardless, the system demonstrated remarkable dynamism and
+robustness, allowing the hopping robot to jump \unit[0.25]{m}, run
+\unitfrac[1.2]{m}{s}, and recover from horizontal disturbance forces applied by
+an experimenter. Moreover, the control strategy easily extended to 3D locomotion
+as well without an exponential increase in computation complexity. This seminal
+work demonstrates that LIPM-based, centralized control that carries stability
+guarantees is not necessary to ensure stability of robotic systems and suggests
+the constraints and model reductions enforced by centralized control may hold
+systems back. Rather, intelligent design of heuristic control strategies can in
+fact provide high levels of performance in practice.
 
-        \item Applicable to prostheses
-        \begin{itemize}
-            \item not bio inspired
-                \begin{itemize}
-                    \item simbicon/impedance control
-                    \item hybrid zero dynamics for prostheses
-                \end{itemize}
+Virtual model control
 
-            \item bio inspired
+simbicon
 
-                We can derive another class of dynamic, decentralized
-                controllers from biological models of animal and human
-                locomotion. These models simulate locomotion at the level of the
-                central nervous system, through simplified models of neural
-                circuitry. 
-                \begin{description}
-                    \item[Central Pattern Generators (CPGs)]
-                        
-                    \item[neuromuscular model] 
-                \end{description}
-        \end{itemize}
-   \end{itemize}
+\subsection{Dynamic Prosthesis Control}
+impedance control
+
+control lyapunov function for prosthesis
+
+We can derive another class of dynamic, decentralized controllers from
+biological models of animal and human locomotion. These models simulate
+locomotion at the level of the central nervous system, through simplified models
+of neural circuitry. 
 
 \section{Bioinspired Control for
 Prostheses}\label{sec:back_bioinspired_pros_control} 
 
-\subsection{Impedance Control}
 
 \subsection{Central Pattern Generators}
 \subsubsection{Central Pattern Generators in Biology}
