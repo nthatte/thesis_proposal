@@ -120,25 +120,30 @@ However, there are several key issues to this approach. One issue stems from
 \cref{lipm_step_ik,lipm_step_servo} listed above. These steps generate and
 precisely follow via servo control a kinematic trajectory of joint angles. When
 perturbed by unforeseen external forces, stiff position control in this manner
-may generate large reaction forces and thus move the COP outside of the SP,
-resulting in a fall. 
+may generates large reaction forces and thus may move the COP outside of the SP,
+resulting in a fall. We can understand the interactions between the leg and the
+environment and the leg and robot body through the concepts of impedance and
+admittance. The environment and robot body are admittances, objects that take
+forces as inputs and move (or not move) in response. As discussed in
+\citet{hogan1985impedance}, it is therefore necessary that the leg acts like an
+impedance, an object that produces an interaction force in response to the
+position imposed on it by the environment and robot body.
 
-\emph{Dynamic, centralized control} seeks to combat this issue by using torque
-control, instead of position control, to ensure compliance to unmodeled
-disturbances. Commonly, in this approach the dynamics model of the full
-system\sidenote{Where $q$, $\dot{q}$, and $\ddot{q}$ describe the generalized
-coordinates, velocities, and accelerations of the system configuration, $M(q)$
-is the mass matrix, $C(q, \dot{q})$ is a matrix of centripetal and Coriolis
-force coefficients, $N(q)$ represents the gravitational forces, $S$ is a
-selection matrix that assigns joint torques $\tau$ to coordinates $q$, $J(q)$ is
-the Jacobian between joint angles and contact points, and $\lambda$ is a vector
-of external forces},
+\emph{Dynamic, centralized control} seeks to control these interaction forces by
+directly computing joint torques, instead of using high-gain position control.
+Commonly, in this approach the dynamics model of the full system\sidenote{Where
+$q$, $\dot{q}$, and $\ddot{q}$ describe the generalized coordinates, velocities,
+and accelerations of the system configuration, $M(q)$ is the mass matrix, $C(q,
+\dot{q})$ is a matrix of centripetal and Coriolis force coefficients, $N(q)$
+represents the gravitational forces, $S$ is a selection matrix that assigns
+joint torques $\tau$ to coordinates $q$, $J(q)$ is the Jacobian between joint
+angles and contact points, and $\lambda$ is a vector of external forces},
 \begin{align}
     M(q) \ddot{q} + C(q, \dot{q}) \dot{q} + N(q) = S\tau + J^T(q) \lambda,
 \end{align}
 is used as an equality constraint in a quadratic program (QP) that minimizes
 torques, reaction forces, and deviation from the desired trajectory.
-Additionally, the QP can include inequality contraints representing torque
+Additionally, the QP can include inequality constraints representing torque
 saturations and friction limits \citep{hutter2013hybrid, herzog2014balancing,
 saab2013dynamic, wensing2013generation}. Recently, at the DARPA Robotics
 Challenge (DRC) several robots used QP-based dynamic centralized approaches to
@@ -165,15 +170,16 @@ model with a one-degree-of-freedom walking mechanical linkage. In this control,
 all joint angles are parameterized with respect to a single phase variable,
 usually the leg angle. As the phase variable progresses via its passive
 dynamics, control Lyapunov functions impose virtual constraints that force
-joints to follow a walking gait trajectory. The control expresses dynamic,
-human-like behavior as it is automatically maintains its balance in response to
+joints to follow a walking gait trajectory. The control expresses a degree of
+dynamism, as the phase variable is free to evolve naturally and demonstrates
+human-like reflexes as it is automatically maintains its balance in response to
 external perturbations by stepping forward or backwards.
 
 While these recent advances have helped close the gap in dynamism and
 reactiveness displayed by humans and control robotic systems while still
 ensuring robustness, these methods are largely inapplicable to prosthesis
 control due to their reliance on full state information and accurate system
-models.  We should expect neither from the prosthesis-amputee system.
+models. We should expect neither from the prosthesis-amputee system.
 Consequently, researchers have explored decentralized control methods that use
 only a subset of the state and generally rely on heuristic control strategies
 instead of deriving control actions from a detailed system model. 
@@ -202,10 +208,10 @@ Consequently, it suffers from many of the same problems identified in
 centralized kinematic control. Namely, it does not comply to the environment,
 which can result in large and unnatural reaction forces. For example, if a
 prosthesis under this control strategy encountered an obstacle during swing, the
-knee would not to flex in response and thus the impact would induce a large
+knee would not to flex in response and thus, the impact would induce a large
 moment on the amputee. Moreover, echo control suffers from the additional
-problem of not allowing the amputee to to start or stop with the prosthesis leg
-with their prosthesis leg.
+problem of not allowing the amputee to to start or stop gait with their
+prosthesis leg.
 
 As was the case for centralized control, commanding torques instead of joint
 angles helps alleviate this issue by allowing for dynamic interaction with the
@@ -222,8 +228,8 @@ mapping thrust duration to hopping apex height. To control horizontal velocity,
 first it is assumed that placing the foot in the center of the locus of points
 comprised of the center of gravity projected onto the floor will result in zero
 change in horizontal velocity. Then, a linear feedback gain on velocity error
-determines the offset from this nominal foot placement, which is achieved by a
-servo control on the leg angle during swing. Finally, the control regulates the
+determines the offset from this point. A servo control on the leg angle during
+swing realizes the desired foot placement. Finally, the control regulates the
 torso attitude during stance via PD feedback. 
 
 Unlike a centralized control scheme, \citeauthor{raibert1983dynamically}'s
@@ -237,25 +243,101 @@ as well without an exponential increase in computation complexity. This seminal
 work demonstrates that LIPM-based, centralized control that carries stability
 guarantees is not necessary to ensure stability of robotic systems and suggests
 the constraints and model reductions enforced by centralized control may hold
-systems back. Rather, intelligent design of heuristic control strategies can in
-fact provide high levels of performance in practice.
+systems back. Rather, intelligent design of heuristic control to shape the
+natural dynamics of a system can in fact provide high levels of performance in
+practice.
 
-Virtual model control
+Virtual model control, proposed by \citet{pratt2001virtual}, provides a
+convenient method for designing heuristic control strategies. In contrast to the
+control proposed in \citet{raibert1983dynamically}, which commands forces
+aligned with the robot's actuators, virtual model control does not require such
+correspondence. Rather, designers can use their intuition to place virtual
+mechanical elements, such as springs, dampers, masses, and linkages on or
+between reference coordinate frames located anywhere in space. The virtual
+mechanisms apply generalized forces $F$ to the coordinate frames, which are
+translated to joint torques $\tau$ via the Jacobian $J$ according to
+\begin{align}
+    \tau = J^T F.
+\end{align}
+Joint-level controls realize these desired torques, thereby simulating the
+virtual components. 
 
-simbicon
+This intuitive control approach has many advantages: First, it an intuitive
+framework to design controllers for many tasks and many different robot
+architectures. Second, even though the original virtual model control proposed
+by \citeauthor{pratt2001virtual}'s is centralized, one can easily design
+decentralized controllers with this method as well. If the virtual mechanisms do
+not span all the joints, $J$ will be a sparse matrix, resulting in a
+decentralized control approach that can be applied to prostheses. Last,
+impedance mechanisms such as springs and dampers ensure dynamic interaction with
+the environment with reasonable reaction forces.
 
 \subsection{Dynamic Prosthesis Control}
-impedance control
+With the goal of dynamic interaction with the environment in mind,
+\citet{sup2007design} formulated \emph{impedance control} for active prostheses.
+The strategy is a essentially a form of simple virtual model control, where
+linear and nonlinear springs along with linear dampers span individual joints.
+A finite state machine, such as the one in
+\cref{fig:impedance_control_state_flow}, switches impedance functions as the
+amputee progresses through phases of gait: early and late stance and early and
+late swing. \citet{sup2008design} uses an impedance model with linear and cubic
+springs and a linear damper given by
+\begin{align}
+    \tau = -k_1 (\theta - \theta_0) - k_2 (\theta - \theta_0)^3 - b \dot \theta.
+\end{align}
+Regression analysis of the torque vs angle and velocity data of intact subjects
+performing level-ground walking returns the impedance parameters for each joint
+in each state.  An experimenter can further tune these parameters to better suit
+the amputee's gait. 
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{impedance_control_state_flow}
+    \caption{Finite state machine used for the impedance control proposed by
+    \citet{sup2007design}. In each state the control employs impedance functions
+    that determine the behavior of the ankle and knee joints of an active
+    transfemoral prosthesis.}
+    \label{fig:impedance_control_state_flow}
+\end{marginfigure}
+This strategy has been implemented on both transtibial \citep{shultz2014walking}
+and transfmoral \citep{lawson2014robotic} active prostheses and has enabled
+those prostheses to improve amputee gait characteristiscs over those provided by
+passive prostheses.  Moreover, by tuning impedance parameters for specific tasks
+and augmenting the finite state machine, researchers have extended impedance
+control to help amputees to walk up and down slopes \citep{sup2011upslope} and
+stairs \citep{lawson2013control}, run \citep{huff2012running,
+shultz2015running}, and execute sit-to-stand motions \citep{varol2009powered}.
+A similar control method is quasai-stiffness control \citep{}. In this method, 
+instead of fitting the torque vs angle curves with impedance functions, a
+look-up-table stores a discreteized version of the entire curve. An advantage of
+this method is that it can provide speed adaptation by linear interpolation
+between look up tables representing slow and fast walking.
 
-control lyapunov function for prosthesis
+In contrast to the kinematic echo control strategy discussed earlier, impedance
+control and quasistatic control should produce more reasonable interaction
+forces. This is especially true when the prosthesis encounters an unexpected
+disturbance, as the control does not try to follow a specific trajectory with
+high precision and thus high feedback gains. However, whereas impedance control
+as originally proposed by \citet{hogan1985impedance} advocated independently
+specifiying the disturbance response torque and the torque required to achieve
+the desired motion, the impedance control for prostheses we have discussed uses
+the same command for both when is not obvious that this should be the case. 
+
+Recently, several research groups have proposed dynamic control strateies that 
+contain both a feedforward element for generating the nominal motion and a
+feedback element for responding to disturbances. In these approaches, these two
+aspects can be designed and tuned seperately.
+
+minimum jerk
+control lyapunov function for prosthesis - cop based, hip angle with impedance
+control feed forward
+
+\section{Bioinspired Control for
+Prostheses}\label{sec:back_bioinspired_pros_control} 
 
 We can derive another class of dynamic, decentralized controllers from
 biological models of animal and human locomotion. These models simulate
 locomotion at the level of the central nervous system, through simplified models
 of neural circuitry. 
-
-\section{Bioinspired Control for
-Prostheses}\label{sec:back_bioinspired_pros_control} 
 
 
 \subsection{Central Pattern Generators}
@@ -299,6 +381,7 @@ decentralization and dimensionality reduction are desirable properties in this
 domain as well.
 
 \subsubsection{Neuromechanical Models with CPGs}
+\todo{look for taga paper that talks about interaction with environment}
 The seminal work on CPG-based bipedal locomotion control is presented in
 \citet{taga1991self}. In this model, a CPG neural network of six interconnected
 oscillators describes the joint torques applied to a four link biped model.

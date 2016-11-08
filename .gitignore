@@ -14,7 +14,7 @@ main.pdf
 *.cb
 *.cb2
 *.swp
-makefile
+.latexmkrc
 
 ## Intermediate documents:
 *.dvi

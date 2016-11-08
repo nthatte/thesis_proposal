@@ -1,0 +1,5 @@
+@default_files = ("main");
+$pdf_previewer = "open -a /Applications/Skim.app"; 
+$pdf_mode=1;
+$preview_continuous_mode=1;
+$pdflatex = 'pdflatex -interaction=nonstopmode';
