@@ -5,25 +5,22 @@
     \centering
 	\begin{subfigure}[b]{\textwidth}
     	\centering
-        %\includegraphics{}
-        \missingfigure{C-Leg}
-        \caption{Ottobock C-Leg knee prosthesis}
+        \includegraphics[height=1.5in]{ottobock_cleg}
+        \caption{C-Leg™ Knee ©Ottobock}
         \label{fig:ottobock_cleg}
         \vspace{0.25in}
 	\end{subfigure}
 	\begin{subfigure}[b]{\textwidth}
     	\centering
-        %\includegraphics{}
-        \missingfigure{Rheo Knee}
-        \caption{Össur Rheo Knee}
+        \includegraphics[height=1.5in]{rheo-knee}
+        \caption{Rheo™  Knee ©Össur}
         \label{fig:ossur_rheo}
         \vspace{0.25in}
 	\end{subfigure}
 	\begin{subfigure}[b]{\textwidth}
     	\centering
-        %\includegraphics{}
-        \missingfigure{Foot}
-        \caption{Freedom Innovations Foot}
+        \includegraphics[height=1.5in]{freedom_innov_foot}
+        \caption{Thrive™ Foot ©Freedom Innovations}
         \label{fig:freedom_innovations_foot}
 	\end{subfigure}
     \caption{Examples of microprocessor-controlled mechanically-passive knee
@@ -42,10 +39,10 @@ amputees living in the United States will likely double.
 Currently, prosthetists often prescribe transfemoral amputees (those with
 amputations between the hip and knee joints) an energy storage and return
 composite foot such as the Sierra Foot (Freedom Innovations; Irvine, CA;
-\cref{fig:freedom_innovations_foot}) along with a microprocessor-controlled
-mechanically-passive knee prostheses. These knee prostheses feature control
+\cref{fig:freedom_innovations_foot}) along with a microprocessor-controlled,
+mechanically-passive knee prosthesis. These knee prostheses feature control
 algorithms that measure kinematic and force data via sensors embedded in the
-prosthesis and adjust the knee's resistance accordingly.  Examples of
+device and adjust the knee's resistance accordingly.  Examples of
 microprocessor-controlled prosthetic knees include the C-Leg (Otto Bock;
 Duderstadt, Germany; \cref{fig:ottobock_cleg}), which has an adjustable
 hydraulic damping system, and the Rheo Knee (Össur; Reykjavik, Iceland;
@@ -62,13 +59,14 @@ level walking \citep{perry1992gait}, walking up stairs
 \citep{nadeau2003frontal}, running \citep{buczek1990stance}, and jumping
 \citep{hubley1983work}. In addition, active knee flexion and extension muscle
 activations have been noted during stumble recovery \citep{eng1994strategies}.
-At the ankle as well, passive spring-like prostheses cannot replicate the
-positive net work seen in the ankle joint during level ground walking, which is
-essential for push-off and forward propulsion \citep{perry1992gait}.
+At the ankle joint, passive spring-like prostheses cannot replicate the positive
+net work seen in the ankle joint during level ground walking, which is essential
+for push-off and forward propulsion \citep{perry1992gait}.
 
-Consequently, lower-limb amputees, and especially transfemoral or above-the-knee
-amputees, equipped with mechanically-passive prostheses suffer from a number of
-issues including markedly increased energy consumption~\citep{waters1976energy},
+Consequently, lower-limb amputees, and especially transfemoral
+amputees\sidenote{those with above the knee amputations} equipped with
+mechanically-passive prostheses suffer from a number of issues including
+markedly increased energy consumption~\citep{waters1976energy},
 abnormal gait kinematics~\citep{jaegers1995prosthetic}, and an increased
 likelihood of falling~\citep{miller2001prevalence}. Specifically, large
 percentages of transfemoral amputees report they are unable to complete tasks
@@ -141,20 +139,20 @@ Control}\label{sec:intro_challenges}
 
 It still remains an open research question how best to control these prostheses
 to achieve natural and robust gaits. In the most established control method for
-powered prostheses, the prosthesis uses simple impedance functions to
-approximate the joint torque versus angle relationships observed during
-walking~\citep{sup2009preliminary}. However, since the torque functions only
-approximate steady, level walking, this method does not seem to generalize well
-to other situations such as walking on slopes~\citep{sup2011upslope} or rough
-ground~\citep{thatte2016toward} and changing foot placement
-targets~\citep{schepelmann2016evaluation}. 
+powered prostheses, the prosthesis uses simple functions to approximate the
+joint torque versus angle relationship, termed the \emph{quasi-stiffness}
+observed during walking~\citep{sup2007design, lenzi2014speed}. However, since
+the torque functions only approximate steady, level walking, this method
+requires further tuning to handle other situations such as walking on
+slopes~\citep{sup2011upslope} or rough ground~\citep{thatte2016toward} and
+changing foot placement targets~\citep{schepelmann2016evaluation}. 
 
 As mentioned earlier, walking on slopes and rough ground present major hurdles
 for transfemoral amputees. Moreover, previously developed prosthesis controls
 have not specifically addressed the risk of falling that is so detrimental to
 amputee quality of life. Therefore, it is clear that we should formulate a
 prosthesis controller with more power to generalize to a larger variety of
-environments thereby improving amputee gait robustness. Formulating a robotic
+environments, which will improve amputee gait robustness. Formulating a robotic
 prosthesis controller to accomplish this goal requires we address three main
 challenges:
 
@@ -220,16 +218,16 @@ challenges:
     stability empirically.
 
     \item\label{chal:amputees_unique} \emph{Amputees are unique}~~Finally, we
-    should be able to adapt robotic prosthesis controllers to each amputees
-    individual's needs. The variation in amputee needs arise from a number of
-    factors including but not limited to the amputee's height, weight, strength,
-    endurance, reason for amputation, time since amputation, experience, and
-    personal preferences. Consequently, prostheses and controllers should be
-    optimized to suit individual users.
+    should be able to adapt robotic prosthesis controllers to each amputee's
+    individual needs. The variation in amputee needs arise from a number of
+    factors including, but not limited to, the amputee's height, weight,
+    strength, endurance, reason for amputation, time since amputation,
+    experience, and personal preferences. Consequently, prostheses and
+    controllers should be optimized to suit individual users.
 \end{challenges}
 
 \vspace{2ex}
-\begin{fullwidth} \emph{This thesis proposes decentralized, dynamic control
+\begin{fullwidth} \emph{This thesis proposes dynamic decentralized control
 methods for transfemoral prostheses, along with methods to optimize them for
 individual amputees, in order to improve gait robustness and naturalness.}
 \end{fullwidth}
@@ -239,10 +237,10 @@ individual amputees, in order to improve gait robustness and naturalness.}
 In this thesis, we seek to improve amputee gait robustness and naturalness by
 employing an alternative approach to joint control in prostheses that seeks to
 mimic the underlying dynamics and control of the human neuromuscular system. In
-this approach, instead of replicating recorded torque profiles with impedance
-functions, we model the dynamical system, consisting of virtual muscles and
-local reflex feedback pathways, that generate joint torques during locomotion.
-Crucially, the resulting prosthesis control addresses
+this approach, instead of replicating recorded torque profiles with
+quasi-stiffness functions, we model the dynamical system, consisting of virtual
+muscles and local reflex feedback pathways, that generate joint torques during
+locomotion.  Crucially, the resulting prosthesis control addresses
 \cref{chal:dynamic,chal:incomplete_state}: the control is decentralized, as the
 reflex feedback are designed to rely only on the state of other muscles in the
 same leg, and dynamic, as the virtual muscles integrate the sensed kinematic
@@ -258,10 +256,10 @@ socket and on the ground shape the motion of the amputee-prosthesis system.
     \label{fig:eilenberg_muscle}
 \end{marginfigure}
 
-Prior work on neuromuscular models shows that they can lead to robust and
-natural-looking gaits when used to control simulated bipeds. For example, using
-a neuromuscular model, an optimized simulated biped model walked on unseen,
-uneven terrain with sudden drops and steps up to 14 centimeters
+Prior work on neuromuscular models shows that when applied to simulated biped
+models they can produce robust gaits with natural appearances. For example,
+using a neuromuscular model, an optimized simulated biped model walked on
+unseen, uneven terrain with sudden drops and steps up to 14 centimeters
 \citep{song2015neural}. In addition, \citet{eilenberg2010control} successfully
 applied the neuromuscular control approach to a powered ankle prosthesis
 (\cref{fig:eilenberg_muscle}), which mimics the kinematics and kinetics of the
@@ -276,17 +274,17 @@ neuromuscular control versus the established impedance control method. We find
 that neuromuscular control enabled the simulated amputee to walk further over
 rougher terrain than the established impedance control method allows.
 
-Next to test the feasibility of the control approach to control a real system, we
-design and build a partial powered transfemoral prosthesis prototype with an
+Next, to test the feasibility of the control approach to control a real system,
+we design and build a partial powered transfemoral prosthesis prototype with an
 active knee actuator and a passive, spring-loaded ankle. The prosthesis
 prototype uses series elastic actuation~\citep{pratt1995series} that allows it
 to accurately achieve the torques commanded by the neuromuscular model. Initial
 tests with an intact user wearing the prosthesis through an amputee simulator
-adaptor show that the proposed neuromuscular control when applied to the knee of
-an active prosthesis, produce reasonable kinematics and joint torques. This
-positive result motivates continued development of the prosthesis into a
-full active knee and ankle transfemoral prosthesis and implementation of testing
-of the full neuromuscular prosthesis control.
+adaptor show that the proposed neuromuscular control, when applied to the knee
+of an active prosthesis, produce reasonable kinematics and joint torques. This
+positive result motivates continued development of the prosthesis into a full
+active knee and ankle transfemoral prosthesis and implementation of testing of
+the full neuromuscular prosthesis control.
 
 To address the \cref{chal:amputees_unique}, we propose to optimize prosthesis
 controls for specific subjects. To this end, in completed work, we develop an
@@ -301,7 +299,7 @@ the proposed method improves gait characteristics when applied to the full
 neuromuscular controlled prosthesis for an amputee subject. We intend to
 investigate this question via additional tests on an amputee subject.
 
-Lastly, we seek to improve the capability of the transfemoral prosthesis to
+Last, we seek to improve the capability of the transfemoral prosthesis to
 respond to trips, which pose a significant and impactful threat to amputee
 quality of life. To accomplish this goal, we propose to use imitation learning
 techniques \citep{argall2009survey} to learn polices that allow the prosthesis
@@ -317,19 +315,18 @@ authors then evaluate these classifiers via cross validation, in which a subset
 of the training data is set aside and used for testing, and report low
 error-rates.  However, to date no one has applied a trip classifier to
 prosthesis hardware in order to initiate a trip recovery controller. Trivial
-application of classifiers trained on healthy human subject data likely will not
-work, as the distribution of data at test time generated by a prosthesis that is
-controlled by a learned policy will differ from the data used to train that
-policy. The training and test time distribution mismatch violates the i.i.d.\
-(independent and identically drawn) assumption that underpins classification
-performance. To remedy this problem, we intend to employ the DAGGER training
-method \citep{ross2011reduction} that aligns the train and test time
-distributions through an iterative procedure. We will collect training and
-testing data to learn and evaluate the trip recovery policies using the Push Bot
-robot (\cref{fig:push_bot}) which can apply tripping forces to subjects via
-actuated tethers.
-
-\begin{marginfigure}[-3in]
+application of classifiers trained on healthy human subject data likely will
+yield poor results, as the distribution of data at test time generated by a
+prosthesis that is controlled by a learned policy will differ from the data used
+to train that policy. The training and test time distribution mismatch violates
+the i.i.d.\sidenote[][1in]{independent and identically drawn} assumption that
+underpins classification performance. To remedy this problem, we intend to
+employ the DAGGER training method \citep{ross2011reduction} that aligns the
+train and test time distributions through an iterative procedure. We will
+collect training and testing data to learn and evaluate the trip recovery
+policies using the Push Bot robot (\cref{fig:push_bot}) which can apply tripping
+forces to subjects via actuated tethers.
+\begin{marginfigure}[-3.5in]
     \centering
     %\includegraphics{}
     \missingfigure{push bot}
@@ -378,12 +375,13 @@ contributions:
     transfemoral prosthesis control}~~We will implement the proposed
     neuromuscular prosthesis control on the SEA transfemoral prosthesis,
     optimize its parameters according to the amputee subject's preferences, and
-    evaluate the prosthesis' ability to produce a natural and comfortable gait.
-    We will measure gait characteristics in terms of joint kinematics and
-    kinetics and the amputee's metabolic energy consumption. We will present
-    results relative to typical non-amputee gait, the amputee's gait using his
-    or her prescribed prosthesis, and the gait achieved by an unoptimized
-    prosthesis control.
+    evaluate the prosthesis' ability to produce a natural and robust gait.  We
+    will measure gait characteristics in terms of joint kinematics and kinetics
+    and the amputee's metabolic energy consumption. We will present results
+    relative to typical non-amputee gait, the amputee's gait using his or her
+    prescribed prosthesis, and the gait achieved by an unoptimized prosthesis
+    control. We will also evaluate the ability the control to adapt to novel
+    circumstances such as changes in gait speed and ground slope. 
 
     \item\label{contrib:trip_recovery} \emph{Learning and evaluation of trip
     recovery policies}~~The last contribution is a method to learn and
@@ -391,5 +389,5 @@ contributions:
     swing. The learned policies will advance the state-of-the-art as they will
     be the first trip recovery policies implemented on real prosthesis hardware,
     whereas previous policies were trained and tested offline using data
-    collected from healthy human subjects.
+    collected from non-amputee subjects.
 \end{contributions}
