@@ -52,8 +52,7 @@ p2, = ax.plot([0, 70], [10, -10], ls=(0, (2.5,2)) ,linewidth=2, color=color2)
 
 fontsize = ax.xaxis.get_label().get_fontsize()
 ax.legend((p0, p1, p2), ('torque', 'early stance spring', 'pre-swing/swing spring'), 
-    frameon = False, loc = (0.15, 0.75), fontsize=6, handlelength=3)
-
+    frameon = False, loc = (-0.3, 1), fontsize=8, handlelength=3)
 ax.xaxis.set_label_text('Angle (deg)')
 ax.yaxis.set_label_text('Torque (N-m)')
 
