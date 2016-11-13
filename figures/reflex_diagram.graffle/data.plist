@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>ActiveLayerIndex</key>
-	<integer>0</integer>
+	<integer>4</integer>
 	<key>ApplicationVersion</key>
 	<array>
 		<string>com.omnigroup.OmniGraffle7</string>
-		<string>174.11.0.272324</string>
+		<string>176.2.0.273994</string>
 	</array>
 	<key>AutoAdjust</key>
 	<integer>0</integer>
@@ -5203,7 +5203,7 @@
 			<key>Artboards</key>
 			<false/>
 			<key>Lock</key>
-			<false/>
+			<true/>
 			<key>Name</key>
 			<string>Layer 5</string>
 			<key>Print</key>
@@ -5227,7 +5227,7 @@
 			<key>Artboards</key>
 			<false/>
 			<key>Lock</key>
-			<false/>
+			<true/>
 			<key>Name</key>
 			<string>Control</string>
 			<key>Print</key>
@@ -5284,7 +5284,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2016-11-10 21:29:20 +0000</string>
+	<string>2016-11-12 03:06:09 +0000</string>
 	<key>Modifier</key>
 	<string>Nitish Thatte</string>
 	<key>MovementHandleVisible</key>
@@ -5355,6 +5355,8 @@
 	<false/>
 	<key>VPages</key>
 	<integer>1</integer>
+	<key>VisibleVoidKey</key>
+	<real>1</real>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
@@ -5372,7 +5374,7 @@
 		<key>Sidebar_Tab</key>
 		<integer>0</integer>
 		<key>VisibleRegion</key>
-		<string>{{-134.51758888130763, 155.27638116541158}, {450.25125412365298, 381.90954590845564}}</string>
+		<string>{{-134.51758888130763, 189.9497478334161}, {450.25125412365298, 381.90954590845564}}</string>
 		<key>Zoom</key>
 		<real>1.9900000095367432</real>
 		<key>ZoomValues</key>
