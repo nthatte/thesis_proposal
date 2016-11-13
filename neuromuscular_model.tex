@@ -22,14 +22,15 @@ reflexes that implement the key behaviors required for walking.
 
 \section{Mechanical Model}\label{sec:neuro_mech_model}
 
-To obtain the simulation results we present in this thesis, we construct a
-mechanical model in the Matlab Simscape Multibody environment similar to those
-presented in \citet{geyer2010muscle, song2015neural}. This model represents the
-seven link biped in \cref{fig:neuro_seven_link} and includes two legs with
-thigh, shank, and foot segments, as well as a lumped head-arms-trunk (HAT)
-segment. \Cref{tab:model_mech_params} lists the segment lengths, center of mass
-and joint locations measured from the distal end, masses, and inertias that
-approximate those of a \unit[80]{kg}, \unit[2.0]{m} tall person.
+To obtain the simulation results we present in \cref{sec:completed_comparison},
+we construct a mechanical model in the Matlab Simscape Multibody environment
+similar to those presented in \citet{geyer2010muscle, song2015neural}. This
+model represents the seven link biped in \cref{fig:neuro_seven_link} and
+includes two legs with thigh, shank, and foot segments as well as a lumped
+head-arms-trunk (HAT) segment. \Cref{tab:model_mech_params} lists the segment
+lengths, center of mass and joint locations measured from the distal end,
+masses, and inertias that approximate those of a \unit[80]{kg}, \unit[2.0]{m}
+tall person.
 
 \begin{table}[b]
   \centering
@@ -70,7 +71,7 @@ the maximum recovery velocity of the ground. If $\dot n_c$ exceeds this
 velocity ground contact is lost.
 
 In the tangential direction, a state machine switches between two force models
-representing sliding and static frction. Static frction is given by
+representing sliding and static friction. Sliding friction is given by
 \begin{align}
     F_{t,sl} = -\func{sign}{\dot t_c} \mu_{sl} F_n
 \end{align}
@@ -84,6 +85,10 @@ is the penetration velocity, $\mu_{sl} = 0.8$ is the sliding coefficient of
 friction, and $k_t =\unitfrac[78.45]{N}{mm}$ is the stiffness coefficient in the
 tangential direction.
 
+The contact model begins in the sliding mode and switches to the static mode if
+$\dot t_c < 1 \unitfrac[1]{cm}{s}$. It switches back to the sliding mode when
+$| F_{t,st} | < \mu_{st} | F_n |$, where $\mu_{st} = 0.9$.
+
 Finally, the biped skeletal model includes soft joint limits to represent
 the skeletal joint limits on the knee, ankle, and hip joints. The functional
 form form the soft limit joint torque is identical to that of the normal ground
@@ -92,22 +97,21 @@ reaction force given by \cref{eq:grf_n}.
     \tau_{jl} = k_{jl} \Delta \theta_{jl} (1 + \dot \theta_{jl}) (\Delta
     \theta_{jl}  > 0) \left(\nicefrac{\dot \theta_{jl}}{\dot \theta_{max}} > -1
     \right), 
-    \label{eq:grf_n}
+    \label{eq:tau_joint_limit}
 \end{align}
 where $k_{jl} = \unitfrac[0.3]{N \cdot m}{deg}$ is the joint stiffness $\Delta
 \theta$ and $\dot \theta_{jl}$ are the joint limit penetration angle and
 velocity respectively, and $\dot \theta_{max} = \unitfrac[1]{deg}{s}$ is the
 maximum joint limit retraction velocity. \Cref{tab:joint_lim} lists the
 engagement angles for the joint limits.
-
 \begin{margintable}
   \centering
       \begin{tabular}{lll}
         \toprule
         Joint & ext.\ lim.\ & flex lim.\ \\
         \midrule
-        hip   & -40 & 50 \\
-        knee  & 5 &      \\
+        hip   &     & 50 \\
+        knee  &   5 &    \\
         ankle & -40 & 20 \\
         \bottomrule
       \end{tabular}
@@ -116,30 +120,76 @@ engagement angles for the joint limits.
   extension (see \cref{fig:neuro_seven_link}).}\label{tab:joint_lim}
 \end{margintable}
 
+To obtain simulation results, we simulate the mechanical system with the ode15s
+variable step solver. We set the maximum step size to \unit[10]{ms}, relative
+error tolerance to $10^{-4}$, and abolute error to $10^{-6}$.
+
 \section{Hill Muscle Models}\label{sec:neuro_hill_muscle}
 
-\begin{marginfigure}
+Our proposed transfemoral prosthesis control is comprised of biological muscle
+actuators that are stimulated according to hypothesized reflex pathways.
+Specifically, we use a Hill-type \emph{muscle tendon unit} (MTU) developed in
+\citet{geyer2010muscle} . It is comprised of a contractile element (CE) that
+represents muscle fibers and produces force when activated, a parallel elastic
+(PE) element that represents the stiffness of the collagen tissue between muscle
+fascicles, and series elastic (SE) element that models tendon stretch.
+\Cref{fig:hill_type_mtu} shows the arrangement of these elements. Note that the
+PE and SE both are unidirectional springs with engagement lengths of $l_{opt}$
+and $l_{slack}$ respectively.
+\begin{marginfigure}[-1in]
     \centering
-    \includegraphics[width=\linewidth]{force_length_plot_annotate}
-    \caption{}
+    \includegraphics[width=\linewidth]{mtu_figure}
+    \vspace{-0.4in}
+    \caption{Hill-type muscle tendon unit with contractile element (CE),
+    parallel elasticity (PE), and series elasticity (SE).}
+    \label{fig:hill_type_mtu}
+\end{marginfigure}
+
+The CE generates force according to
+\begin{align}
+    F_{CE} = F_{max} A \func{f_l}{l_{CE}} \func{f_v}{v_{CE}}.
+    \label{eq:hill_ce}
+\end{align}
+In this equation, the force generated by the CE $(F_{CE})$ is the maximum
+isometric (constant length) force $(F_{max})$ multiplied by activation $(A)$,
+the force-length ($\func{f_l}{\cdot})$, and force-velocity
+$(\func{f_v}{\cdot})$, relationships of the CE. The activation $A$ is a low-pass
+filtered version of the stimulation signal muscle $S(t)$ generated by the muscle
+reflexes we will detail in the \hyperref[sec:neuro_stance_reflexes]{next}
+section. This filter, given by $A(t) = S - \tau \dot A(t)$ with time constant
+$\tau$, represents the diffusion dynamics of calcium ions that activate binding
+sites in the muscle fibers.
+\begin{marginfigure}[0.2in]
+    \centering
+    \includegraphics[width=\linewidth]{force_length_ce_annotate}
+    \vspace{-0.25in}
+    \caption{Force-length relationship of the CE.}
     \label{fig:force_length_ce}
 \end{marginfigure}
 
-\begin{marginfigure}
+The binding sites are where overlapping actin and myosin filaments attach and
+generate pulling force. The contractile element length of $l_{opt}$ corresponds
+to maximum overlap between these filaments. Therefore, as as the muscle length
+moves away from $l_{opt}$, its force production capacity decreases leading to
+the force-length relationship shown in \cref{fig:force_length_ce}. We model the
+force-length relationship via a bell curve
+\begin{align}
+    \func{f_l}{l_{CE}} = \exp \left( \ln(0.05) \left| \frac{l_{ce} - l_{opt}}{w l_{opt}}
+    \right|^3 \right).
+    \label{eq:hill_force_length}
+\end{align}
+\begin{marginfigure}[0.2in]
     \centering
-    \includegraphics[width=\linewidth]{force_velocity_plot}
-    \caption{}
+    \includegraphics[width=\linewidth]{force_velocity_ce}
+    \vspace{-0.25in}
+    \caption{Force-velocity relationship of the CE.}
     \label{fig:force_velocity_ce}
 \end{marginfigure}
 
-\begin{marginfigure}
-    \centering
-    \includegraphics[width=\linewidth]{force_length_pese_plot}
-    \caption{}
-    \label{fig:force_length_pese}
-\end{marginfigure}
-
-\begin{margintable}
+The velocity-dependent filament attachment probabilities give rise to a
+force-velocity relationship shown in \cref{fig:force_velocity_ce}. The following 
+expression captures this relationship.
+\begin{table}[t]
   \centering
   \begin{tabular}{ll|ll}
     \toprule
@@ -155,8 +205,55 @@ engagement angles for the joint limits.
   \end{tabular}
   \caption{Neuromuscular parameters for shared entities (left) and the hamstring
   muscle (right)}
-  \label{tab:neurmusc_params}
-\end{margintable}
+  \label{tab:neuromusc_params}
+\end{table}
+\begin{align}
+    \func{f_v}{v_{CE}} = 
+    \begin{cases} 
+        \frac{v_{max} - v_{CE}}{v_{max} + K v_{CE}}, & \textrm{if } v_{CE}< 0 \\
+        N + (N-1) \frac{v_{max} + v_{CE}}{7.56 K v_{CE} - v_{max}}, &
+            \textrm{if } v_{CE} \ge 0 
+    \end{cases}
+\end{align}
+In this expression, $K$ is a shape parameter and $N$ determines the force
+amplification when the contractile element is lengthening. The force-velocity
+relationship acts as a multiplicative damper causing the CE to produce more
+contractile force when it is lengthening and less as it extends.
+
+We model both passive elements, the PE and SE, using the same functional form
+representing a unidirectional, stiffening spring, the behavior of which is shown
+in \cref{fig:force_length_pese}. The expressions for the elastic force produces
+by these elements are
+\begin{align}
+    \func{F_{PE}}{l_{CE}} &= F_{max} \left( \frac{l_{CE} - l_{opt}}{\epsilon_{PE}
+        l_{opt}} \right)^2 (l_{CE} > l_{opt})\\
+    \func{F_{SE}}{l_{SE}} &= F_{max} \left( \frac{l_{SE} - l_{slack}}{\epsilon_{SE}
+        l_{slack}} \right)^2 (l_{SE} > l_{slack}).
+\end{align}
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{force_length_pese}
+    \caption{PE and SE force length relationship. For the PE, $l_{ref} = l_{opt}$
+    and $\epsilon_{ref} = \epsilon_{PE}$. Likewise, for the SE, $l_{ref} =
+    l_{slack}$ and $\epsilon_{ref} = \epsilon_{SE}$.} 
+    \label{fig:force_length_pese}
+\end{marginfigure}
+
+The left-hand side of \cref{tab:neuromusc_params} lists the parameters common
+among all seven muscles of each leg of the neuromuscular model. On the
+right-hand side of the table, we list four muscle-specific parameters for
+hamstrings muscle. For a complete list of muscle parameters please refer
+to \citet{song2015neural}. 
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=\linewidth]{biped_w_muscles}
+    \caption{Biped walking model with labeled muscles.} 
+    \label{fig:biped_w_muscles}
+\end{figure} 
+The full biped model, shown in \cref{fig:biped_w_muscles}, includes
+seven Hill-Type muscle-tendon units: soleus, gastrocnemius, tibialis anterior,
+vastus, hamstring, hip flexors, and gluteus.
 
 \section{Stance Reflexes}\label{sec:neuro_stance_reflexes}
 \section{Swing Leg Control}\label{sec:neuro_swing_reflexes}

@@ -1,0 +1,19 @@
+all: ankle_torque_vs_angle.pdf knee_torque_vs_angle.pdf force_length_pese.pdf force_length_ce.pdf force_velocity_ce.pdf spring_mass_model.pdf
+
+ankle_torque_vs_angle.pdf : ankle_torque_vs_angle.py winter_data_angle_torque.csv 
+	ipython ankle_torque_vs_angle.py
+
+knee_torque_vs_angle.pdf : knee_torque_vs_angle.py winter_data_angle_torque.csv 
+	ipython knee_torque_vs_angle.py
+
+force_length_pese.pdf : force_length_pese.py
+	ipython force_length_pese.py
+
+force_length_ce.pdf : force_length_ce.py
+	ipython force_length_ce.py
+
+force_velocity_ce.pdf : force_velocity_ce.py
+	ipython force_velocity_ce.py
+
+spring_mass_model.pdf : spring_mass_model.py spring_mass_model_grf_y.mat spring_mass_model_grf_x.mat spring_mass_model_y.mat human_grf_y.mat human_grf_x.mat human_y.mat
+	ipython spring_mas_model_py.py

@@ -32,12 +32,9 @@ color2light = '#EA9ADB'
 color3      = '#DFAE62'
 color3light = '#F8D6A3'
 
-K = 5
-N = 1.5
-sigma_ce_neg = np.linspace(-1, 0) #normalized fiver length
-sigma_ce_pos = np.linspace( 0, 1) #normalized fiver length
-fv_neg = (1 + sigma_ce_neg)/(1 - K*sigma_ce_neg)
-fv_pos = N + (N - 1)*(1 - sigma_ce_pos)/(-7.56*K*sigma_ce_pos - 1)
+w = 0.56
+lambda_ce = np.linspace(0, 2, 100)    #normalized fiver length
+fl = np.exp(np.log(0.05) * np.abs((lambda_ce - 1)/w)**3)
 
 #create figure
 fig = plt.figure(figsize = (2,2))
@@ -45,12 +42,11 @@ ax = plt.axes()
 
 #add lines connecting medians
 markersize = 4
-p0, = ax.plot(sigma_ce_neg, fv_neg, linewidth=2, color=color1)
-p1, = ax.plot(sigma_ce_pos, fv_pos, linewidth=2, color=color1)
+p0, = ax.plot(lambda_ce, fl, linewidth=2, color=color0)
 
-ax.set_title('CE Force-Velocity', y=1.08)
-ax.xaxis.set_label_text('Velocity')
-ax.yaxis.set_label_text('Force')
+ax.set_title('CE Force-Length', y=1.08)
+ax.xaxis.set_label_text('Length')
+ax.yaxis.set_label_text('Force Multiplier')
 
 #set axis properties
 ax.xaxis.set_tick_params(direction = 'out', width = 1)
@@ -61,23 +57,23 @@ ax.spines['top'].set_visible(False)
 ax.xaxis.set_ticks_position('bottom')
 ax.yaxis.set_ticks_position('left')
 
-ax.axis([-1.2, 1.1, -0.15, 1.6])
-ax.spines['left'].set_bounds(0, 1.5)
-ax.set_yticks([0, 1, N])
-ax.set_yticklabels(['0', 1, 'N'])
+ax.axis([-0.2, 2.1, -0.1, 1.1])
+ax.spines['left'].set_bounds(0, 1)
+ax.set_yticks(np.arange(0, 2, 1))
+#ax.set_yticklabels([0, 0.001, 0.01, 0.1, 1, 10])
 
-ax.spines['bottom'].set_bounds(-1, 1)
-ax.set_xticks(np.arange(-1,2,1))
-ax.set_xticklabels(['$\mathsf{v_{max}}$', '0', '$\mathsf{|v_{max}|}$'])
+ax.spines['bottom'].set_bounds(0, 1)
+ax.set_xticks(np.arange(0,2,1))
+ax.set_xticklabels(['0', r'$\mathsf{l_{opt}}$'])
 
 #adjust label pos
 ylabelpos = ax.yaxis.get_label().get_position()
-ylabelpos = (ylabelpos[0], ylabelpos[1] + 0.05)
+ylabelpos = (ylabelpos[0], ylabelpos[1] + 0.0)
 ax.yaxis.get_label().set_position(ylabelpos)
 
 xlabelpos = ax.xaxis.get_label().get_position()
 xlabelpos = (xlabelpos[0]+0.05, xlabelpos[1])
 ax.xaxis.get_label().set_position(xlabelpos)
 
-filename = 'force_velocity_plot.pdf'
+filename = 'force_length_ce.pdf'
 fig.savefig(filename, bbox_inches='tight')
