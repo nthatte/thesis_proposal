@@ -59,7 +59,7 @@ ax.yaxis.set_ticks_position('left')
 ax.axis([-0.2, 2.1, -0.1, 1.1])
 ax.spines['left'].set_bounds(0, 1)
 ax.set_yticks(np.arange(0, 2, 1))
-#ax.set_yticklabels([0, 0.001, 0.01, 0.1, 1, 10])
+ax.set_yticklabels(['0', r'$\mathsf{F_{max}}$'])
 
 ax.spines['bottom'].set_bounds(0, 2)
 ax.set_xticks(np.arange(0,3,1))
@@ -74,5 +74,5 @@ xlabelpos = ax.xaxis.get_label().get_position()
 xlabelpos = (xlabelpos[0]+0.05, xlabelpos[1])
 ax.xaxis.get_label().set_position(xlabelpos)
 
-filename = 'force_length_pese_plot.pdf'
+filename = 'force_length_pese.pdf'
 fig.savefig(filename, bbox_inches='tight')

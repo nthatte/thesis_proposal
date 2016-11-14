@@ -139,8 +139,25 @@
 \newcommand{\proposaltitle}{Robust and Natural Gait via Neuromuscular Control
 for Tansfemoral Prostheses}
 
-\newcommand{\prob}[1]{\mathrm{P} \left( #1 \right)}
-\newcommand{\func}[2]{\mathrm{#1}\left( #2 \right)}
+\usepackage{xparse}
+
+\newcommand{\prob}[1]{\operatorname{P} \left( #1 \right)}
+\newcommand{\tn}[1]{\textnormal{#1}}
+
+\DeclareDocumentCommand{\func}{m o o m}
+{%
+    \IfValueTF{#2}
+        {%
+        \IfValueTF{#3}
+            {\operatorname{#1}_{#2}^{#3} \left( #4 \right)}
+            {\operatorname{#1}_{#2}      \left( #4 \right)}
+        }
+        {%
+        \IfValueTF{#3}
+            {\operatorname{#1}^{#3} \left( #4 \right)}
+            {\operatorname{#1}      \left( #4 \right)}
+        }
+}
 
 %%
 % Book metadata

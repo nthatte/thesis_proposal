@@ -24,13 +24,13 @@ reflexes that implement the key behaviors required for walking.
 
 To obtain the simulation results we present in \cref{sec:completed_comparison},
 we construct a mechanical model in the Matlab Simscape Multibody environment
-similar to those presented in \citet{geyer2010muscle, song2015neural}. This
-model represents the seven link biped in \cref{fig:neuro_seven_link} and
-includes two legs with thigh, shank, and foot segments as well as a lumped
-head-arms-trunk (HAT) segment. \Cref{tab:model_mech_params} lists the segment
-lengths, center of mass and joint locations measured from the distal end,
-masses, and inertias that approximate those of a \unit[80]{kg}, \unit[2.0]{m}
-tall person.
+similar to those presented in \citet{geyer2010muscle, song2013integration,
+song2015neural}.  This model represents the seven link biped in
+\cref{fig:neuro_seven_link} and includes two legs with thigh, shank, and foot
+segments as well as a lumped head-arms-trunk (HAT) segment.
+\Cref{tab:model_mech_params} lists the segment lengths, center of mass and joint
+locations measured from the distal end, masses, and inertias that approximate
+those of a \unit[80]{kg}, \unit[2.0]{m} tall person.
 
 \begin{table}[b]
   \centering
@@ -39,14 +39,14 @@ tall person.
         & Feet & Shanks & Thighs & HAT \\
         \midrule
         $l         \ (\unit{cm})$ & 20    & 50   & 50   & 80   \\
-        $d_{COM}   \ (\unit{cm})$ & 14    & 30   & 30   & 35   \\
-        $d_{Joint} \ (\unit{cm})$ & 16    & 50   & 50   &      \\
+        $d_\tn{COM}   \ (\unit{cm})$ & 14    & 30   & 30   & 35   \\
+        $d_\tn{Joint} \ (\unit{cm})$ & 16    & 50   & 50   &      \\
         $m         \ (\unit{kg})$ & 1.25  & 3.5  & 8.5  & 53.5 \\
         $J         \ (\unit{kg})$ & 0.005 & 0.05 & 0.15 & 3    \\
         \bottomrule
       \end{tabular}
-  \caption{Segment lengths $(l_s)$, center of mass $(d_{COM})$ and joint
-  $(d_{Joint})$ locations measured from the distal end, masses $(m)$, and
+  \caption{Segment lengths $(l_s)$, center of mass $(d_\tn{COM})$ and joint
+  $(d_\tn{Joint})$ locations measured from the distal end, masses $(m)$, and
   inertias $(J)$ approximated from
   \citet{gunther2003synthesis}.}\label{tab:model_mech_params}
 \end{table}
@@ -58,53 +58,53 @@ reduction of the 3D ground contact model presented in
 tangential directions with respect to the terrain. In the normal direction the
 force is
 \begin{align}
-    F_n = k_n \Delta n_c (1 + \dot n_c) (\Delta n_c  > 0)
-    \left(\nicefrac{\dot n_c}{v_{max}} > -1 \right),
+    F_\tn{n} = k_\tn{n} \Delta n_c (1 + \dot n_c) (\Delta n_c > 0)
+    \left(\nicefrac{\dot n_c}{v_\tn{max}} > -1 \right),
     \label{eq:grf_n}
 \end{align}
-where $k_n = \unitfrac[78.45]{N}{mm}$ is the stiffness coefficient in
+where $k_\tn{n} = \unitfrac[78.45]{N}{mm}$ is the stiffness coefficient in
 the normal direction and $\Delta n_c$ and $\dot n_c$ are the normal penetration
 in the normal direction and velocity. The form of the normal force is inspired
 by \citet{gunther2003synthesis, scott1993biomechanical} and represents a linear
-spring with multiplicitive damping.  $v_{max} = \unitfrac[3]{cm}{s}$ represents
+spring with multiplicitive damping.  $v_\tn{max} = \unitfrac[3]{cm}{s}$ represents
 the maximum recovery velocity of the ground. If $\dot n_c$ exceeds this
 velocity ground contact is lost.
 
 In the tangential direction, a state machine switches between two force models
 representing sliding and static friction. Sliding friction is given by
 \begin{align}
-    F_{t,sl} = -\func{sign}{\dot t_c} \mu_{sl} F_n
+    F_{\tn{t,slide}} = -\func{sign}{\dot t_c} \mu_\tn{slide} F_n
 \end{align}
 while static friction is given by
 \begin{align}
-    F_{t,st} = -k_t \Delta t_c \left(1 + \func{sign}{\Delta t_c}
-    \frac{\dot t_c}{v_{max}} \right),
+    F_{\tn{t,static}} = -k_t \Delta t_c \left(1 + \func{sign}{\Delta t_c}
+    \frac{\dot t_c}{v_\tn{max}} \right),
 \end{align}
-where $\Delta t_c$ is the penetration in the tangential direction $\dot t_c$
-is the penetration velocity, $\mu_{sl} = 0.8$ is the sliding coefficient of
-friction, and $k_t =\unitfrac[78.45]{N}{mm}$ is the stiffness coefficient in the
-tangential direction.
+where $\Delta t_c$ is the penetration in the tangential direction $\dot t_c$ is
+the penetration velocity, $\mu_\tn{slide} = 0.8$ is the sliding coefficient of
+friction, and $k_\tn{t} =\unitfrac[78.45]{N}{mm}$ is the stiffness coefficient
+in the tangential direction.
 
 The contact model begins in the sliding mode and switches to the static mode if
-$\dot t_c < 1 \unitfrac[1]{cm}{s}$. It switches back to the sliding mode when
-$| F_{t,st} | < \mu_{st} | F_n |$, where $\mu_{st} = 0.9$.
+$\dot t_c < 1 \unitfrac[1]{cm}{s}$. It switches back to the sliding mode when $|
+F_{\tn{t,static}} | < \mu_\tn{static} | F_n |$, where $\mu_\tn{static} = 0.9$.
 
 Finally, the biped skeletal model includes soft joint limits to represent
 the skeletal joint limits on the knee, ankle, and hip joints. The functional
 form form the soft limit joint torque is identical to that of the normal ground
 reaction force given by \cref{eq:grf_n}.
 \begin{align}
-    \tau_{jl} = k_{jl} \Delta \theta_{jl} (1 + \dot \theta_{jl}) (\Delta
-    \theta_{jl}  > 0) \left(\nicefrac{\dot \theta_{jl}}{\dot \theta_{max}} > -1
+    \tau_{jl} = k_{jl} \Delta \phi_{jl} (1 + \dot \phi_{jl}) (\Delta
+    \phi_{jl}  > 0) \left(\nicefrac{\dot \phi_{jl}}{\dot \phi_\tn{max}} > -1
     \right), 
     \label{eq:tau_joint_limit}
 \end{align}
 where $k_{jl} = \unitfrac[0.3]{N \cdot m}{deg}$ is the joint stiffness $\Delta
-\theta$ and $\dot \theta_{jl}$ are the joint limit penetration angle and
-velocity respectively, and $\dot \theta_{max} = \unitfrac[1]{deg}{s}$ is the
+\phi$ and $\dot \phi_{jl}$ are the joint limit penetration angle and
+velocity respectively, and $\dot \phi_\tn{max} = \unitfrac[1]{deg}{s}$ is the
 maximum joint limit retraction velocity. \Cref{tab:joint_lim} lists the
 engagement angles for the joint limits.
-\begin{margintable}
+\begin{margintable}[-0.65in]
   \centering
       \begin{tabular}{lll}
         \toprule
@@ -125,18 +125,7 @@ variable step solver. We set the maximum step size to \unit[10]{ms}, relative
 error tolerance to $10^{-4}$, and abolute error to $10^{-6}$.
 
 \section{Hill Muscle Models}\label{sec:neuro_hill_muscle}
-
-Our proposed transfemoral prosthesis control is comprised of biological muscle
-actuators that are stimulated according to hypothesized reflex pathways.
-Specifically, we use a Hill-type \emph{muscle tendon unit} (MTU) developed in
-\citet{geyer2010muscle} . It is comprised of a contractile element (CE) that
-represents muscle fibers and produces force when activated, a parallel elastic
-(PE) element that represents the stiffness of the collagen tissue between muscle
-fascicles, and series elastic (SE) element that models tendon stretch.
-\Cref{fig:hill_type_mtu} shows the arrangement of these elements. Note that the
-PE and SE both are unidirectional springs with engagement lengths of $l_{opt}$
-and $l_{slack}$ respectively.
-\begin{marginfigure}[-1in]
+\begin{marginfigure}[-0.25in]
     \centering
     \includegraphics[width=\linewidth]{mtu_figure}
     \vspace{-0.4in}
@@ -144,14 +133,24 @@ and $l_{slack}$ respectively.
     parallel elasticity (PE), and series elasticity (SE).}
     \label{fig:hill_type_mtu}
 \end{marginfigure}
+Our proposed transfemoral prosthesis control is comprised of biological muscle
+actuators that are stimulated according to hypothesized reflex pathways.
+Specifically, we use a Hill-type \emph{muscle tendon unit} (MTU) developed in
+\citet{geyer2010muscle}. It is comprised of a contractile element (CE) that
+represents muscle fibers and produces force when activated, a parallel elastic
+(PE) element that represents the stiffness of the collagen tissue between muscle
+fascicles, and series elastic (SE) element that models tendon stretch.
+\Cref{fig:hill_type_mtu} shows the arrangement of these elements. Note that the
+PE and SE both are unidirectional springs with engagement lengths of
+$l_\tn{opt}$ and $l_\tn{slack}$ respectively.
 
 The CE generates force according to
 \begin{align}
-    F_{CE} = F_{max} A \func{f_l}{l_{CE}} \func{f_v}{v_{CE}}.
+    F_\tn{CE} = F_\tn{max} A \func{f_l}{l_\tn{CE}} \func{f_v}{v_\tn{CE}}.
     \label{eq:hill_ce}
 \end{align}
-In this equation, the force generated by the CE $(F_{CE})$ is the maximum
-isometric (constant length) force $(F_{max})$ multiplied by activation $(A)$,
+In this equation, the force generated by the CE $(F_\tn{CE})$ is the maximum
+isometric (constant length) force $(F_\tn{max})$ multiplied by activation $(A)$,
 the force-length ($\func{f_l}{\cdot})$, and force-velocity
 $(\func{f_v}{\cdot})$, relationships of the CE. The activation $A$ is a low-pass
 filtered version of the stimulation signal muscle $S(t)$ generated by the muscle
@@ -159,7 +158,7 @@ reflexes we will detail in the \hyperref[sec:neuro_stance_reflexes]{next}
 section. This filter, given by $A(t) = S - \tau \dot A(t)$ with time constant
 $\tau$, represents the diffusion dynamics of calcium ions that activate binding
 sites in the muscle fibers.
-\begin{marginfigure}[0.2in]
+\begin{marginfigure}[-1in]
     \centering
     \includegraphics[width=\linewidth]{force_length_ce_annotate}
     \vspace{-0.25in}
@@ -168,17 +167,19 @@ sites in the muscle fibers.
 \end{marginfigure}
 
 The binding sites are where overlapping actin and myosin filaments attach and
-generate pulling force. The contractile element length of $l_{opt}$ corresponds
-to maximum overlap between these filaments. Therefore, as as the muscle length
-moves away from $l_{opt}$, its force production capacity decreases leading to
-the force-length relationship shown in \cref{fig:force_length_ce}. We model the
-force-length relationship via a bell curve
+generate pulling force. The contractile element length of $l_\tn{opt}$
+corresponds to maximum overlap between these filaments. Therefore, as as the
+muscle length moves away from $l_\tn{opt}$, its force production capacity
+decreases leading to the force-length relationship shown in
+\cref{fig:force_length_ce}. We model the force-length relationship via a bell
+curve
 \begin{align}
-    \func{f_l}{l_{CE}} = \exp \left( \ln(0.05) \left| \frac{l_{ce} - l_{opt}}{w l_{opt}}
+    \func{f_l}{l_\tn{CE}} = \exp \left( \ln(0.05) \left|
+    \frac{l_\tn{CE} - l_\tn{opt}}{w l_\tn{opt}}
     \right|^3 \right).
     \label{eq:hill_force_length}
 \end{align}
-\begin{marginfigure}[0.2in]
+\begin{marginfigure}[0.25in]
     \centering
     \includegraphics[width=\linewidth]{force_velocity_ce}
     \vspace{-0.25in}
@@ -187,20 +188,20 @@ force-length relationship via a bell curve
 \end{marginfigure}
 
 The velocity-dependent filament attachment probabilities give rise to a
-force-velocity relationship shown in \cref{fig:force_velocity_ce}. The following 
+force-velocity relationship shown in \cref{fig:force_velocity_ce}. The following
 expression captures this relationship.
 \begin{table}[t]
   \centering
   \begin{tabular}{ll|ll}
     \toprule
-    Param & Value          & Param & Value      \\
-    \midrule                        
-    $\tau$ & \unit[0.1]{s} & $l_{opt}^{ham}$   & \unit[0.10]{m} \\
-    $w$ & 0.56             & $v_{max}^{ham}$   & \unitfrac[-1.2]{m}{s} \\
-    $K$ & 5                & $F_{max}^{ham}$   & \unit[3000]{N} \\
-    $N$ & 1.5              & $l_{slack}^{ham}$ & \unit[0.31]{m} \\
-    $\epsilon_{pe}$ & $w$  &                   &  \\
-    $\epsilon_{se}$ & 0.04 &                   &  \\
+    Param & Value             & Param                   & Value \\
+    \midrule                           
+    $\tau$ & \unit[0.1]{s}    & $l_\tn{opt}^\tn{ham}$   & \unit[0.10]{m} \\
+    $w$    & 0.56             & $v_\tn{max}^\tn{ham}$   & \unitfrac[-1.2]{m}{s} \\
+    $K$    & 5                & $F_\tn{max}^\tn{ham}$   & \unit[3000]{N} \\
+    $N$    & 1.5              & $l_\tn{slack}^\tn{ham}$ & \unit[0.31]{m} \\
+    $\epsilon_\tn{PE}$ & $w$  &                         & \\
+    $\epsilon_\tn{SE}$ & 0.04 &                         & \\
     \bottomrule
   \end{tabular}
   \caption{Neuromuscular parameters for shared entities (left) and the hamstring
@@ -208,11 +209,11 @@ expression captures this relationship.
   \label{tab:neuromusc_params}
 \end{table}
 \begin{align}
-    \func{f_v}{v_{CE}} = 
+    \func{f_v}{v_\tn{CE}} = 
     \begin{cases} 
-        \frac{v_{max} - v_{CE}}{v_{max} + K v_{CE}}, & \textrm{if } v_{CE}< 0 \\
-        N + (N-1) \frac{v_{max} + v_{CE}}{7.56 K v_{CE} - v_{max}}, &
-            \textrm{if } v_{CE} \ge 0 
+        \frac{v_\tn{max} - v_\tn{CE}}{v_\tn{max} + K v_\tn{CE}}, & \tn{if } v_\tn{CE}< 0 \\
+        N + (N-1) \frac{v_\tn{max} + v_\tn{CE}}{7.56 K v_\tn{CE} - v_\tn{max}}, &
+            \tn{if } v_\tn{CE} \ge 0 
     \end{cases}
 \end{align}
 In this expression, $K$ is a shape parameter and $N$ determines the force
@@ -225,17 +226,17 @@ representing a unidirectional, stiffening spring, the behavior of which is shown
 in \cref{fig:force_length_pese}. The expressions for the elastic force produces
 by these elements are
 \begin{align}
-    \func{F_{PE}}{l_{CE}} &= F_{max} \left( \frac{l_{CE} - l_{opt}}{\epsilon_{PE}
-        l_{opt}} \right)^2 (l_{CE} > l_{opt})\\
-    \func{F_{SE}}{l_{SE}} &= F_{max} \left( \frac{l_{SE} - l_{slack}}{\epsilon_{SE}
-        l_{slack}} \right)^2 (l_{SE} > l_{slack}).
+    \func{F_\tn{PE}}{l_\tn{CE}} &= F_\tn{max} \left( \frac{l_\tn{CE} - l_\tn{opt}}{\epsilon_\tn{PE}
+        l_\tn{opt}} \right)^2 (l_\tn{CE} > l_\tn{opt})\\
+    \func{F_\tn{SE}}{l_\tn{SE}} &= F_\tn{max} \left( \frac{l_\tn{SE} - l_\tn{slack}}{\epsilon_\tn{SE}
+        l_\tn{slack}} \right)^2 (l_\tn{SE} > l_\tn{slack}).
 \end{align}
 \begin{marginfigure}
     \centering
     \includegraphics[width=\linewidth]{force_length_pese}
-    \caption{PE and SE force length relationship. For the PE, $l_{ref} = l_{opt}$
-    and $\epsilon_{ref} = \epsilon_{PE}$. Likewise, for the SE, $l_{ref} =
-    l_{slack}$ and $\epsilon_{ref} = \epsilon_{SE}$.} 
+    \caption{PE and SE force length relationship. For the PE, $l_\tn{ref} = l_\tn{opt}$
+    and $\epsilon_\tn{ref} = \epsilon_\tn{PE}$. Likewise, for the SE, $l_\tn{ref} =
+    l_\tn{slack}$ and $\epsilon_\tn{ref} = \epsilon_\tn{SE}$.} 
     \label{fig:force_length_pese}
 \end{marginfigure}
 
@@ -247,15 +248,152 @@ to \citet{song2015neural}.
 
 \begin{figure}[b]
     \centering
-    \includegraphics[width=\linewidth]{biped_w_muscles}
+    \includegraphics[width=3in]{biped_w_muscles}
     \caption{Biped walking model with labeled muscles.} 
     \label{fig:biped_w_muscles}
 \end{figure} 
 The full biped model, shown in \cref{fig:biped_w_muscles}, includes
 seven Hill-Type muscle-tendon units: soleus, gastrocnemius, tibialis anterior,
-vastus, hamstring, hip flexors, and gluteus.
+vastus, hamstring, hip flexors, and gluteus. The length of these MTUs is related
+to the joint angles according to the variable-length moment arms
+$\func{r_}[\tn{mtu}][j]{\phi^j}$ for each muscle about each joint. For example,
+the length of a biarticular muscle spanning joints $j$ and $k$ is
+\begin{align}
+    l_\tn{mtu} = l_\tn{opt} + l_\tn{slack} + \rho \left( \int_{\phi_0^j}^{\phi^j}
+        \func{r}[\tn{mtu}][j]{\phi^j} \tn{d} \phi^j + \int_{\phi_0^k}^{\phi^k}
+        \func{r}[\tn{mtu}][k]{\phi^k} \tn{d} \phi^k \right).
+\end{align}
+Where $\rho$ is a parameter that approximates the effect of the pennation angle 
+of the muscle fibers. The variable length moment arms also govern the torque a
+muscle produces about a joint according to
+\begin{align}
+    \tau_\tn{mtu} = \func{r}[\tn{mtu}][j]{\phi^j} F_\tn{mtu}.
+\end{align}
 
 \section{Stance Reflexes}\label{sec:neuro_stance_reflexes}
+
+During stance, hypothesized reflex feedback pathways stimulate the muscles of
+the leg. In general, a linear feedback law governs the stimulation
+$\func{S}[][m]{t}$ of muscle $m$, 
+\begin{align}
+    \func{S}[][m]{t} = S_0^m + \sum_n G_n^m \func{Pro}[n][]{t - \Delta t_n},
+\end{align}
+where $S_0^m$ is a constant pre-stimulation, $\func{Pro}[n][]{t - \Delta t_n}$
+is the time-delayed proprioceptive signal from muscle $n$, and $G_n^m$ is the
+gain on that signal. The proprioceptive signal can take the form of force
+feedback, $\func{F}[\tn{n}][m]{\cdot}$, which uses the time delayed tendon
+force, or length feedback, $\func{L}[\tn{n}][m]{\cdot} =
+\func{l}[\tn{CE},n][]{\cdot} - l_{\tn{off}, n}$, which uses the difference
+between the length of the contractile element and an offset length
+$l_n^\tn{off}$.
+
+The time delay we apply to proprioceptive signals estimate the round-trip neural
+signal transmission delay of afferent signals from muscle spindles and Golgi
+tendons to the spine and efferent signals back to the muscles. For ankle
+muscles, the soleus, tibialis anterior, and gastrocnemius, the time delay is
+$\Delta t_n = \unit[20]{ms}$. For knee muscles, the vastus and hamstrings, it is
+$\Delta t_n = \unit[10]{ms}$. For the hip muscles, the hamstrings, gluteus, and
+hip flexors, the time delay is $\Delta t_n = \unit[5]{ms}$. We will denote time
+delayed signals using $t_\tn{l} = t - \unit[20]{ms}$, $t_\tn{m} = t -
+\unit[10]{ms}$, and $t_\tn{s} = t - \unit[5]{ms}$.
+
+
+The reflexes encode several key functions of legged locomotion: generating
+compliant leg behavior, preventing knee overextension, and balancing the trunk.
+
+The reflexes achieve the first function, generating compliant leg behavior, via
+positive force feedback on the monoarticular leg extensors: the soleus, vastus,
+and gluteus. For example, the reflexes stimulated the vastus in part by
+\begin{align}
+    \func{S}[][\tn{vas}]{t} = S_0^\tn{vas} + 
+        G_\tn{vas}^\tn{vas} \func{F}[\tn{vas}][]{t_\tn{m}} + \ldots \:.
+\end{align}
+
+To implement the second function, preventing knee overextension, the reflexes
+control uses two strategies. First, positive force feedback of the
+biarticular gastrocnemius and hamstrings muscles helps counteract the
+tendency for knee overextension caused by ankle plantarflexion and hip extension
+torques, respectively. For example, the hamstring has a force feedback reflex,
+\begin{align}
+    \func{S}[][\tn{ham}]{t} = S_0^\tn{ham} + 
+        G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_\tn{s}} + \ldots \:,
+        \label{eq:ham_stim}
+\end{align}
+which helps prevent both knee extension and hip flexion caused by heel-strike,
+and the gastrocnemius has feedback,
+\begin{align}
+    \func{S}[][\tn{gas}]{t} = S_0^\tn{gas} + 
+        G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}} \:.
+        \label{eq:gas_stim}
+\end{align}
+
+A second mechanism further protects the knee by inhibiting the vastus
+stimulation in proportion to knee extension beyond a threshold, resulting in
+the complete vastus stimulation
+\begin{align}
+    \func{S}[][\tn{vas}]{t} &= S_0^\tn{vas} + 
+        G_\tn{vas}^\tn{vas} \func{F}[\tn{vas}][]{t_\tn{m}} 
+            -k_\phi \left(\phi_\tn{k}(t_\tn{m}) - \phi_\tn{k}^\tn{off} \right)
+            \notag \\
+        &\quad \times 
+            \left( \phi_\tn{k}(t_\tn{m}) < \phi_\tn{k}^\tn{off} \right)
+            \left( \dot \phi_\tn{k}(t_\tn{m}) < 0\right) \label{eq:vas_stim_full} 
+\end{align}
+where $\phi_\tn{k}^\tn{off}$ is the angle beyond which the vastus is inhibited.
+
+The reflexes achieve the final function of balancing the trunk by
+proportional-derivative control that produces stimulations for the hip muscles
+(hip flexors, gluteus, and hamstrings) to stabilize the trunk at a reference
+lean. Because muscles can only provide pulling force, the proportional derivative
+control signal is distributed as hip flexor stimulation if the signal represents
+flexion torque and as simultaneous stimulation for the gluteus and hamstrings if
+it represents hip extension torque. For example, the complete hamstrings
+stimulation becomes
+\begin{align}
+    \func{S}[][\tn{ham}]{t} &= S_0^\tn{ham} + 
+        G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_\tn{s}} \notag\\
+            &\quad + \left[ \left( k_\tn{p} (\phi_\tn{trunk}(t_\tn{s}) - \phi_{\tn{ref}}) 
+                + k_\tn{d} \dot{\phi}_{\tn{trunk}}(t_\tn{s})
+                \right)\right. \notag\\
+            &\quad \times \left. \left( \left(
+                k_\tn{p}(\phi_\tn{trunk}(t_\tn{s}) 
+                - \phi_{\tn{ref}}) + k_\tn{d}\dot{\phi}_{\tn{trunk}}(t_\tn{s}) 
+                \right) > 0\right) \right],
+        \label{eq:ham_stim_full}
+\end{align}
+where the last two terms return the positive reflex contribution from the trunk
+balance control. 
+
+The full set of stance reflexes are:
+\begin{align}    
+    \func{S}[][\tn{sol}]{t} &= S_0^\tn{sol} + 
+        G_\tn{sol}^\tn{sol} \func{F}[\tn{sol}][]{t_\tn{l}} \\
+    \func{S}[][\tn{ta}]{t} &= S_0^\tn{ta} + 
+        G_\tn{ta}^\tn{ta} \left( \func{l}[\tn{CE,ta}][]{t_\tn{l}} 
+            - l_\tn{ta}^\tn{off} \right) - G_\tn{sol}^\tn{ta} 
+            \func{F}[\tn{sol}][]{t_\tn{l}}\\
+    \func{S}[][\tn{gas}]{t} &= S_0^\tn{gas} + 
+        G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}} \\
+    \func{S}[][\tn{vas}]{t} &= S_0^\tn{vas} + 
+        G_\tn{vas}^\tn{vas} \func{F}[\tn{vas}][]{t_\tn{m}} 
+        -k_\phi \left( \phi_\tn{k}(t_\tn{m}) - \phi_\tn{k}^\tn{off} \right) \notag \\
+        &\quad \times 
+            \left( \phi_\tn{k}(t_\tn{m}) < \phi_\tn{k}^\tn{off} \right)
+            \left( \dot \phi_\tn{k}(t_\tn{m}) < 0\right) \\     
+    \func{S}[][\tn{ham}]{t} &= S_0^\tn{ham} + 
+        G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_{s}} \notag\\
+            &\quad + \left\{ k_\tn{p} (\phi_{\tn{trunk}} - \phi_{\tn{ref}}) 
+                + k_\tn{d} \dot{\phi}_{\tn{trunk}} \right\}_+ \\
+    \func{S}[][\tn{glu}]{t} &= S_0^\tn{glu} + 
+            G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_{s}} \notag \\
+            &\quad + \left\{ k_\tn{p} (\phi_{\tn{trunk}} - \phi_{\tn{ref}}) 
+                + k_\tn{d} \dot{\phi}_{\tn{trunk}} \right\}_-  \\
+    \func{S}[][\tn{hfl}]{t} &= S_0^\tn{hfl} + 
+            \left\{ k_\tn{p} (\phi_{\tn{trunk}} - \phi_{\tn{ref}}) 
+                + k_\tn{d} \dot{\phi}_{\tn{trunk}} \right\}_+ 
+\end{align}    
+
+
 \section{Swing Leg Control}\label{sec:neuro_swing_reflexes}
 \subsection{Idealized Swing Leg Control}
 \subsection{Neuromuscular Reflex Swing Leg Control}
