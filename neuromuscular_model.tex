@@ -368,8 +368,7 @@ The full set of stance reflexes are:
     \func{S}[][\tn{sol}]{t} &= S_0^\tn{sol} + 
         G_\tn{sol}^\tn{sol} \func{F}[\tn{sol}][]{t_\tn{l}} \\
     \func{S}[][\tn{ta}]{t} &= S_0^\tn{ta} + 
-        G_\tn{ta}^\tn{ta} \left( \func{l}[\tn{CE,ta}][]{t_\tn{l}} 
-        - l_\tn{ta}^\tn{off} \right) - G_\tn{sol}^\tn{ta} 
+        G_\tn{ta}^\tn{ta} \func{L}[\tn{ta}][]{t_\tn{l}} - G_\tn{sol}^\tn{ta} 
         \func{F}[\tn{sol}][]{t_\tn{l}}\\
     \func{S}[][\tn{gas}]{t} &= S_0^\tn{gas} + 
         G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}} \\
@@ -392,24 +391,27 @@ The full set of stance reflexes are:
 \end{align}    
 \end{fullwidth}
 
-\section{Swing Leg Control}\label{sec:neuro_swing_reflexes}
-During swing, the reflexes shape the natural double pendulum dynamics of the leg
-in order to achieve sufficient knee flexion, prevent toe scuffing, reach a
-target landing leg angle, and then extend the leg towards the ground. We here
-review two versions of the swing leg contro: First, an idealized controal,
-proposed in \citet{desai2012robust}, which proposes reflexes that directly apply
-torques to the knee and ankle joints, and second, a muscle reflex control,
-presented in \citet{desai2013muscle}, which applies neural stimulations to
-Hill-type muscles to achieve the functionality of the idealzed control.
+\section{Swing Leg Control}\label{sec:neuro_swing_reflexes} During swing, the
+reflexes shape the natural double pendulum dynamics of the leg in order to
+achieve sufficient knee flexion, prevent toe scuffing, reach a target landing
+leg angle, and then extend the leg towards the ground. We here review two
+versions of the swing leg control: First, an idealized control, proposed in
+\citet{desai2012robust}, which proposes reflexes that directly applies torques
+to the hip and knee joints (\cref{sec:neuro_ideal_swing}), and second, a muscle
+reflex control, presented in \citet{desai2013muscle}, which applies neural
+stimulations to Hill-type muscles to achieve the functionality of the idealized
+control (\cref{sec:neuro_muscle_swing}).
 
-\subsection{Idealized Swing Leg Control}
+\subsection{Idealized Swing Leg Control}\label{sec:neuro_ideal_swing}
 The idealized swing control comprises two layers. In the first layer, a leg
-placement policy 
+placement policy,
 \begin{align}
-    \alpha_{\tn{tgt}} = \alpha_{0} + c_\tn{d} d + c_\tn{v} v
+    \alpha_{\tn{tgt}} = \alpha_{0} + c_\tn{d} d + c_\tn{v} v,
     \label{eq:simbicon}
 \end{align}
-prescribes desired foot placement locations, where $\alpha_{\tn{tgt}}$ is the
+prescribes leg angle for the leg to reach by the end of swing. We measure the
+leg angle between the hip-ankle line and horizontal as shown in
+\cref{fig:swing_leg_polar}. In \cref{eq:simbicon}, $\alpha_{\tn{tgt}}$ is the
 target leg angle, $\alpha_{0}$ is the default leg angle, $d$ is the horizontal
 distance between the stance leg ankle and the model's center of mass, $v$ is the
 velocity of the center of mass, and $c_\tn{d}$ and $c_\tn{v}$ are constant gain
@@ -426,7 +428,16 @@ moments generated at the onset of swing. If the passive knee flexion is
 insufficient (the foot swings forward with a tendency to scuff the ground), the
 control produces active flexion torque of the knee in proportion to the rate
 $\dot{\alpha}$ of forward leg motion,
-
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{swing_leg_polar}
+    \caption{The swing leg control guides the leg towards a desired landing leg
+    angle $\alpha_\tn{tgt}$ through three phases: (i) Flex the knee until it
+    achieves a clearance leg length $l_\tn{clr}$. (ii) Hold the leg length via
+    knee damping. (iii) Stop and Extend the leg towards the ground when the leg
+    reaches $\alpha_\tn{tgt}$. Figure reproduced from \citet{desai2012robust}.}
+    \label{fig:swing_leg_polar}
+\end{marginfigure}
 \begin{align}
     \tau_\tn{k}^\tn{i} = \begin{cases}
                  0,                     & \dot{\alpha} > 0 \\
@@ -506,6 +517,100 @@ force,
 \end{align}
 During swing, only the swing leg torques are used.
 
+\subsection{Neuromuscular Reflex Swing Leg Control}\label{sec:neuro_muscle_swing}
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{biped_w_muscles_rf_bfsh}
+    \caption{Neuromuscular Swing leg control employs the seven muscles used in
+    the stance control as well as a monoarticular knee flexor, the biceps
+    femoris short head, and a biarticular hip flexor/knee extensor, the rectus
+    femoris} 
+    \label{fig:biped_w_muscles_rf_bfsh}
+\end{marginfigure} 
 
-\subsection{Neuromuscular Reflex Swing Leg Control}
+The muscle reflex interpretation of the idealized swing leg control presented in
+the previous \crefname{sec:neuro_ideal_swing} proposes reflexes to achieve the 
+same three goals as the ideal swing leg control: (i) flex the knee to achieve
+sufficient ground clearance, (ii) prevent toe scuffing by damping the knee (iii)
+stop and extend the leg when the target leg angle is achieved (see
+\cref{fig:swing_leg_polar}). This control assumes a leg with nine-muscles, the
+seven included in the stance control (\cref{fig:biped_w_muscles}), as well as
+two additional muscles shown in figure (\cref{fig:biped_w_muscles_rf_bfsh}).
+These muscles are a monoarticular knee flexor, the biceps femoris short head,
+and a biarticular hip flexor/knee extensor, the rectus femoris. As in the case
+of the stance control, the reflexes primarily consist of linear feedback laws of
+the form
+\begin{align}
+    \func{S}[phase][m]{t} = G_n^m \func{Pro}[n][]{t - \Delta t_n}.
+\end{align}
+For the swing control, the proprioceptive feedback can be either on length,
+$\func{L}[n][m]{\cdot} = \func{l}[\tn{CE},n][]{\cdot} - l_{\tn{off}, n}$,
+or velocity, $\func{V}[n][m]{\cdot} = \func{v}[\tn{CE},n][]{\cdot} -
+v_{\tn{off}, n}$. In these equations $l_{\tn{off},n}$ and $v_{\tn{off}, n}$ are
+offset lengths and velocities the control tries to obtain.
 
+As in the idealized control, the knee control is divided into three phases. In
+phase 1, the behavior of the idealized control is to provide knee flexion torque
+in proportion to the rate of forward leg angle progression
+(\cref{eq:flexphase}). The muscle interpretation uses the rate of length change
+of the rectus femoris contractile element as a proxy for the speed of the leg
+angle. It therefore implements phase 1 by stimulating a monoarticular knee
+flexor, the biceps femoris short head, based on velocity feedback from the
+rectus femoris.
+\begin{align}
+    \func{S}[i][\tn{bfsh}]{t} = G_\tn{rf}^\tn{bfsh}\func{V}[\tn{rf}][]{t_\tn{m}}.
+\end{align}
+
+In the second phase, the control dampens knee flexion and modulates the damping
+of knee extension (\cref{eq:holdphase}, allowing more extension as the target
+angle is approached and only damping the knee if it extends faster than the leg
+angle progresses. In this phase, the control uses velocity feedback to dampen
+knee flexion according to
+\begin{align}
+    \func{S}[\tn{ii}][\tn{rf}]{t} = G_\tn{bfsh}^\tn{bfsh}
+        \func{V}[\tn{bfsh}][]{t_\tn{m}},
+\end{align}
+and a modified velocity feedback to dampen knee extension according to
+\begin{align}
+    \func{S}[\tn{ii}][\tn{bfsh}]{t} = G_\tn{bfsh}^\tn{bfsh}
+        \func{V}[\tn{bfsh}]{t_\tn{m}} \func{L}[\tn{rf}][\tn{bfsh}]{t_\tn{m}} 
+        \left( \func{V}[\tn{bfsh}]{t_\tn{m}} + \func{V}[\tn{rf}]{t_\tn{m}}
+        \right).
+\end{align}
+
+The final task of the swing control, is to stop and extend the leg. Stopping is
+achieved by length feedback on the hamstring
+\begin{align}
+    \func{S}[\tn{iii}][\tn{ham}]{t} = G_\tn{ham}^\tn{ham}
+        \func{L}[\tn{ham}]{t_\tn{s}},
+\end{align}
+and is augmented by the other knee flexors if $\func{S}[\tn{iii}][\tn{ham}]{t} >
+S_\tn{thr}$, where $S_\tn{thr}$ is a threshold.
+\begin{align}
+    \func{S}[\tn{iii}][\tn{bfsh}]{t} &= G_\tn{bfsh}^\tn{ham}
+        \left (\func{S}[\tn{iii}][\tn{ham}]{t} - S_\tn{thr} \right) \\
+    \func{S}[\tn{iii}][\tn{gas}]{t} &= G_\tn{gas}^\tn{ham}
+        \left (\func{S}[\tn{iii}][\tn{ham}]{t} - S_\tn{thr} \right)
+\end{align}
+The control triggers knee extension through vastus length feedback, when the leg angle velocity crosses zero,
+\begin{align}
+    \func{S}[\tn{iii}][\tn{vas}]{t} = G_\tn{vas}^\tn{vas}
+        \func{L}[\tn{vas}]{t_\tn{s}}.
+\end{align}
+
+The hip and ankle joints are controlled via length feedbacks. The hip control
+approximates $\alpha$ through the length of the rectus femoris. Consequently,
+the hip control uses length feedback from the rectus femoris in order to drive
+the leg towards $\alpha_\tn{tgt}$,
+\begin{align}
+    \func{S}[][\tn{hfl}]{t} = S_0^\tn{hfl} + G_\tn{rf}^\tn{hfl}
+        \func{L}[\tn{rf}]{t_\tn{s}} \\
+    \func{S}[][\tn{glu}]{t} = S_0^\tn{glu} + G_\tn{rf}^\tn{glu}
+        \func{L}[\tn{rf}]{t_\tn{s}}.
+\end{align}
+During swing length feedback on the tibialis anterior dorsiflexes the ankle to
+prevent toe scuffing
+\begin{align}
+    \func{S}[][\tn{ta}]{t} = S_0^\tn{ta} + G_\tn{ta}^\tn{ta}
+        \func{L}[\tn{ta}]{t_\tn{l}}
+\end{align}
