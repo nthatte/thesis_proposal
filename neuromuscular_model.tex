@@ -492,7 +492,7 @@ $k^\tn{ext}$ is a proportional gain.
 The swing leg control also specifies a hip torque in the form of a proportional
 derivative control on the leg angle, 
 \begin{align}
-    \tau_\tn{h}^\alpha = k_\tn{p} (\alpha_\tn{tgt} - \alpha) - k_\tn{d} \dot\alpha.
+    \tau_\tn{h}^\alpha = k_\tn{p} (\alpha - \alpha_\tn{tgt}) + k_\tn{d} \dot\alpha.
     \label{eq:hipfeedback}
 \end{align}
 This hip torque is supplemented by a feed forward term 

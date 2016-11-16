@@ -55,13 +55,13 @@ replicate healthy leg behavior as they are incapable of providing positive power
 during the gait cycle. 
 
 Positive power at the knee is evident in a number of locomotion tasks including
-level walking \citep{perry1992gait}, walking up stairs
+level walking \citep{perry2010gait}, walking up stairs
 \citep{nadeau2003frontal}, running \citep{buczek1990stance}, and jumping
 \citep{hubley1983work}. In addition, active knee flexion and extension muscle
 activations have been noted during stumble recovery \citep{eng1994strategies}.
 At the ankle joint, passive spring-like prostheses cannot replicate the positive
 net work seen in the ankle joint during level ground walking, which is essential
-for push-off and forward propulsion \citep{perry1992gait}.
+for push-off and forward propulsion \citep{perry2010gait}.
 
 Consequently, lower-limb amputees, and especially transfemoral
 amputees\sidenote{those with above the knee amputations} equipped with
@@ -76,7 +76,7 @@ walking outside on uneven terrain (29.5\%), picking up an object from the ground
 (28.1\%) or getting up from the floor after a fall (22.8\%)
 \citep{gauthier1999enabling}.
 
-Importantly, these gait pathologies can lead an avoidance of walking
+Importantly, these gait pathologies can lead to an avoidance of walking
 \citep{gauthier1999enabling}. This is especially true in the case of falls.
 \citet{miller2001prevalence} find 49.2\% of lower limb amputees feared falling
 and that of those afraid of falls 76\% avoided physical activity as a result.
@@ -108,12 +108,12 @@ further debilitation.
     \label{fig:vanderbilt_prostheses_intro}
 \end{figure*}
 
-To help remedy this situation, in the past decade researchers and companies have
-developed robotic powered knee and ankle prostheses for lower-limb amputees.
-These prostheses feature actuators at the knee and/or ankle that, if controlled
-correctly, could potentially restore the kinetics, kinematics, and reactions
-of the healthy human leg. Notable examples include three generations of
-transfemoral prostheses developed by Vanderbilt
+To help remedy this situation, in the past decade academic research groups and
+companies have developed robotic powered knee and ankle prostheses for
+lower-limb amputees.  These prostheses feature actuators at the knee and/or
+ankle that, if controlled correctly, could potentially restore the kinetics,
+kinematics, and reactions of the healthy human leg. Notable examples include
+three generations of transfemoral prostheses developed by Vanderbilt
 University~(\cref{fig:vanderbilt_prostheses_intro}) \citep{sup2009preliminary,
 lawson2013control, lawson2014robotic} and the Biom powered
 ankle~(\cref{fig:biom_ankle}) \citep{herr2012bionic}. These powered prostheses
@@ -170,7 +170,7 @@ challenges:
     stance, the leg acts in a compliant, spring-like manner
     \citep{geyer2006compliant} and significant time is spent in
     statically-unstable contact on the heel or toe, suggesting the importance of
-    mechanical stability achieved via foot placement \citep{perry1992gait}.
+    mechanical stability achieved via foot placement \citep{perry2010gait}.
     During swing, ballistic motion explains much of the leg trajectory
     \citep{mochon1980ballistic}. Indeed, much of the entire gait cycle can be
     explained via passive dynamics as evidenced by passive-dynamic walkers
@@ -201,21 +201,22 @@ challenges:
     information}~~An additional difference between robotic prosthesis control
     and controls often used on humanoid walking robots stems from the lack of
     full state information.  Humanoid walking controllers such as those used in
-    the DARPA robotics challenge (DRC), controllers use the full state of the
-    robot (\ie the positions and velocities of every joint and the robot's
-    center of mass), to plan and track a trajectories, thereby ensuring
-    stability of the full system \citep{feng2015optimization,
-    kuindersma2014efficiently, englsberger2014trajectory}.
+    the DARPA robotics challenge (DRC), use the full state of the robot (\ie the
+    positions and velocities of every joint and the robot's center of mass), to
+    plan and track a trajectories, thereby ensuring stability of the full system
+    \citep{feng2015optimization, kuindersma2014efficiently,
+    englsberger2014trajectory}.
 
     While these recent approaches used in the DRC are dynamic and therefore
     address challenge 1, for prosthesis control we typically only know the state
     of the prosthesis itself. It is unreasonable to expect that amputees will
     don full body sensing suits in order to provide a complete picture of the
     state of the amputee-prosthesis system. Therefore, prosthesis controllers
-    must be decentralized, meaning joint torque commands are computed using only
-    a subset of the full state. A side affect of this approach is a loss of
-    formal stability guarantees. However, we can still evaluate amputee
-    stability empirically.
+    must be decentralized, meaning prosthesis joint torque commands are computed
+    using only a subset of the full state, while the human controls their own
+    joints with a diferent subset of state. A side effect of decentralization is
+    a loss of formal stability guarantees of the combined amputee and prosthesis
+    system. However, we can still evaluate amputee stability empirically.
 
     \item\label{chal:amputees_unique} \emph{Amputees are unique}~~Finally, we
     should be able to adapt robotic prosthesis controllers to each amputee's
@@ -336,7 +337,7 @@ forces to subjects via actuated tethers.
 
 \section{Expected Contributions}\label{sec:intro_contributions}
 
-Work presented in this thesis will advance the state-of-the-art for robotic
+Work presented in this thesis will advance the state of the art for robotic
 transfemoral prosthesis control and optimization. There are four main expected 
 contributions: 
 

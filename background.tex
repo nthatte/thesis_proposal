@@ -69,7 +69,7 @@ simplified locomotion model applies additional reductions to the bipedal
 spring-mass model, replacing spring legs with ideal prismatic force sources and
 constraining the center of mass to move on a plane. The resulting simplified
 model features linear COM dynamics with respect to the zero moment point (ZMP).
-The ZMP is the point on the ground about the horizontal moments needed to
+The ZMP is the point on the ground about which the horizontal moments needed to
 counteract the total reaction forces on the system is zero. When the ZMP lies
 within the support polygon\sidenote{The convex hull of contact points on the
 ground} (SP), it is coincident with the center of pressure (COP). On the other
@@ -161,19 +161,19 @@ inverted pendulum model does not produce center of mass trajectories or ground
 reaction force profiles similar to those seen during human locomotion.  Second,
 human gaits do not constrain the ZMP to the support polygon as we spend
 significant time on the heel and balls of our feet during stance
-\citep{perry1992gait}.
+\citep{perry2010gait}.
 
 To overcome these issues and produce more human like gaits, recently researchers
 have investigated applying dynamic centralized control approaches to enforce
 spring-mass model dynamics instead of LIPM dynamics. With this approach,
 researchers have developed robust controllers for both walking
-\citep{wensing2013generation} and running \citep{martin2015robust} for humanoid
-robots. Alternatively, \citet{sreenath2011compliant} replaced the LIPM model
-with a one-degree-of-freedom walking mechanical linkage. In this control, all
-joint angles are parameterized with respect to a single phase variable, usually
-the leg angle. As the phase variable progresses via its passive dynamics a
-control Lyapunov function impose virtual constraints that force joints to follow
-a walking gait trajectory. The control expresses a degree of dynamism, as the
+\citep{liu2016terrain} and running \citep{martin2015robust} for humanoid robots.
+Alternatively, \citet{sreenath2011compliant} replaced the LIPM model with a
+one-degree-of-freedom walking mechanical linkage. In this control, all joint
+angles are parameterized with respect to a single phase variable, usually the
+leg angle. As the phase variable progresses via its passive dynamics a control
+Lyapunov function impose virtual constraints that force joints to follow a
+walking gait trajectory. The control expresses a degree of dynamism, as the
 phase variable is free to evolve naturally, and demonstrates human-like reflexes
 as it is automatically maintains its balance in response to external
 perturbations by stepping forward or backwards.
@@ -212,9 +212,9 @@ Consequently, it suffers from many of the same problems identified in
 centralized kinematic control. Namely, it does not comply to the environment,
 which can result in large and unnatural reaction forces. For example, if a
 prosthesis under this control strategy encountered an obstacle during swing, the
-knee would not to flex in response, thereby inducing a large moment on the
-amputee. Moreover, echo control suffers from the problem of not allowing the
-amputee to to start or stop gait with their prosthesis leg.
+knee would not flex in response, thereby inducing a large moment on the amputee.
+Moreover, echo control suffers from the problem of not allowing the amputee to
+to start or stop gait with their prosthesis leg.
 
 As was the case for centralized control, commanding torques instead of joint
 angles helps alleviate this issue by allowing for compliant interaction with the
@@ -251,14 +251,17 @@ natural dynamics of a system can in fact provide high levels of performance in
 practice.
 
 Virtual model control, proposed by \citet{pratt2001virtual}, provides a
-convenient method for designing heuristic control strategies. In contrast to the
-control proposed in \citet{raibert1983dynamically}, which commands forces
-aligned with the robot's actuators, virtual model control does not require such
-correspondence. Rather, designers can use their intuition to place virtual
-mechanical elements, such as springs, dampers, masses, and linkages on or
-between reference coordinate frames located anywhere in space. The virtual
-mechanisms apply generalized forces $F$ to the coordinate frames, which are
-translated to joint torques $\tau$ via the Jacobian $J$ according to
+convenient method for designing heuristic control strategies. While the authors
+originally used the method as a centralized control, later work such as
+\citet{ajallooeian2013central} apply the method to design controls that feature
+decentralized elements as well. In contrast to the control proposed in
+\citet{raibert1983dynamically}, which commands forces aligned with the robot's
+actuators, virtual model control does not require such correspondence. Rather,
+designers can use their intuition to place virtual mechanical elements, such as
+springs, dampers, masses, and linkages on or between reference coordinate frames
+located anywhere in space.  The virtual mechanisms apply generalized forces $F$
+to the coordinate frames, which are translated to joint torques $\tau$ via the
+Jacobian $J$ according to
 \begin{align}
     \tau = J^T F.
 \end{align}
@@ -267,19 +270,19 @@ virtual components.
 
 This control approach has many advantages: First, it provides an intuitive
 framework to design controllers for many tasks and many different robot
-architectures. Second, even though the original virtual model control proposed
-by \citeauthor{pratt2001virtual} is centralized, one can easily design
-decentralized controllers with this method as well. If the virtual mechanisms do
-not span all the joints, $J$ will be a sparse matrix, resulting in a
-decentralized control approach that can be applied to prostheses. Last,
-impedance mechanisms such as springs and dampers ensure dynamic interaction with
-the environment with reasonable reaction forces.
+architectures. Second, one can easily design decentralized controllers with this
+method by using virtual mechanisms that span only a subset of joints. This
+create a sparse Jacobian matrix, $J$, resulting in a decentralized control
+approach that can be applied to prostheses. Last, impedance mechanisms such as
+springs and dampers ensure dynamic interaction with the environment with
+reasonable reaction forces.
 
 \subsection{Dynamic Prosthesis Control}
 With the goal of dynamic interaction with the environment in mind,
 \citet{sup2007design} formulated \emph{impedance control} for active prostheses.
 The strategy is a essentially a form of simple virtual model control, where
 linear and nonlinear springs along with linear dampers span individual joints.
+\todo{add figure with torque vs angle curves}
 A finite state machine, such as the one in
 \cref{fig:impedance_control_state_flow}, switches impedance functions as the
 amputee progresses through phases of gait: early and late stance and early and
@@ -340,9 +343,12 @@ model-based computation of feed-forward torques.
 For example, \citet{lenzi2014speed, lenzi2014minimum} compute minimum jerk
 trajectories for the knee and ankle joints during the swing phase. These
 trajectories are parameterized by fifth order polynomials that connect the
-initial states of the knee and ankle joints, measured just before toe-off, to to
-the desired final states, specified for both joints as zero angle, velocity, and
-acceleration. The ankle joint uses a single trajectory, while the knee joint
+initial states of the knee and ankle joints to desired final states. The method
+uses the measured joint angles, veloities and acceleration just before toe-off
+as the initial state and specifies the desired final state for both joints as
+zero angle, velocity, and acceleration.
+
+The ankle joint uses a single trajectory, while the knee joint
 uses two trajectories, one that connects the initial state to a maximum knee
 flexion state and one that connects the maximum knee flexion state to the final
 state.  Using a model of the system represented by Euler-Lagrange dynamics
@@ -355,8 +361,8 @@ more compliant behavior.
 
 A disadvantage of the minimum jerk trajectory approach is it generates and
 executes a trajectory whose duration is heuristically determined at toe-off.
-Recently, \citet{gregg2014virtual, zhao2016first} have proposed methods similar
-to the centralized virtual constraint control discussed in
+Recently, \citet{gregg2014virtual} and \citet{zhao2016first} have proposed
+methods similar to the centralized virtual constraint control discussed in
 \cref{sec:back_centralized_control}, in which the natural progression of a phase
 variable determines the rate at which the control follows preplanned
 trajectories. \citet{gregg2014virtual} chooses to follow the ankle-foot and
@@ -380,26 +386,34 @@ reduces the dependence on the model. A quadratic program then computes the
 minimum required extra effort to ensure convergence to a preplanned trajectory
 that is parameterized with respect to hip angle.
 
-\section{Bioinspired Control for
-Prostheses}\label{sec:back_bioinspired_pros_control} 
+\subsection{Walking Control Summary}
 
-The dynamic control prosthesis control strategies we outlined in the previous
-section in some sense all provide a feed-forward torque that generates a desired
-nominal trajectory, and an impedance behavior that determines the disturbance
-response characteristics. In the case of quasi-stiffness control, the same
-function encodes both of these characteristics.  In the case of trajectory
-following controllers, model inversion provides the necessary torque to execute
-the plan while either a proportional derivative controller, feedback
-linearization, or control Lyapunov function provides impedance behavior.
+The dynamic control prosthesis control strategies we outlined in this section in
+some sense all provide a feed-forward torque that generates a desired nominal
+trajectory, and an impedance behavior that determines the disturbance response
+characteristics. In the case of quasi-stiffness control, the same function
+encodes both of these characteristics.  In the case of trajectory following
+controllers, model inversion provides the necessary torque to execute the plan
+while either a proportional derivative controller, feedback linearization, or
+control Lyapunov function provides impedance behavior.  
+
 However, it is not clear that these approaches generate the impedance responses
 of the system we actually want to replicate in the field of prosthetics, that of
 the amputee's missing limb. In the biological leg, impedance characteristics may
 play a crucial role when it comes to stabilizing movement
 \citep{won1995stability, burdet2001central} and changes in response to a number
 of factors including any of mean ankle torque, ankle position, perturbation
-amplitude, and muscle fatigue \citep{kearney1989system}.
+amplitude, and muscle fatigue \citep{kearney1989system}. It may be possible to
+model the both the quasistatic and impedance behaviors via powerful function
+approximators such as Gaussian Processes or Neural Networks, but these
+approaches could also suffer from the curse of dimensionality and the difficulty
+of gathering biomechanical training data. Therefore, in the next section we will
+discuss approaches that seek to directly model the underlying bioloical system
+that generates these behaviors.
 
-An alternative approach to developing prosthesis control, which may better model
+\section{Bioinspired Control}\label{sec:back_bioinspired_pros_control} 
+
+An alternative approach to prosthesis control, which may better model both the
 joint quasi-stiffness and joint impedance, is to model the underlying biological
 neuromuscular dynamical system that gives rise to these characteristics. Two
 hypothesized mechanisms that govern the neuromuscular system are central pattern
@@ -416,15 +430,15 @@ autonomously generate periodic neural activation
 patterns~\citep{ijspeert2008central}.  \citet{brown1911intrinsic} first
 suggested their existence based on experiments he conducted on decerebrated and
 deafferented cats. In these experiments, \citeauthor{brown1911intrinsic} severed
-both the \emph{afferent pathways} (that carry sensory information) and
-\emph{efferent pathways} (that transmit higher level commands from the brain to
-motor neurons).  Despite the lack of high level control and sensory feedback,
-the cats still displayed cyclical motions in their hind legs similar to those
-seen during normal gait. This result suggests CPGs may play an important role in
-generating locomotion controls in vertebrate animals. Similar cyclical neural
-activity (called fictive locomotion) has been found in isolated lamprey spinal
-cords \citep{cohen1980neuronal}, salamanders \citep{delvolve1999fictive}, and
-frog embryos \citep{soffe1982tonic}. 
+the cat's sensory information pathways (deafferentation) and decrebrated the
+cats to cut-off high-level commands from the brain to alpha motor neurons.
+Despite the lack of high level control and sensory feedback, the cats still
+displayed cyclical motions in their hind legs similar to those seen during
+normal gait. This result suggests CPGs may play an important role in generating
+locomotion controls in vertebrate animals. Similar cyclical neural activity
+(called fictive locomotion) has been found in isolated lamprey spinal cords
+\citep{cohen1980neuronal}, salamanders \citep{delvolve1999fictive}, and frog
+embryos \citep{soffe1982tonic}. 
 
 \begin{marginfigure}
     \centering
@@ -443,23 +457,23 @@ to gait transitions in both decerebrated cats \citep{shik1966control} and
 salamanders \citep{cabelguen2003bimodal}.  Therefore, CPGs may serve as a form
 of dimensionality reduction and decentralization for the biological control
 system as low-dimensional, high-level signals from brain can shape the
-high-dimensional, low-level CPG output. Consequently, CPGs may also represent
-an attractive option for robotic legged locomotion controllers as
-decentralization and dimensionality reduction are desirable properties in this
-domain as well.
+high-dimensional, low-level CPG output. Consequently, CPGs may also represent an
+attractive option for generating feed-forward commands for robotic legged
+systems as decentralizaiton and dimensionality reduction are desirable
+properties in this domain as well.
 
-\subsubsection{Neuromechanical Models with CPGs}
+\subsubsection{Neuromechanical Models and Robot Implementations with CPGs}
 The seminal work on CPG-based bipedal locomotion control is presented in
 \citet{taga1991self}. In this model, a CPG neural network of six interconnected
-oscillators describes the joint torques applied to a four link biped model.
+oscillators describes the joint torques applied to a five link biped model.
 Differential equations, first presented in \citet{matsuoka1987mechanisms} with
 additional sensory feedback from joint and inertial link angles, describe the
-output of the CPG network. The resulting biped model walks with a natural gait
-featuring both single and double support and demonstrates robustness to a
-variety of disturbances including changes to ground stiffness, damping, and
-slope. Additionally, tuning a single parameter induced a transition from walking
-to running in the model in a manner comparable to the biological gait
-transitions observed after stimulation of the MLR.
+output of the CPG network. The resulting biped model is capable of both running
+and walking gaits  and demonstrates robustness to a variety of disturbances
+including changes to ground stiffness, damping, and slope. Additionally, tuning
+a single parameter induced a transition from walking to running in the model in
+a manner comparable to the biological gait transitions observed after
+stimulation of the MLR.
 
 CPGs have successfully controlled several bipedal humanoid robots. For example,
 \citet{endo2005experimental} used \citeauthor{matsuoka1987mechanisms}'s
@@ -482,9 +496,9 @@ parameters to fit recorded knee angle trajectories from healthy human subjects.
 During walking, the CPG entrains desired knee motions to the oscillations of the
 amputee's hip joint. The desired knee angles are achieved in a
 mechanically-passive prosthesis via online adjustment of the knee damping.
-Similarly, \citet{torrealba2010through, mora2012cybernetic} also use a CPG to
-control a mechanically-passive variable damping prosthesis but use phase
-resetting to synchronize the amputee and CPG dynamics. 
+Similarly, \citet{torrealba2010through} and \citet{mora2012cybernetic} also use
+a CPG to control a mechanically-passive variable damping prosthesis but use
+phase resetting to synchronize the amputee and CPG dynamics. 
 
 For active prostheses, \citet{geng2012design} suggest using a Hopf oscillators
 to fit the trajectory of the knee angle during walking. \citet{guo2010study}
@@ -522,7 +536,7 @@ generates activation in the spinal chord of equal frequency
 ability of decerebrated cats to walk on treadmills across a range of speeds
 \citep{rossignol2000locomotion}.
 
-For human and primate bipedal locomotion, the role of CPGs is more muddied and
+For human and primate bipedal locomotion, the role of CPGs is less clear and
 the role of reflexes more evident than for decerebrated cats and simpler
 vertebrate animals \citep{mackay2002central, vaughan2003theories,
 nielsen2003we}. This is perhaps due to the demands of controlling the inherently
@@ -530,16 +544,16 @@ unstable dynamics of upright walking \citep{capaday2002special}. For example,
 while rhythmic spinal activity has been observed in humans, it is not clear if
 the neural signals are an example of autonomous fictive motion, indicative of a
 CPG, or entrainment with stretch reflexes in leg muscles
-\citep{capaday2002special, stewart1991modulation}. In this case, we can also
-look to robotics to provide insight about biology: in the previously discussed
-experiments on humanoid robots controlled by CPGs, a significant reduction in
-robustness was observed after blocking sensory feedback pathways
-\citep{endo2005experimental, righetti2006programmable} indicating CPGs alone may
-not fully explain bipedal locomotion. Whereas research has not yet clearly
-established the presence of a CPG driving human locomotion, research has
-identified many reflexes that contribute to locomotion such as the Hoffman
-reflex (H-reflex) of the soleus ankle plantarflexor muscle
-\citep{capaday1987difference}, stretch reflex in the soleus
+\citep{capaday2002special, stewart1991modulation}. 
+
+In this case, we can also look to robotics to provide insight about biology: in
+the previously discussed experiments on humanoid robots controlled by CPGs, a
+significant reduction in robustness was observed after blocking sensory feedback
+pathways \citep{endo2005experimental, righetti2006programmable} indicating CPGs
+alone may not fully explain bipedal locomotion. Whereas research has not yet
+clearly established the presence of a CPG driving human locomotion, research has
+identified many reflexes that contribute to locomotion such as stretch reflex in
+the knee during swing \citep{garrett1983role}, stretch reflex in the soleus
 \citep{yang1991contribution}, soleus force feedback \citep{grey2007positive},
 and cutaneous reflexes that induce withdrawal responses \citep{yang1990phase}. 
 
@@ -554,10 +568,10 @@ and activation input (computed using models presented in
 \citet{pierrynowski1985physiological} and \citet{davy1987dynamic}). These forces
 are applied to constant moment arms in order to produce joint torques summed
 about joints as in a virtual model control. The authors optimize the cost of
-transport of transport of the biped with a genetic algorithm and achieve a gait
-with human-like kinematics and kinetics. Moreover, the forces produced by many
-of the muscles resemble those produced during human locomotion. Despite the fact
-that the CPG used in this model received no feedback signals, the resultant gait
+transport of the biped with a genetic algorithm and achieve a gait with
+human-like kinematics and kinetics. Moreover, the forces produced by many of the
+muscles resemble those produced during human locomotion. Despite the fact that
+the CPG used in this model received no feedback signals, the resultant gait
 still exhibited a small degree of robustness to perturbations although not as
 much as \citeauthor{taga1991self}'s model. The author's attribute the robustness
 to the stabilizing feedback provided by muscle reflexes. 
@@ -724,7 +738,7 @@ and lithium-ion batteries, inexpensive microcontrollers and inertial measurement
 units (IMUs), and strong but light composite materials such as carbon fiber.
 With these advancements, engineers have successfully designed prostheses to meet
 or exceed the requirements for walking~(\cref{tab:walking_requirements}).
-\begin{margintable}
+\begin{margintable}[-2in]
   \centering
   \begin{tabular}{lll}
     \toprule
@@ -743,14 +757,15 @@ or exceed the requirements for walking~(\cref{tab:walking_requirements}).
 
 In this \namecref{sec:back_pros_design}, we review a number of recent prosthesis
 designs and analyze their ability to enable dynamic locomotion
-(\cref{chal:dynamic,chal:incomplete_state} of transfemoral prosthesis locomotion).  To address
-this challenge, prostheses should be able to regulate their output joint torques
-and behave as though they have inertial properties similar to that of a normal
-human leg. This will ensure that the prosthesis will emulate the energy
-efficient gaits of normal walking and remain compliant to unforeseen
-disturbances and uneven terrain.
+(\cref{chal:dynamic,chal:incomplete_state} of transfemoral prosthesis
+locomotion).  To address this challenge, prostheses should be able to regulate
+their output joint torques and behave as though they have inertial properties
+similar to that of a normal human leg. This will ensure that the prosthesis will
+emulate the energy efficient gaits of normal walking and remain compliant to
+unforeseen disturbances and uneven terrain.
 
-\subsection{Direct Drive Transfemoral Prostheses}\label{sec:back_direct_drive}
+\subsection{Rigid Transmission Transfemoral
+Prostheses}\label{sec:back_rigid_trans} 
 \begin{marginfigure}
     \centering
 	\begin{subfigure}[t]{\linewidth}
@@ -786,13 +801,13 @@ disturbances and uneven terrain.
 \end{marginfigure}
 
 The most common approach for active transfemoral prosthesis design employs
-electric motors, coupled to transmissions, that directly drive the knee and
-ankle joints. The transmissions may utilize a combination of gears, chains,
+electric motors with transmissions that are rigidly coupled to the knee and
+ankle joints.  The transmissions may utilize a combination of gears, chains,
 belts, ball screws, and four-bar-mechanisms in order to increase the torque
 output of the actuator, at the expense of speed, in order to satisfy the
 requirements listed in \cref{tab:walking_requirements}. A successful line of
 transfemoral prostheses following this design paradigm comes from Vanderbilt
-university. The first prosthesis in this line \cref{fig:vanderbilt_prostheses}a
+university. The first prosthesis in this line (\cref{fig:vanderbilt_gen_1})
 used a pair of ball screw transmissions and brushless motors capable of
 \unit[200]{W} of continuous power output to drive its knee and ankle joints
 \citep{sup2009preliminary}. 
@@ -806,8 +821,9 @@ that reduces the required ankle motor torque. As shown in figure
 spring accounts for a significant portion of the ankle's torque versus angle
 relationship. Therefore, incorporating a spring into the ankle offloads this
 portion of the torque from the motor. The ankle motor only needs to provide the
-delta between the desired output torque and the linear spring. As a result, the
-spring reduces motor energy consumption, heat generation, and transmission wear.
+difference between the desired output torque and the linear spring. As a result,
+the spring reduces motor energy consumption, heat generation, and transmission
+wear.
 
 Further improvements resulted in two more generations of prostheses
 (\cref{fig:vanderbilt_gen_2,fig:vanderbilt_gen_3}) \citep{lawson2013control,
@@ -821,7 +837,7 @@ sup2011upslope, lawson2013control, lawson2014robotic, lenzi2014speed}, EMG-based
 \citep{lenzi2014minimum}, and virtual constraint control
 \citep{gregg2014virtual}. 
 
-Additional prostheses in the direct drive category include AMPRO
+Additional prostheses in the rigid transmission category include AMPRO
 \citep{zhao2016first}, and a commercially available active knee and ankle
 prostheses: the Össur Power Knee and Proprio Foot. The AMPRO prosthesis features
 two 374 W motors coupled to Harmonic Drive transmissions.
@@ -841,12 +857,12 @@ swing to help avoid trips.
     \label{fig:ankle_torque_vs_angle}
 \end{marginfigure}
 
-
-\subsubsection{Torque Control Strategies for Direct Drive Prostheses}
+\subsubsection{Torque Control Strategies for Rigid Transmission Prostheses}
 In order to achieve dynamic locomotion capabilities, it is crucial that
 prosthesis designs allow for closed loop control of torques. To do this control
 system must be able to accurately measure the torque at the joint output. There
-are two main strategies for torque measurement used by direct drive prostheses.
+are two main strategies for torque measurement used by prostheses with rigid
+transmissions.
 
 The first strategy is to measure the current draw of the motors windings, which
 is related linearly to the motor torque. One can then multiply this measurement
@@ -940,22 +956,21 @@ impact shock could cause damage to gearing and discomfort for the amputee.
 %human foot for 1.7m 85 kg = 0.0187 kg*m^2
 
 \subsection{Design of Dynamic Prostheses}
-In contrast to the direct drive actuation discussed in the previous subsection,
-prostheses that employ series elastic actuation may be better poised to achieve
-dynamic locomotion \citep{pratt1995series}. This actuation scheme (illustrated
-in \cref{fig:sea_diagram}) aims to solve the torque measurement and impedance
-amplification caused by transmissions by placing a spring in series with the
-actuator. Measuring the deflection of the spring allows for accurate closed-loop
-control of the joint torque. Moreover, the spring low-pass filters external
-impulses, granting the control system more time to move the motor rotor in
-response to the external load.  Due to these properties, designers have
+In contrast to the rigid transmission actuation discussed in the previous
+subsection, prostheses that employ series elastic actuation may be better poised
+to achieve dynamic locomotion \citep{pratt1995series}. This actuation scheme
+(illustrated in \cref{fig:sea_diagram}) aims to solve the torque measurement and
+impedance amplification caused by transmissions by placing a spring in series
+with the actuator. Measuring the deflection of the spring allows for accurate
+closed-loop control of the joint torque. Moreover, the spring low-pass filters
+external impulses, granting the control system more time to move the motor rotor
+in response to the external load.  Due to these properties, designers have
 integrated series elastic actuators into a number of bipedal robots that seek to
 achieve dynamic locomotion such as M2V2 \citep{pratt2008design} and ATRIAS
 \citep{grimes2013atrias}.
-
 \begin{marginfigure}
     \centering
-    \includegraphics[height=6.25in]{sea_diagram}
+    \includegraphics[width=2in]{sea_diagram}
     \caption{Series elastic actuation inserts a spring between the gear output
     and the load (here drawn as linear actuator for simplicity). Torque is
     measured via the spring deflection, $\tau = k(\theta_l - \theta_m -
@@ -986,7 +1001,7 @@ this trade off in mind. In these publications, the authors find that using an
 SEA spring soft enough to protect the ball screw transmission results in
 insufficient closed loop torque control bandwidth. To overcome this shortcoming,
 the authors incorporate a parallel spring into the ankle as was done for some of
-the knee and ankle prostheses discussed in \cref{sec:back_direct_drive}. Because
+the knee and ankle prostheses discussed in \cref{sec:back_rigid_trans}. Because
 the parallel spring offsets the motor's torque requirements,
 \citeauthor{au2008powered} find that it also improves the bandwidth of the
 system from 4 Hz to 20 Hz, thereby exceeding the requirement for walking. 
@@ -997,9 +1012,9 @@ connected to a light-weight prosthesis end-effector via a Bowden cable
 transmission. The Bowden cable applies forces to one end of a fiberglass leaf
 spring strain gauges measure its deflection. The author's note that the series 
 springs isolate the prosthesis end effector from the motor's rotor inertia. With
-this system the author achieve a large peak output torque ($\unit[175]{N \cdot m}$)
-and high bandwidth (\unit[17]{Hz}), allowing them to rapidly test the effects of
-different control strategies and emulate prosthesis hardware
+this system the authors achieve a large peak output torque ($\unit[175]{N \cdot
+m}$) and high bandwidth (\unit[17]{Hz}), allowing them to rapidly test the
+effects of different control strategies and emulate prosthesis hardware
 \citep{caputo2015informing}.
 
 \subsubsection{Springs for energy efficiency}
@@ -1038,7 +1053,15 @@ design problem are AAAKP (agonist-antagonist active knee prosthesis)
 \citep{martinez2008design, martinez2011antagonistic} and the CSEA (clutchable
 series elastic actuator) knee \citep{rouse2014clutchable, rouse2015design}.
 
-\begin{marginfigure}[0.5in]
+The AAAKP prosthesis uses two unidirectional springs, one for extension and one
+for flexion, each in series with its own actuator. With this setup,
+AAAKP is able to store energy during the knee flexion phase just after heel
+strike, and transfer it to a flexion spring for use during pre-swing and swing.
+The prosthesis consumes just \unitfrac[5.6]{J}{stride}. However, the downside of
+this design is inefficient use of actuator mass, as two electric motors are
+required, one for extension and one for flexion.
+
+\begin{marginfigure}[0in]
     \centering
     \includegraphics[width=\linewidth]{knee_torque_vs_angle}
     \caption{Torque vs angle relationship for the knee during level ground
@@ -1048,15 +1071,6 @@ series elastic actuator) knee \citep{rouse2014clutchable, rouse2015design}.
     \citet{winter2009biomechanics} scaled to 85 kg subject.}
     \label{fig:knee_torque_vs_angle}
 \end{marginfigure}
-
-The AAAKP prosthesis uses two unidirectional springs, one for extension and one
-for flexion, each in series with its own actuator. With this setup,
-AAAKP is able to store energy during the knee flexion phase just after heel
-strike, and transfer it to a flexion spring for use during pre-swing and swing.
-The prosthesis consumes just \unitfrac[5.6]{J}{stride}. However, the downside of
-this design is inefficient use of actuator mass, as two electric motors are
-required, one for extension and one for flexion.
-
 A second concept is to use a series elastic actuator with a clutch on the motor
 \citep{rouse2014clutchable, rouse2015design} The clutch saves energy by holding
 the motor side of the series spring stationary while the spring is loaded in
@@ -1068,7 +1082,7 @@ Moreover, the simplified design of the CSEA has a mass of \unit[2.7]{kg} vs
 \unit[3.6]{kg} for the AAAKP.
 
 A potential drawback of SEA designs that are tuned for energy efficiency is that
-they typically tune tune the spring stiffness to match observed quasi-stiffness
+they typically tune the spring stiffness to match observed quasi-stiffness
 of the biological joint during a certain phase of the gait. However, this
 stiffness value is not necessarily that which maximizes torque control
 bandwidth. Therefore, while prostheses tuned for efficiency can consume less
@@ -1096,30 +1110,29 @@ activity it engenders are two major issues amputees face
 \citep{miller2001prevalence}. Avoidance of physical activity can potentially
 cause deterioration of strength, balance and control, which may lead to further
 inactivity, debilitation, and social isolation. Currently, the microprocessor
-controlled, mechanically-passive prostheses feature trip recovery modes
-that ``lock'' or highly damp knee movement. However,
-\citet{bellmann2010comparative} show that these modes fail to adequately respond
-to trips during a large portion of swing due to knee buckling at touch-down.
-Moreover, it is unclear that passive, locking responses are intuitive for
-amputees or coordinate well with innate trip recovery responses, which can
-require positive joint power \citep{cordero2005energy}. However, the advent of
-active transfemoral prostheses give us the opportunity to replicate amputee's
-preferred responses, which will hopefully yield more effective and intuitive
-fall-prevention actions.
+controlled, mechanically-passive prostheses feature trip recovery modes that
+``lock'' or highly damp knee movement. However, \citet{bellmann2010comparative}
+show that these modes fail to adequately respond to trips during a large portion
+of swing due to knee buckling at touch-down.  It is unclear that passive,
+locking responses are intuitive for amputees or coordinate well with innate trip
+recovery responses, which can require positive joint power
+\citep{cordero2005energy}. The advent of active transfemoral prostheses gives us
+the opportunity to replicate amputee's preferred responses, which will hopefully
+yield more effective and intuitive fall-prevention actions.
 
 \subsection{Responses to Trips}
 
 Able-bodied persons primarily use two strategies to recover from trips to their
-swing legs: When the tripped in early swing, people usually use an
+swing legs: When tripped in early swing, people usually use an
 \emph{elevating strategy}, in which the knee is actively flexed to lift the foot
 over and in front of the obstacle. In late swing, people typically use a
 \emph{lowering strategy}, in which knee extensor muscles rapidly bring the foot
 in contact with the ground in front of the obstacle \citep{eng1994strategies}.
 In response to mid-swing trips, people may use either strategy
-\citep{schillings2000muscular}. Finally, the \emph{delayed lowering} can also be
-used in early swing. This strategy is an aborted attempt at an elevating
-strategy, followed by a lowering strategy, and is used when the toe catches
-on the obstacle \citep{eng1994strategies}.
+\citep{schillings2000muscular}. Finally, people also use the \emph{delayed
+lowering} strategy in early swing. This strategy is an aborted attempt at an
+elevating strategy, followed by a lowering strategy, and is used when the toe
+catches on the obstacle \citep{eng1994strategies}.
 
 Interestingly, \citet{shirota2015transfemoral} show that transfemoral amputees
 using mechanically-passive prostheses utilize these same strategies despite the
@@ -1162,12 +1175,12 @@ data processing and cognitive control as compared to able-bodied persons.
 
 A control system that seeks to be intuitive and effective for amputees by
 mimicking their responses to trips needs to be able to model these complexities.
-As a result, researchers have relied on data-driven and machine learning
-approaches to detect and classify trips so that prostheses can take the
-appropriate actions. All systems designed to date use a two-layer classification
-scheme, where the first layer distinguishes trips from normal walking, and the
-second layer classifies the recovery strategy as either elevating or lowering.
-The first such system by \citet{lawson2010stumble} used Fast Fourier Transform
+As a result, researchers have relied on data-driven, machine learning approaches
+to detect and classify trips so that prostheses can take the appropriate
+actions. All systems proposed to date use a two-layer classification scheme,
+where the first layer distinguishes trips from normal walking, and the second
+layer classifies the recovery strategy as either elevating or lowering.  The
+first such system by \citet{lawson2010stumble} used Fast Fourier Transform
 features of data collected from six accelerometers placed on the lower limb. To
 collect training data, the author's outfitted healthy subjects with sensors, and
 randomly subjected them to trips. They classified stumbles from normal walking
@@ -1175,14 +1188,14 @@ via a threshold on power between 10 and \unit[40]{Hz} and classified elevating
 versus lowering strategies based on the root-mean-squared thigh acceleration in
 a \unit[50]{ms} window before the stumble. \citet{zhang2011towards} further add
 EMG sensors to the trip detection system, and employ outlier detection methods
-so that the trips were not required in the training dataset. They find EMG sensors
-improve the false alarm rate, at the expense of classification latency. However,
-the false alarm rate is still quite high, corresponding to an incorrect positive
-classification every \unit[1.6]{min}. Finally, \citet{shirota2014recovery} use
-linear discriminant analysis on kinematic features from the tripped leg. They
-find evidence supporting the use of the two-stage classification scheme, and
-identify the optimal update frequency and length for the window in which they
-compute features.
+so that the trips were not required in the training dataset. They find EMG
+sensors improve the false alarm rate, at the expense of classification latency.
+However, the false alarm rate is still quite high, corresponding to an incorrect
+positive classification every \unit[1.6]{min}. Finally,
+\citet{shirota2014recovery} use linear discriminant analysis on kinematic
+features from the tripped leg. They find evidence supporting the use of the
+two-stage classification scheme, and identify the optimal update frequency and
+length for the window in which they compute features.
 
 A major drawback of these previous works is that they report error rates based
 on offline validation results; \ie they collect data from subjects who are
@@ -1195,3 +1208,27 @@ descent found that online error rates were significantly higher than offline
 error rates \citep{hargrove2015intuitive}. As we discuss in
 \cref{sec:proposed_trip_recovery}, it is likely this trend will hold true for
 stumble classification as well.
+
+\section{Backgorund Summary}
+From this literature review, we see that in order to achieve dynamic prosthesis
+behaviors, such as trip recovery, both the prosthesis controls and mechanical
+must address both the nominal walking gait as well as the disturbance response.
+We see a clear trend in the literature in this direction: Control algorithms
+have evolved from kinematic strategies that follow preplanned trajectories with
+stiff position control to dynamic strategies that allow us to design both the
+nominal trajectory the disturbance response characteristics. Likewise, in
+prosthesis design we see a trend towards series elastic actuators that enable
+accurate sensing and control of the prosthesis joint torque. With these
+actuators, we can design prosthesis joints that can simulate the passive
+dynamics of the human leg, allowing for natural interactions with the
+environment. 
+
+In this thesis, we intend to take an integrated approach to the hardware and
+control design in order to maximize the dynamism of the resulting system. We
+plan design and build a series elastic actuator transfemoral prosthesis, capable
+of executing dynamic motions, and combine it with neuromuscular reflex control,
+which provides a unified explanation for both the quasistatic and impedance
+behaviors of the human leg. With this approach, we hope the prosthesis will be
+respond to smaller disturbances like biological human leg and will be able to
+execute dynamic trip recovery responses such as the raising and lowering
+strategies in response to larger disturbances.
