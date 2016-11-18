@@ -30,7 +30,7 @@ song2015neural}.  This model represents the seven link biped in
 segments as well as a lumped head-arms-trunk (HAT) segment.
 \Cref{tab:model_mech_params} lists the segment lengths, center of mass and joint
 locations measured from the distal end, masses, and inertias that approximate
-those of a \unit[80]{kg}, \unit[2.0]{m} tall person.
+those of a \unit[80]{kg}, \unit[1.8]{m} tall person.
 
 \begin{table}[b]
   \centering
@@ -62,13 +62,13 @@ force is
     \left(\nicefrac{\dot n_c}{v_\tn{max}} > -1 \right),
     \label{eq:grf_n}
 \end{align}
-where $k_\tn{n} = \unitfrac[78.45]{N}{mm}$ is the stiffness coefficient in
-the normal direction and $\Delta n_c$ and $\dot n_c$ are the normal penetration
-in the normal direction and velocity. The form of the normal force is inspired
-by \citet{gunther2003synthesis, scott1993biomechanical} and represents a linear
-spring with multiplicitive damping.  $v_\tn{max} = \unitfrac[3]{cm}{s}$ represents
-the maximum recovery velocity of the ground. If $\dot n_c$ exceeds this
-velocity ground contact is lost.
+where $k_\tn{n} = \unitfrac[78.45]{N}{mm}$ is the stiffness coefficient in the
+normal direction and $\Delta n_c$ and $\dot n_c$ are the penetration direction
+and velocity in the normal direction. The form of the normal force is inspired
+by \citet{gunther2003synthesis} and \citet{scott1993biomechanical} and
+represents a linear spring with multiplicative damping.  $v_\tn{max} =
+\unitfrac[3]{cm}{s}$ represents the maximum recovery velocity of the ground. If
+$\dot n_c$ exceeds this velocity, ground contact is lost.
 
 In the tangential direction, a state machine switches between two force models
 representing sliding and static friction. Sliding friction is given by
@@ -86,7 +86,7 @@ friction, and $k_\tn{t} =\unitfrac[78.45]{N}{mm}$ is the stiffness coefficient
 in the tangential direction.
 
 The contact model begins in the sliding mode and switches to the static mode if
-$\dot t_c < 1 \unitfrac[1]{cm}{s}$. It switches back to the sliding mode when $|
+$\dot t_c < \unitfrac[1]{cm}{s}$. It switches back to the sliding mode when $|
 F_{\tn{t,static}} | < \mu_\tn{static} | F_n |$, where $\mu_\tn{static} = 0.9$.
 
 Finally, the biped skeletal model includes soft joint limits to represent
@@ -219,7 +219,7 @@ expression captures this relationship.
 In this expression, $K$ is a shape parameter and $N$ determines the force
 amplification when the contractile element is lengthening. The force-velocity
 relationship acts as a multiplicative damper causing the CE to produce more
-contractile force when it is lengthening and less as it extends.
+contractile force when it is lengthening and less as it contracts.
 
 We model both passive elements, the PE and SE, using the same functional form
 representing a unidirectional, stiffening spring, the behavior of which is shown
@@ -319,15 +319,15 @@ respectively. For example, the gastrocnemius has a force feedback reflex,
         G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}} \:,
         \label{eq:gas_stim}
 \end{align}
-that flexes the knee as it contributes to anklep plantarflexion. The hamstring
+that flexes the knee as it contributes to ankle plantarflexion. The hamstring
 also has a positive force feed back
 \begin{align}
     \func{S}[][\tn{ham}]{t} = S_0^\tn{ham} + 
         G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_\tn{s}} + \ldots \:
         \label{eq:ham_stim}
 \end{align}
-that counteracts knee flexion caused by hip extension. Also, the hamstring force
-feedback helps prevent hip flexion caused by heel-strike.
+that counteracts knee extension caused by hip extension. Also, the hamstring
+force feedback helps prevent hip flexion caused by heel-strike.
 
 A second mechanism further protects the knee by inhibiting the vastus
 stimulation in proportion to knee extension beyond a threshold, resulting in
@@ -529,10 +529,10 @@ During swing, only the swing leg torques are used.
 \end{marginfigure} 
 
 The muscle reflex interpretation of the idealized swing leg control presented in
-the previous \crefname{sec:neuro_ideal_swing} proposes reflexes to achieve the 
-same three goals as the ideal swing leg control: (i) flex the knee to achieve
-sufficient ground clearance, (ii) prevent toe scuffing by damping the knee (iii)
-stop and extend the leg when the target leg angle is achieved (see
+the previous \crefname{sec:neuro_swing_reflexes} proposes reflexes to achieve
+the same three goals as the ideal swing leg control: (i) flex the knee to
+achieve sufficient ground clearance, (ii) prevent toe scuffing by damping the
+knee (iii) stop and extend the leg when the target leg angle is achieved (see
 \cref{fig:swing_leg_polar}). This control assumes a leg with nine-muscles, the
 seven included in the stance control (\cref{fig:biped_w_muscles}), as well as
 two additional muscles shown in figure (\cref{fig:biped_w_muscles_rf_bfsh}).
