@@ -1,9 +1,177 @@
 \chapter{Completed Work}\label{sec:completed_work}
 
 \section{Transfemoral Prosthesis Design}\label{sec:completed_design}
+\begin{marginfigure}[1.25in]
+    \centering
+    \includegraphics[width=\linewidth]{prosthesis_render_annotated}
+    \caption{Render of proposed powered knee and ankle prosthesis design. The
+    prosthesis includes series elastic actuators to enable accurate torque
+    control and a unidirectional parallel ankle spring to offset the required
+    angle torque.}\label{fig:prosthesis_render_annotated}
+\end{marginfigure} 
 
+To test our proposed Neuromuscular control approach, and its ability to help
+subjects maintain or recover their balance, we build a custom transemoral
+prosthesis capable of reproducing dynamic locomotion tasks. The proposed design,
+shown in \cref{fig:prosthesis_render_annotated}, uses brushless electric motors
+coupled to harmonic drive gear sets to drive both the knee and ankle joints.
+Additionally, the joints employ series elastic actuation to enable accurate
+torque control and to protect the Harmonic Drive gear sets from sudden impacts.
+The design also features a unidirectional parallel spring in the ankle that
+partly offsets the torque demands on the ankle motor.  We design both joints to
+meet the demands of dynamic locomotion tasks such as running and trip recovery.
+
+The overall design concept sits in a niche between low powered prostheses
+designed with commercial applicability in mind
+\citep{sup2007design,sup2009preliminary,lawson2014robotic,rouse2015design,
+martinez2011antagonistic} which feature onboard actuation and power sources, and
+high-powered tethered systems \citep{caputo2013experimental,
+caputo2015informing} with off board actuation designed exclusively for use in
+lab environment. Our design features onboard actuators that are more powerful
+than those used in standalone devices, but less capable than those employed in
+tethered devices. To ensure a reasonable overall weight the device's batteries,
+motor drivers, and computers are off board. With this design, we expect to be
+able to test control ideas without encountering hardware performance limitations
+as with a tethered device. At the same time the device is capable of functioning
+outside of the lab environment like a standalone prosthesis. 
+
+\begin{table}
+    \centering
+    \begin{tabular}{lcc}
+        \toprule
+        Specification         & Desired Value & Achieved Value \\
+        \midrule                  
+        Maximum Knee Torque   & $\unit[160]{N \cdot m}$ 
+            & $\unit[170]{N \cdot m}$   \\
+        Maximum Knee Speed    & \unitfrac[1.80]{rev}{s} 
+            & \unitfrac[1.93]{rev}{sec} \\
+        Maximum Ankle Torque  & $\unit[200]{N \cdot m}$ 
+            & $\unit[170 \ (+120^*)]{N \cdot m}$ \\
+        Maximum Ankle Speed   & \unitfrac[1.14]{rev}{s} 
+            & \unitfrac[1.22]{rev}{s} \\
+        Weight                & \unit[6.8]{kg} & \unit[5.9]{kg} \\
+        Minimum Height        & \unit[42.5]{cm} & \unit[42]{cm} \\
+        \bottomrule
+    \end{tabular}
+    \caption{Designed and achieved design specifications. ($^*$Maximum total
+    ankle torque is $\unit[290]{N \cdot m}$ achieved at \unit[10]{degrees} of
+    dorsiflexion.)}\label{tab:pros_requirements}
+\end{table}
+
+\Cref{tab:pros_requirements} shows the desired design specifications for the
+transfemoral prosthesis and the values achieved by the final design. To obtain
+these design specifications we examined a number of studies that ellicited trip
+responses.
+
+We specify desired joint torque and speed values to meet the requirements of
+demanding tasks such as running. The maximum knee torque specification comes
+from the findings of \citet{whitley2008maximum}, who tested the joint torques
+used during recovery from a simulated fall. The maximum knee speed requirement
+comes from \citet{grabiner1993kinematics}, who tested subjects' responses to
+simulated trips induced by unseen obstacles on a walkway. We obtain the maximum
+ankle torque requirement from \citet{pijnappels2005early}, who tripped subjects
+using a obstacles that could suddenly emerge through the floor. The maximum
+ankle speed requirement comes from the running data of
+\citet{novacheck1998biomechanics}. We set to the minimum height specification,
+measured between the center of the knee and bottom of the foot, to accommodate
+the $10^\tn{th}$ percentile female \citep{gordon1988anthropometric}.  Finally,
+the required weight corresponds to the mean leg weight of a $50^\tn{th}$
+percentile male \citep{winter2009biomechanics}.
+
+\subsection{Knee Joint}
+\begin{comment}
+\begin{marginfigure}[0in]
+    \centering \includegraphics[width=\linewidth]{knee_running_torque}
+    \caption{Knee torque required for running}\label{fig:knee_running_torque}
+\end{marginfigure}
+\begin{marginfigure}[0in]
+    \centering \includegraphics[width=\linewidth]{knee_running_speed}
+    \caption{Knee torque required for running}\label{fig:knee_running_speed}
+\end{marginfigure}
+\end{comment}
+
+In addition to achieving the maximum speeds and torques found in
+\cref{tab:pros_requirements}, we design the knee joint so that it can reproduce
+the torque and speed required for a \unit[80]{kg} person to run at
+\unitfrace[3.2]{m}{s} as measured by \citet{novacheck1998biomechanics}. To
+reproduce this trajectory in the knee joint, we utilize a RoboDrive ILM
+$85\times13$ HS-SP motor coupled to a Harmonic Drive Gear set with a 50:1
+reduction (CSG--20--50). \Cref{fig:knee_torque_vs_angle} shows the motor torque
+and speed required to reproduce a running trajectory assuming a gear
+efficiency of $75\%$. In this plot, we see that the running trajectory lies
+within the speed-dependent torque limit of the motor. Moreover, the root mean
+squared torque of this trajectory $(\unit[1.46]{N \cdot m})$ exceeds the torque
+rating of the motor $(\unit[1.43]{N \cdot m})$ by just $2\%$. Therefore, the
+knee joint should be able to provide the necessary torque to enable running for
+a short amount of time, or continuously for lighter subjects or at a slightly
+reduced speed.
+\begin{marginfigure}[-2in]
+    \centering 
+    \includegraphics[width=\linewidth]{knee_motor_torque}
+    \caption{Knee motor torque required for
+    running}\label{fig:knee_torque_vs_angle}
+\end{marginfigure}
+
+\begin{figure*}[t]
+    \centering 
+    \includegraphics[width=\linewidth]{knee_design}
+    \caption{Internal and external design of the knee 
+    joint.}\label{fig:knee_design}
+\end{figure*}
+\Cref{fig:knee_design} shows the internal and external design of the knee joint.
+The primary component in the knee joint is the stator housing. On top of the
+housing is a standard pyramid adaptor that allows the prosthesis to connect to
+amputee's sockets. Within the stator housing, lies the brushless motor stator,
+rotor, and harmonic drive gear set. We sense absolute rotor angle for
+commutation of the brushless motor via hall effect sensors and a magnetic
+complementary sin/cos encoder. To incorporate series elasticity, we take
+inspiration from the design of the bipedal robot Atrias
+\citep{grimes2013atrias}, which uses fiberglass series leaf springs. In our
+design, the output of the gear set drives the proximal end of a fiberglass leaf
+spring in series with the shank. Two Renishaw Resolute absolute encoders measure
+the deflection of this spring to enable torque control.
+
+In addition to allowing for accurate torque control, as shown by
+\citet{au2007biomechanical,au2008powered}, the series elasticity also plays a
+crucial role in protecting fragile gear components from impact loads. To choose
+the spring stiffness for the knee joint, we simulate the prosthesis impacting a
+rigid wall with the foot during swing. To do this, we construct a model of the
+prosthesis in Matlab Simulink Simulink Simscape Multibody that includes the
+series elasticity, gear dynamics, and motor electrical dynamics\sidenote{for
+details see \cref{sec:sec_simulation_environ}}. \Cref{fig:impact_sim_knee} shows
+the simulation environment. The prosthesis is attached to the distal end of a
+thigh segment with a fixed hip position. We control the hip via the ideal swing
+leg control outlined in \cref{sec:neuro_ideal_swing} (\cref{eq:hipfeedback}) and
+consider the case where the external voltage applied to the motor is zero. This
+simulation suggests that a spring stiffness under $\unitfrac[2300]{N \cdot
+m}{rad}$ will ensure that the peak impact torque remains lower than the peak
+allowable impact torque of the Harmonic Drive of $\unit[242]{N \cdot m}$.
+
+\subsection{Ankle Joint}
+
+As with the knee joint, we design the ankle joint to satisfy the requirements
+listed in \cref{tab:pros_requirements}. Specifically, for the ankle joint we pay
+considerable attention to the tripping condition described by
+\citet{pijnappels2005early}, in which the ankle generates a  peak torque of
+$\unit[202]{N \cdot m}$. To avoid using a large and heavy motor to achieve this
+peak torque, we take inspiration from previous prosthetic ankle designs that
+employ a unidirectional parallel spring in the ankle joint that performs the
+conservative portion of the ankle's torque versus angle trajectory during normal
+walking
+\citep{au2007biomechanical,au2008powered,sup2009preliminary,lawson2014robotic}.
+The parallel spring offsets the required motor torque, as the actuator now only
+needs to provide the difference between the desired torque and the torque
+provided by the parallel spring.
+
+The design of the ankle actuator represents a second iteration of the knee
+actuator design. \Cref{fig:ankle_design} shows internal and external views of
+the ankle actuator.
+
+\subsection{Experiments}
 \section{Comparison of Robustness Achieved by Reflex and Impedance Controls in
     Simulation}\label{sec:completed_comparison}
+
+\subsection{Simulation Environment}\label{sec:sec_simulation_environ}
 
 \subsection{Controller Optimization}\label{sec:completed_comparison_opt}
 
