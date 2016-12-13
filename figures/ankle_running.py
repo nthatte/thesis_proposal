@@ -82,7 +82,7 @@ ax.set_yticks(np.arange(0, 3.75, 1.25))
 ax.spines['bottom'].set_bounds(0, 8000)
 ax.set_xticks(np.arange(0,12000,4000))
 
-filename = 'ankle_motor_torque.pdf'
+filename = 'ankle_motor_torque_running.pdf'
 fig.savefig(filename, bbox_inches='tight')
 
 #create figure
@@ -115,6 +115,26 @@ ax.spines['left'].set_bounds(-50, 150)
 ax.set_yticks(np.arange(-50, 200, 50))
 ax.spines['bottom'].set_bounds(-30, 30)
 ax.set_xticks(np.arange(-30,60,30))
+
+#adjust label pos
+inv_data = ax.transData.inverted()
+inv_axes = ax.transAxes.inverted()
+
+ylabelpos_axes = ax.yaxis.get_label().get_position()
+ylabelpos_display = ax.transAxes.transform(ylabelpos_axes)
+ylabelpos_data = inv_data.transform(ylabelpos_display)
+ylabelpos_data[1] = np.array(ax.spines['left'].get_bounds()).mean()
+ylabelpos_display = ax.transData.transform(ylabelpos_data)
+ylabelpos_axes = inv_axes.transform(ylabelpos_display)
+ax.yaxis.get_label().set_position(ylabelpos_axes)
+
+xlabelpos_axes = ax.xaxis.get_label().get_position()
+xlabelpos_display = ax.transAxes.transform(xlabelpos_axes)
+xlabelpos_data = inv_data.transform(xlabelpos_display)
+xlabelpos_data[0] = np.array(ax.spines['bottom'].get_bounds()).mean()
+xlabelpos_display = ax.transData.transform(xlabelpos_data)
+xlabelpos_axes = inv_axes.transform(xlabelpos_display)
+ax.xaxis.get_label().set_position(xlabelpos_axes)
 
 filename = 'ankle_running_torque_v_angle.pdf'
 fig.savefig(filename, bbox_inches='tight')

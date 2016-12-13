@@ -1,25 +1,22 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import rc
 import matplotlib as mpl
+from matplotlib import rc
 import scipy.io as sio
 import pdb
-
 mpl.use("pgf")
+import matplotlib.pyplot as plt
+
 pgf_with_custom_preamble = {
     "pgf.texsystem": "xelatex",
     "font.family": "sans-serif", # use san serif/main font for text elements
     "text.usetex": False,    # use inline math for ticks
-    "pgf.rcfonts": True,   
+    "pgf.rcfonts": False,   
     "pgf.preamble": [
-         r"\usepackage{amsmath}",
-         r"\usepackage{fontspec}",
-         r"\usepackage{xunicode} %Unicode extras!",
-         r"\usepackage{xltxtra}  %Fixes",
-         r"\setmainfont[Ligatures={Common,TeX}]{Times}",
-         r"\setsansfont[Ligatures={Common,TeX}]{Avenir Next}",
-         r"\usepackage{sfmath}"
-         ]
+        r"\usepackage{amsmath}",
+        r"\usepackage{fontspec}",
+        r"\setsansfont{Avenir Next}",
+        r"\setmainfont{Times}",
+    ]
 }
 mpl.rcParams.update(pgf_with_custom_preamble)
 
@@ -112,18 +109,36 @@ ax1.set_xticks(np.arange(0,150,50))
 plt.setp(ax0.get_xticklabels(), visible=False)
 
 #adjust label pos
-ylabelpos = ax0.yaxis.get_label().get_position()
-ylabelpos = (ylabelpos[0], ylabelpos[1] + 0.05)
-ax0.yaxis.get_label().set_position(ylabelpos)
+inv_data_0 = ax0.transData.inverted()
+inv_axes_0 = ax0.transAxes.inverted()
 
-ylabelpos = ax1.yaxis.get_label().get_position()
-ylabelpos = (ylabelpos[0], ylabelpos[1] - 0.2)
-ax1.yaxis.get_label().set_position(ylabelpos)
+inv_data_1 = ax1.transData.inverted()
+inv_axes_1 = ax1.transAxes.inverted()
 
-xlabelpos = ax0.xaxis.get_label().get_position()
-xlabelpos = (xlabelpos[0] - 0.0, xlabelpos[1])
-ax0.xaxis.get_label().set_position(xlabelpos)
-#gs.tight_layout(fig)
+ylabelpos_axes = ax0.yaxis.get_label().get_position()
+ylabelpos_display = ax0.transAxes.transform(ylabelpos_axes)
+ylabelpos_data = inv_data_0.transform(ylabelpos_display)
+ylabelpos_data[1] = np.array(ax0.spines['left'].get_bounds()).mean()
+ylabelpos_display = ax0.transData.transform(ylabelpos_data)
+ylabelpos_axes = inv_axes_0.transform(ylabelpos_display)
+ax0.yaxis.get_label().set_position(ylabelpos_axes)
+
+ylabelpos_axes = ax1.yaxis.get_label().get_position()
+ylabelpos_display = ax1.transAxes.transform(ylabelpos_axes)
+ylabelpos_data = inv_data_1.transform(ylabelpos_display)
+ylabelpos_data[1] = np.array(ax1.spines['left'].get_bounds()).mean()
+ylabelpos_display = ax1.transData.transform(ylabelpos_data)
+ylabelpos_axes = inv_axes_1.transform(ylabelpos_display)
+ax1.yaxis.get_label().set_position(ylabelpos_axes)
+
+xlabelpos_axes = ax1.xaxis.get_label().get_position()
+xlabelpos_display = ax1.transAxes.transform(xlabelpos_axes)
+xlabelpos_data = inv_data_1.transform(xlabelpos_display)
+xlabelpos_data[1] = np.array(ax1.spines['left'].get_bounds()).mean()
+xlabelpos_display = ax1.transData.transform(xlabelpos_data)
+xlabelpos_axes = inv_axes_1.transform(xlabelpos_display)
+ax1.xaxis.get_label().set_position(xlabelpos_axes)
+
 plt.subplots_adjust(hspace = .001)
 
 filename = 'spring_mass_model_data.pdf'

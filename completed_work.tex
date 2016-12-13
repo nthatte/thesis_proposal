@@ -60,7 +60,7 @@ outside of the lab environment like a standalone prosthesis.
 
 \Cref{tab:pros_requirements} shows the desired design specifications for the
 transfemoral prosthesis and the values achieved by the final design. To obtain
-these design specifications we examined a number of studies that ellicited trip
+these design specifications we examined a number of studies that elicited trip
 responses.
 
 We specify desired joint torque and speed values to meet the requirements of
@@ -93,10 +93,10 @@ percentile male \citep{winter2009biomechanics}.
 In addition to achieving the maximum speeds and torques found in
 \cref{tab:pros_requirements}, we design the knee joint so that it can reproduce
 the torque and speed required for a \unit[80]{kg} person to run at
-\unitfrace[3.2]{m}{s} as measured by \citet{novacheck1998biomechanics}. To
+\unitfrac[3.2]{m}{s} as measured by \citet{novacheck1998biomechanics}. To
 reproduce this trajectory in the knee joint, we utilize a RoboDrive ILM
 $85\times13$ HS-SP motor coupled to a Harmonic Drive Gear set with a 50:1
-reduction (CSG--20--50). \Cref{fig:knee_torque_vs_angle} shows the motor torque
+reduction (CSG--25--50). \Cref{fig:knee_motor_torque} shows the motor torque
 and speed required to reproduce a running trajectory assuming a gear
 efficiency of $75\%$. In this plot, we see that the running trajectory lies
 within the speed-dependent torque limit of the motor. Moreover, the root mean
@@ -109,7 +109,7 @@ reduced speed.
     \centering 
     \includegraphics[width=\linewidth]{knee_motor_torque}
     \caption{Knee motor torque required for
-    running}\label{fig:knee_torque_vs_angle}
+    running}\label{fig:knee_motor_torque}
 \end{marginfigure}
 
 \begin{figure*}[t]
@@ -137,8 +137,8 @@ crucial role in protecting fragile gear components from impact loads. To choose
 the spring stiffness for the knee joint, we simulate the prosthesis impacting a
 rigid wall with the foot during swing. To do this, we construct a model of the
 prosthesis in Matlab Simulink Simulink Simscape Multibody that includes the
-series elasticity, gear dynamics, and motor electrical dynamics\sidenote{for
-details see \cref{sec:sec_simulation_environ}}. \Cref{fig:impact_sim_knee} shows
+series elasticity, gear dynamics, and motor electrical dynamics (for
+details see \cref{sec:sec_simulation_environ}). \Cref{fig:impact_sim_knee} shows
 the simulation environment. The prosthesis is attached to the distal end of a
 thigh segment with a fixed hip position. We control the hip via the ideal swing
 leg control outlined in \cref{sec:neuro_ideal_swing} (\cref{eq:hipfeedback}) and
@@ -146,23 +146,91 @@ consider the case where the external voltage applied to the motor is zero. This
 simulation suggests that a spring stiffness under $\unitfrac[2300]{N \cdot
 m}{rad}$ will ensure that the peak impact torque remains lower than the peak
 allowable impact torque of the Harmonic Drive of $\unit[242]{N \cdot m}$.
+\begin{marginfigure}[-2.5in]
+    \centering 
+    \includegraphics[width=\linewidth]{knee_impact_sim}
+    \caption{Impact simulation we used to determine appropriate series spring
+    stiffness.}\label{fig:knee_impact sim}
+\end{marginfigure}
 
 \subsection{Ankle Joint}
 
-As with the knee joint, we design the ankle joint to satisfy the requirements
-listed in \cref{tab:pros_requirements}. Specifically, for the ankle joint we pay
+In the ankle joint we utilize a RoboDrive ILM $70\times10$ HS-SP motor coupled
+to a Harmonic Drive Gear set with a 100:1 reduction (CSG--20--100). As with the
+knee joint, we design the ankle joint to satisfy the requirements listed in
+\cref{tab:pros_requirements}. Specifically, for the ankle joint we pay
 considerable attention to the tripping condition described by
-\citet{pijnappels2005early}, in which the ankle generates a  peak torque of
-$\unit[202]{N \cdot m}$. To avoid using a large and heavy motor to achieve this
-peak torque, we take inspiration from previous prosthetic ankle designs that
-employ a unidirectional parallel spring in the ankle joint that performs the
-conservative portion of the ankle's torque versus angle trajectory during normal
-walking
-\citep{au2007biomechanical,au2008powered,sup2009preliminary,lawson2014robotic}.
-The parallel spring offsets the required motor torque, as the actuator now only
-needs to provide the difference between the desired torque and the torque
-provided by the parallel spring.
+\citet{pijnappels2005early}, in which the ankle generates a peak torque of
+$\unit[202]{N \cdot m}$. 
 
+\begin{marginfigure}[-0in]
+    \centering 
+    \includegraphics[width=\linewidth]{ankle_torque_vs_angle_ups}
+    \caption{Ankle torque vs angle curve during steady, level-ground walking
+    (blue) (\citet{winter2009biomechanics} scaled to \unit[80]{kg} person). A
+    unidirectional parallel spring can provide a portion of this torque (green)
+    and reduces the required actuator torque (purple) to lie under repeated
+    torque limit of the Harmonic Drive Gear set (orange).
+    }\label{fig:ankle_torque_vs_angle_ups}
+\end{marginfigure}
+To avoid using a large and heavy motor to achieve this peak torque, we take
+inspiration from previous prosthetic ankle designs that employ a unidirectional
+parallel spring in the ankle joint that performs the conservative portion of the
+ankle's torque versus angle trajectory during normal walking
+\citep{au2007biomechanical,au2008powered,sup2009preliminary,lawson2014robotic}.
+The parallel spring offsets the required motor torque, as the actuator only
+needs to provide the difference between the desired torque and the torque
+provided by the parallel spring. \Cref{fig:ankle_torque_vs_angle_ups} shows the
+torque versus angle curve during level ground walking
+(\citet{winter2009biomechanics}, scaled to \unit[80]{kg} person). In green we
+show the torque generated by a $\unitfrac[700]{N \cdot m}{rad}$ parallel spring
+optimized to minimize the root-mean-squared motor torque for this trajectory.
+From this plot, we see that with the parallel spring, the peak torque is lower
+than the repeated peak torque limit of the Harmonic Drive Gear set.
+\begin{figure}[b]
+    \centering 
+    \includegraphics[height=2in]{ankle_motor_torque_tripping}
+    \caption{Ankle motor torque required to take the trip recovery action
+    observed by \citet{pijnappels2005early} (blue, trajectory obtained by scaling
+    walking data from \citet{winter2009biomechanics} to a peak torque of
+    $\unit[202]{N \cdot m}$, $75\%$ gear efficiency assumed). Using a parallel
+    spring allows the motor to produce the required torque while remaining
+    within it's torque limit.
+    }\label{fig:ankle_motor_torque_tripping}
+\end{figure}
+
+The tripping data obtained by \citet{pijnappels2005early} shows that the ankle
+kinematics during trip recovery are similar to those seen during normal walking.
+Therefore, the parallel spring, should be able to contribute torque during the
+tripping case as well. To confirm this, \cref{fig:ankle_motor_torque_tripping}
+shows the motor torque required for trip recovery (obtained by scaling walking
+torque data from \citet{winter2009biomechanics} to have a peak torque of
+$\unit[202]{N \cdot m})$ We see that the inclusion of the parallel spring allows
+the prosthesis to produce enough net torque to reproduce the trip recovery
+trajectory without exceeding the torque limit of the motor. 
+
+Finally, \cref{fig:ankle_motor_torque_running} shows the torque and speed
+required of the motor for running \citep{novacheck1998biomechanics}. In this
+case, we use an ankle parallel stiffness of $\unitfrac[267]{N \cdot m}{rad}$.
+From this plot, we see that this combination of ankle motor and spring is nearly
+sufficient for running. Increasing the voltage of the prosthesis from
+\unit[48]{V} to \unit[60]{V} or decreasing the gear ratio from 100:1 to 80:1
+will allow the torque trajectory to fit completely within the motor limits. 
+\begin{marginfigure}[-0in]
+    \centering 
+    \includegraphics[width=\linewidth]{ankle_motor_torque_running}
+    \caption{Ankle motor torque required to reproduce the running trajectory
+    recorded by \citet{novacheck1998biomechanics} assuming a parallel spring
+    stiffness of $\unitfrac[267]{N \cdot m}$ and a gear efficiency of $75\%$.
+    }\label{fig:ankle_motor_torque_running}
+\end{marginfigure}
+
+\begin{figure*}[b]
+    \centering 
+    \includegraphics[width=\linewidth]{ankle_design}
+    \caption{Internal and external design of the ankle 
+    joint.}\label{fig:ankle_design}
+\end{figure*}
 The design of the ankle actuator represents a second iteration of the knee
 actuator design. \Cref{fig:ankle_design} shows internal and external views of
 the ankle actuator.
