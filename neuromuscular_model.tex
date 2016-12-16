@@ -316,14 +316,13 @@ overextension caused by ankle plantarflexion and hip extension torques,
 respectively. For example, the gastrocnemius has a force feedback reflex,
 \begin{align}
     \func{S}[][\tn{gas}]{t} = S_0^\tn{gas} + 
-        G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}} \:,
-        \label{eq:gas_stim}
+        G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}},
 \end{align}
 that flexes the knee as it contributes to ankle plantarflexion. The hamstring
 also has a positive force feed back
 \begin{align}
     \func{S}[][\tn{ham}]{t} = S_0^\tn{ham} + 
-        G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_\tn{s}} + \ldots \:
+        G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_\tn{s}} + \ldots
         \label{eq:ham_stim}
 \end{align}
 that counteracts knee extension caused by hip extension. Also, the hamstring
@@ -339,7 +338,7 @@ the complete vastus stimulation
             \notag \\
         &\quad \times 
             \left( \phi_\tn{k}(t_\tn{m}) < \phi_\tn{k}^\tn{off} \right)
-            \left( \dot \phi_\tn{k}(t_\tn{m}) < 0\right) \label{eq:vas_stim_full} 
+            \left( \dot \phi_\tn{k}(t_\tn{m}) < 0\right)
 \end{align}
 where $\phi_\tn{k}^\tn{off}$ is the angle beyond which the vastus is inhibited.
 
@@ -357,7 +356,6 @@ stimulation becomes
             &\quad +  \left\{ k_\tn{p}^\tn{ham} 
             (\phi_\tn{trunk}(t_\tn{s}) - \phi_{\tn{ref}}) 
             + k_\tn{d}^\tn{ham} \dot{\phi}_{\tn{trunk}}(t_\tn{s}) \right\}_+ 
-        \label{eq:ham_stim_full}
 \end{align}
 where the third term returns the positive reflex contribution from the trunk
 balance control. 
@@ -371,16 +369,19 @@ The full set of stance reflexes are:
         G_\tn{ta}^\tn{ta} \func{L}[\tn{ta}][]{t_\tn{l}} - G_\tn{sol}^\tn{ta} 
         \func{F}[\tn{sol}][]{t_\tn{l}}\\
     \func{S}[][\tn{gas}]{t} &= S_0^\tn{gas} + 
-        G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}} \\
+        G_\tn{gas}^\tn{gas} \func{F}[\tn{gas}][]{t_\tn{l}} 
+        \label{eq:gas_stim_full}\\
     \func{S}[][\tn{vas}]{t} &= S_0^\tn{vas} + 
         G_\tn{vas}^\tn{vas} \func{F}[\tn{vas}][]{t_\tn{m}} 
         -k_\phi \left( \phi_\tn{k}(t_\tn{m}) - \phi_\tn{k}^\tn{off} \right) 
         \left( \phi_\tn{k}(t_\tn{m}) < \phi_\tn{k}^\tn{off} \right)
-        \left( \dot \phi_\tn{k}(t_\tn{m}) < 0\right) \\     
+        \left( \dot \phi_\tn{k}(t_\tn{m}) < 0\right)    
+        \label{eq:vas_stim_full}\\
     \func{S}[][\tn{ham}]{t} &= S_0^\tn{ham} + 
         G_\tn{ham}^\tn{ham} \func{F}[\tn{ham}][]{t_{s}} 
         + \left\{ k_\tn{p}^\tn{ham} (\phi_{\tn{trunk}} - \phi_{\tn{ref}}) 
-        + k_\tn{d}^\tn{ham} \dot{\phi}_{\tn{trunk}} \right\}_+ \\
+        + k_\tn{d}^\tn{ham} \dot{\phi}_{\tn{trunk}} \right\}_+
+        \label{eq:ham_stim_full} \\
     \func{S}[][\tn{glu}]{t} &= S_0^\tn{glu} + 
         G_\tn{glu}^\tn{glu} \func{F}[\tn{glu}][]{t_{s}}
         + \left\{ k_\tn{p}^\tn{glu} (\phi_{\tn{trunk}} - \phi_{\tn{ref}}) 
@@ -512,8 +513,8 @@ torques and muscle stimulations in proportion to the normalized ground reaction
 force,
 \begin{align}
     \tau_\tn{late stance} &= \tau_\tn{stance}(GRF) +
-    \tau_\tn{swing}(1 - GRF),\\ 
-    S^\tn{m}_\textrm{late stance}  &= S^\tn{m}(GRF).
+    \tau_\tn{swing}(1 - GRF), \label{eq:stance_grf_trans}\\ 
+    S^\tn{m}_\textrm{late stance}  &= S^\tn{m}(GRF).\label{eq:swing_grf_trans}
 \end{align}
 During swing, only the swing leg torques are used.
 
