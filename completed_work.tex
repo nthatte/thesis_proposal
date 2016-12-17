@@ -79,16 +79,6 @@ the required weight corresponds to the mean leg weight of a $50^\tn{th}$
 percentile male \citep{winter2009biomechanics}.
 
 \subsection{Knee Joint}
-\begin{comment}
-\begin{marginfigure}[0in]
-    \centering \includegraphics[width=\linewidth]{knee_running_torque}
-    \caption{Knee torque required for running}\label{fig:knee_running_torque}
-\end{marginfigure}
-\begin{marginfigure}[0in]
-    \centering \includegraphics[width=\linewidth]{knee_running_speed}
-    \caption{Knee torque required for running}\label{fig:knee_running_speed}
-\end{marginfigure}
-\end{comment}
 
 In addition to achieving the maximum speeds and torques found in
 \cref{tab:pros_requirements}, we design the knee joint so that it can reproduce
@@ -220,7 +210,8 @@ will allow the torque trajectory to fit completely within the motor limits.
     \includegraphics[width=\linewidth]{ankle_motor_torque_running}
     \caption{Ankle motor torque required to reproduce the running trajectory
     recorded by \citet{novacheck1998biomechanics} assuming a parallel spring
-    stiffness of $\unitfrac[267]{N \cdot m}$ and a gear efficiency of $75\%$.
+    stiffness of $\unitfrac[267]{N \cdot m}{rad}$ and a gear efficiency of
+    $75\%$.
     }\label{fig:ankle_motor_torque_running}
 \end{marginfigure}
 
@@ -384,16 +375,16 @@ disturbance angle is set to 110, 95, or \unit[80]{degrees}, respectively. In
 addition, anticipation of the trip by the experimenter is prevented by applying
 the disturbance only with a probability of 25\%.
 
-\begin{figure}[b!]
+\begin{marginfigure}[1in]
     \centering
-    \includegraphics[width = 3in]{impulse_hardware_annotated}
+    \includegraphics[width = \linewidth]{impulse_hardware_annotated.pdf}
     \caption{Response to simulated tripping disturbance. (A) Undisturbed ankle
     trajectory calculated from hip and knee angles assuming constant hip height.
     (B-D) Ankle trajectories with disturbance applied in early, mid and late
     swing (arrows). The vertical dashed line shows the target landing position
     of the foot, which corresponds to a \unit[75]{degree} landing angle.}
     \label{fig:impulse_hardware}
-\end{figure}
+\end{marginfigure}
 
 The experiments reveal that in response to disturbances during early and late
 swing, the prosthesis control places the swing leg with high repeatability and
@@ -401,7 +392,7 @@ produces leg elevating and lowering strategies observed in humans.
 \cref{fig:impulse_hardware} shows the Cartesian ankle trajectory in swing over
 10 trials for the undisturbed (A) and disturbed conditions (B-D). In the
 undisturbed condition, the leg placement is repeatable with an interquartile
-range (IQR) of landing positions of \unit[3.1[{cm} and a bias of \unit[2.7]{cm}
+range (IQR) of landing positions of \unit[3.1]{cm} and a bias of \unit[2.7]{cm}
 (median) from the target (dashed line).  (Further tuning of the control
 parameters should improve the landing position accuracy.)
 
@@ -440,13 +431,243 @@ from the treadmill handrails.
 \section{Comparison of Robustness Achieved by Reflex and Impedance Controls in
     Simulation}\label{sec:completed_comparison}
 
-\subsection{Simulation Environment}\label{sec:sec_simulation_environ}
+To evaluate the potential of neuromuscular prosthesis control to improve amputee
+gait robustness, we construct a simulation of an amputee walking on a powered
+prosthesis and perform optimizations to identify parameters that lead to robust
+locomotion over rough terrain. We then compare the performance of the proposed
+control to that of impedance control and find that the proposed control improves
+robustness to elevation changes and unexpected deviations from nominal walking,
+suggesting that it may help amputees prevent trips and falls
+(\cref{fig:distsWalked}).
 
-\subsection{Controller Optimization}\label{sec:completed_comparison_opt}
+\subsection{Simulation Environment}\label{sec:complete_simulation_environ}
+We study the performance of the proposed transfemoral prosthesis controller in a
+simulation model of a unilateral amputee equipped with the proposed powered
+prosthesis. To more accurately model an amputee's anatomy, we sever the femur of
+the unimpaired human model \unit[11]{cm} above the knee and attach the hamstring
+muscle to the distal end of the shortened bone as recommended in
+\citet{brown2012amputation}. This change converts the biarticular hamstring into
+a monoarticular muscle that only extends the hip. Next, we attach a model of the
+full prosthesis to the severed femur. The prosthesis modeled in this study is an
+earlier version of the prosthesis design presented in
+\cref{sec:completed_design}, which uses the knee actuator design for both the
+knee and ankle joints. Our simulation of the prosthesis models the series
+elasticity, electrical dynamics, gear ratios, and resultant reflected inertias
+of the actuators, and assumes a low-level current-based SEA control achieves
+desired torques \citep{pratt1995series}.
+
+To generate the reference torques for the SEAs, we use a hybrid neuromuscular
+control that blends the muscle based stance-control
+(\cref{sec:neuro_stance_reflexes}) with the idealized swing leg placement
+control \cref{sec:neuro_swing_reflexes}. We make make two modifications to the
+prosthesis-side swing leg control.  First, on the prosthesis-side hip we remove
+the feed-forward term that neutralizes the disturbance created by the knee's
+stop and extend phase (\cref{eq:hipfeedforward}), requiring that feedback
+control deal with this torque.  Second, we do not use the adaptive leg placement
+policy of the swing control (\cref{eq:simbicon}) as the prosthesis does not have
+access to information about the amputee's center of mass and stance leg ankle
+position.  Instead the prosthesis swing leg control employs a constant target
+leg angle, $\alpha_\tn{tgt} = const$.
+
+To compare the performance of the proposed control, we also simulate the
+commonly-used impedance control method, described in detail in
+\cref{sec:back_dynamic_pros_control}, at the behavior level.  Specifically, we
+implement the impedance control presented in \citet{sup2008design} as it tended
+to perform better than other versions in our simulations. This control
+partitions the gait cycle into four phases. In each phase $i$, the torque of an
+actuated joint is governed by an impedance function
+\begin{align} 
+    \tau_i = -k_{1,i} (\theta - \theta_{1,i}) - k_{2,i} 
+        (\theta - \theta_{2,i})^3 - b_i \dot{\theta} , 
+\end{align} 
+where $\theta$ is the joint angle, $\theta_{1,i}$ and $\theta_{2,i}$ are angle
+offsets, and $k_{1,i}$, $k_{2,i}$ and $b_i$ are the impedance parameters.  
+
+% Parameter Optimization
+\subsection{Controller Optimization for Natural and Robust Walking}
+    \label{sec:completed_comparison_opt}
+
+For both the hybrid neuromuscular controller and the impedance controller, we
+use optimization to search for gaits that appear natural and are robust to
+disturbances. For the hybrid neuromuscular model, we optimize 53 parameters that
+include reflex feedback gains and swing leg control parameters for both the
+amputee and prosthesis as well as the SEA control gains. To reduce the number of
+parameters to optimize, we use fixed values for many parameters, such as the
+muscle properties and prestimulations. For the impedance controller, we optimize
+59 parameters that include the reflex feedback gains and the swing leg control
+parameters for the amputee model, and the impedance parameters and SEA
+controller gains for the prosthesis. Again to reduce the number of parameters to
+optimize, the impedance parameters that are set to zero according to
+\citet{sup2008design} are fixed to zero during the optimization. 
+
+We rely on the covariance matrix adaptation evolution strategy (CMA-ES)
+\citep{hansen2006cma} and perform optimization in two steps. In the first step,
+we search for control parameters that generate a gait with natural kinematics
+and kinetics. To this end, we take advantage of the observation that human gait
+seems to result from minimizing metabolic energy consumption
+\citep{mcneill2002energetics}, and use the cost of transport 
+\begin{align}
+    \mathit{Cost} = \frac{W}{mgx} + \frac{1}{mgx} \int \left( 
+        c_1\tau_\tn{cmd}^2  + c_2 \tau_\tn{limit}^2 \right) \tn{d}t
+    \label{eq:costfuncenergy}
+\end{align}
+as optimization criterion. In the cost, $W$ accounts for the energy consumption
+of both the modeled amputee's muscles and the prosthesis' virtual muscles
+according to \citet{umberger2003model}, $\tau_\tn{cmd}$ is the sum of the
+torques commanded by the neuromuscular swing control or the impedance control,
+$\tau_\tn{limit}$ is the sum of torques produced by the model's mechanical
+hardstops, which prevent knee and ankle hyperextension, $m$ is the mass of the
+amputee, $g$ is the gravitational acceleration, and $x$ is the distance
+travelled in 20 seconds. The hand tuned constants, $c_1 = 0.1$ and $c_2 = 0.01$,
+ensure that the terms of the cost function have similar order-of-magnitude. 
+
+We run the above optimization for 300 iterations, and use the best resulting set
+of control parameters to seed an optimization for robustness to unexpected
+changes in ground height. For this second step, the cost function becomes
+\begin{align}
+    \mathit{Cost} = -x + c_3 \int \tau_\tn{limit}^2 dt ,
+\end{align}
+rewarding the distance travelled and penalizing joint hyperextension ($c_3 =
+0.0005$). Instead of level ground, the simulations evaluating the cost are
+performed on terrain that is flat for the first 10 meters (to allow the model to
+reach steady walking) and then features steps, spaced one meter apart and drawn
+from a uniform random distribution. The width of the distribution grows at a
+rate of \unit[2.5]{cm} per meter distance travelled, resulting in steps that
+grow progressively rougher the farther the model walks. To avoid overfitting,
+the evaluation is performed on five different terrains, resulting in an average
+cost. Like in the first step, the optimization is stopped after 300 iterations,
+resulting in the final, best set of control parameters.
 
 \subsection{Results}\label{sec:completed_comparison_results}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width = \columnwidth]{distsWalked}
+    \caption{Control performance of simulated prosthesis on rough terrain. The
+    distances walked over terrains with different ground roughness are compared
+    between the amputee model using a powered knee-ankle prosthesis with
+    impedance control (green) and hybrid neuromuscular control (blue) as well
+    as with the unimpaired human model (red). Shown are the median and range
+    ($25^\textrm{th}$ and $75^\textrm{th}$ percentiles) of the covered
+    distances for 50 terrains sampled at each roughness level.
+    }\label{fig:distsWalked}
+\end{figure}
+
+We evaluate the performance of the proposed control and of impedance control by
+subjecting the amputee model to terrains that are flat for \unit[10]{meters} and
+then feature steps drawn from uniform distributions for another
+\unit[90]{meters}.  The widths of the distributions are constant but vary among
+the terrains to test the control performance on steps of increasing steepness
+(\unit[0]{cm} to $\pm \unit[14]{cm}$, \unit[2]{cm} increments, total of 8
+terrains). 
+
+\Cref{fig:distsWalked} shows the distances the amputee model walks over 50
+trials at each roughness level (proposed neuromuscular control in blue,
+impedance control in green). Most of the trials with the impedance-controlled
+prosthesis cover the full distance up to a roughness of \unit[2]{cm}. At a
+roughness of \unit[4]{cm}, however, the median distance drops to \unit[34]{m},
+which further declines as the roughness increases. In contrast, the  prosthesis
+using the neuromuscular control, allows the amputee model to walk the full
+distance up to a roughness of \unit[6]{cm}. Moreover, neuromuscular control has
+a similar distribution of distances walked at a roughness of \unit[8]{cm} as
+impedance control has at a roughness of \unit[4]{cm}.
+
+Although the prosthesis using neuromuscular control significantly improves the
+robustness of the amputee model on rough terrain, the performance trails by a
+large margin that of an unimpaired model (\cref{fig:distsWalked}, red line), for
+which most of the trials covered the full distance up to a roughness of
+\unit[10]{cm}.  Limiting the swing leg placement targets in the neuromuscular
+prosthesis control to constant angles may account for some of this performance
+gap. In future work, we may overcome this limitation by estimating the amputee's
+center of mass velocity and stance ankle position so that the prosthesis control
+can take advantage of the full leg placement policy (\cref{eq:simbicon}). Other
+sources for the performance gap could stem from differences in the inertial
+properties between the prosthesis and the healthy leg, delay and inaccuracy in
+the series elastic actuator torque tracking, and the increased number of
+parameters in the asymmetric amputee model, which can reduce the quality of the
+optimized solutions.
+
+A possible explanation for why the neuromuscular control produces more robust
+behavior than impedance control is the former's attempt to mimic the underlying
+dynamics and goals of human motor control rather than to track impedance
+behavior about a predefined motion for each individual joint. To illustrate this
+difference, we subject the amputee model with both control strategies to a
+simulated trip in the form of a $\unit[15]{N \cdot s}$ impulse applied at 5\% of
+the undisturbed swing duration. 
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics{impulseResponseAnnotated}
+    \caption{Tripping response of the amputee model with neuromuscular (A) and
+    impedance control (B) of the prosthesis. Shown are the prosthetic toe
+    trajectories during undisturbed gait (dashed line) and when disturbed by a
+    $\unit[15]{N \cdot s}$ impulse (solid line). The neuromuscular controller
+    effectively responds to the disturbance and maintains a qualitatively
+    similar toe trajectory. The impedance controller leads to foot scuffing and
+    an eventual fall.
+    }\label{fig:ImpulseResponses}
+\end{figure*}
+
+\Cref{fig:ImpulseResponses}A shows the toe trajectory of the prosthesis using
+neuromuscular control both in the undisturbed and disturbed cases. While the
+impulse causes a large deviation from the nominal trajectory in early swing, the
+controller quickly recovers. From mid-swing onward, the foot follows a
+qualitatively similar path, maintains adequate ground clearance, and
+successfully reaches a similar foot placement as in the undisturbed case. In
+contrast, the prosthesis with impedance control does not respond adequately when
+subjected to the disturbance (\cref{fig:ImpulseResponses}B). This is illustrated
+by the prosthesis behavior in mid swing, during which it does not react
+appropriately to maintain ground clearance of the toe. Rather, the joint-based
+impedance functions drive the knee into extension prematurely, and the
+prosthetic foot scuffs the ground resulting in a trip and subsequent fall.
 
 \subsection{Discussion}\label{sec:completed_comparison_discuss}
 
-\section{Optimization of Systems Using
-    Preferences}\label{sec:completed_pref_opt}
+Our simulation results suggest that the hybrid neuromuscular control policy can
+improve amputee gait stability over existing impedance control methods. An
+amputee model walking with a powered prosthesis showed substantial improvements
+in balance recovery on rough ground and after swing leg trips when using the
+hybrid neuromuscular control policy as opposed to impedance control.  One
+possible reason for the improvement is that the proposed controller considers
+global leg information such as the target leg angle
+(\crefrange{eq:flexphase}{eq:stop}), and it is well known that without placing
+the feet into proper target points on the ground, legged systems fail to balance
+\citep{townsend1985biped,raibert1986legged,kajita20013d,
+seyfarth2002movement,pratt2006capture,wu20133}. A second reason could be that
+the design of the swing leg control policy explicitly accounts for large
+disturbances to the lower limb dynamics in order to achieve desired leg
+placements \citep{desai2012robust}. Neither is the case for current impedance
+control policies; however, future research may show that impedance or other
+control policies can equally make use of this global information and design
+criterion.
+
+Whether the simulation results transfer to amputee gait remains to be
+determined. In an initial test with a non-amputee experimenter wearing the
+prosthesis via a knee adaptor, we found the hybrid neuromuscular control
+reproduces normal walking patterns qualitatively and effectively responds to
+disturbances in early and late swing. To understand if these initial results
+generalize to amputee locomotion requires further research. First, we only
+simulated disturbances in the hardware tests by commanding disturbance torques
+to the prosthesis knee. This approach allowed us to apply reproducible
+disturbances, but it does not capture real tripping or obstacle encounters,
+which will, for instance, exert torques about the hip joint as well.  Second,
+the use of the knee adaptor creates abnormal kinematics and inertias and
+provides only a loose fit between user and prosthesis. In consequence, we only
+tested slow walking at 0.5 m/s holding onto hand rails.
+
+Finally, the simulation and hardware tests captured only a small
+portion of the balance disturbances that humans typically encounter
+\citep{robinovitch2013video}. Other disturbances may evoke amputee responses
+that the simulation model does not capture; especially since it is driven
+solely by a reflexive walking controller that ignores conscious interventions.
+Already, the hardware experiments revealed that the control's response to
+mid-swing disturbances does not match observed human responses and risks
+allowing the user to fall. This result suggests the model and corresponding
+hardware implementation require additional reflexes or structural changes in
+the control to better capture human locomotion and balance recovery. Foot
+placement into target points, while beneficial in particular for responding to
+early swing disturbances and for rough ground walking, may not be a goal that
+the human system prioritizes in response to other disturbances. Identifying
+human objectives in these situations could lead to improved leg prosthesis
+behaviors independent of the proposed approach, impedance-like approaches, or
+other control design approaches.
+

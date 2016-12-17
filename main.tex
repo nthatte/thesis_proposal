@@ -47,7 +47,7 @@
 % For graphics / images
 \usepackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
-\graphicspath{{./figures/}}
+\graphicspath{{./figures/}{../icra_2017_review_1/figures/}}
 
 % The fancyvrb package lets us customize the formatting of verbatim
 % environments.  We use a slightly smaller font.
@@ -56,6 +56,11 @@
 
 \usepackage{amsmath} % assumes amsmath package installed
 \usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{bm} %bold italic vectors
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\DeclareMathOperator{\argmin}{argmin}
+
 %%
 % Prints argument within hanging parentheses (i.e., parentheses that take
 % up no horizontal space).  Useful in tabular environments.
@@ -139,11 +144,10 @@
 \newcommand{\proposaltitle}{Robust and Natural Gait via Neuromuscular Control
 for Tansfemoral Prostheses}
 
-\usepackage{xparse}
-
 \newcommand{\prob}[1]{\operatorname{P} \left( #1 \right)}
-\newcommand{\tn}[1]{\textnormal{#1}}
+\newcommand{\tn}[1]{\mathrm{#1}}
 
+\usepackage{xparse}
 \DeclareDocumentCommand{\func}{m o o m}
 {%
     \IfValueTF{#2}
@@ -154,8 +158,53 @@ for Tansfemoral Prostheses}
         }
         {%
         \IfValueTF{#3}
-            {\operatorname{#1}^{#3} \left( #4 \right)}
+            {\operatorname{#1}^{#3} \left( #3 \right)}
             {\operatorname{#1}      \left( #4 \right)}
+        }
+}
+
+\DeclareDocumentCommand{\funcil}{m o o m}
+{%
+    \IfValueTF{#2}
+        {%
+        \IfValueTF{#3}
+            {\operatorname{#1}_{#2}^{#3} (#4)}
+            {\operatorname{#1}_{#2}      (#4)}
+        }
+        {%
+        \IfValueTF{#3}
+            {\operatorname{#1}^{#3} (#3)}
+            {\operatorname{#1}      (#4)}
+        }
+}
+
+\DeclareDocumentCommand{\funcsb}{m o o m}
+{%
+    \IfValueTF{#2}
+        {%
+        \IfValueTF{#3}
+            {\operatorname{#1}_{#2}^{#3} \left[ #4 \right]}
+            {\operatorname{#1}_{#2}      \left[ #4 \right]}
+        }
+        {%
+        \IfValueTF{#3}
+            {\operatorname{#1}^{#3} \left[ #3 \right]}
+            {\operatorname{#1}      \left[ #4 \right]}
+        }
+}
+
+\DeclareDocumentCommand{\vecf}{m o o}
+{%
+    \IfValueTF{#2}
+        {%
+        \IfValueTF{#3}
+            {\bm{#1}_{#2}^{#3}}
+            {\bm{#1}_{#2}     }
+        }
+        {%
+        \IfValueTF{#3}
+            {\bm{#1}^{#3}}
+            {\bm{#1}     }
         }
 }
 
@@ -237,6 +286,7 @@ for Tansfemoral Prostheses}
 \input{background}
 \input{neuromuscular_model}
 \input{completed_work}
+\input{completed_tuning}
 \input{proposed_work}
 
 % The back matter contains appendices, bibliographies, indices, glossaries, etc.

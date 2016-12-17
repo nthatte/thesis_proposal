@@ -1,26 +1,22 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib as mpl
 from matplotlib import rc
 import scipy.io as sio
-import matplotlib as mpl
 import pdb
-
 mpl.use("pgf")
+import matplotlib.pyplot as plt
+
 pgf_with_custom_preamble = {
     "pgf.texsystem": "xelatex",
     "font.family": "sans-serif", # use san serif/main font for text elements
     "text.usetex": False,    # use inline math for ticks
-    "pgf.rcfonts": True,   
+    "pgf.rcfonts": False,   
     "pgf.preamble": [
-         r"\usepackage{amsmath}",
-         r"\usepackage{fontspec}",
-         r"\usepackage{xunicode} %Unicode extras!",
-         r"\usepackage{xltxtra}  %Fixes",
-         r"\setmainfont[Ligatures={Common,TeX}]{Times}",
-         r"\setsansfont[Ligatures={Common,TeX}]{Avenir Next Regular}",
-         r"\usepackage{sfmath}"
-         ],
-    "legend.handlelength": 3
+        r"\usepackage{amsmath}",
+        r"\usepackage{fontspec}",
+        r"\setsansfont{Avenir Next}",
+        r"\setmainfont{Times}",
+    ]
 }
 mpl.rcParams.update(pgf_with_custom_preamble)
 
@@ -39,7 +35,7 @@ def shift_ylabel(axbnds, ytickbnds, axis):
 def center_xlabel(axbnds, xtickbnds, axis):
     axrange = (axbnds[-1] - axbnds[0])/2
     newmdpt = (xtickbnds[-1] + xtickbnds[0])/2 - axbnds[0]
-    xlabelpos = (0.5*newmdpt/axrange, -0.3)
+    xlabelpos = (0.5*newmdpt/axrange, -0.5)
     axis.xaxis.set_label_coords(xlabelpos[0], xlabelpos[1])
 
 def shift_axes(axis, shift):
@@ -48,10 +44,10 @@ def shift_axes(axis, shift):
     axis.set_position(axpos_new)
 
 fig, ax = plt.subplots(4,1, sharex = True)
-fig.set_size_inches(3,5)
+fig.set_size_inches(2,5)
 ylim = (-0.05, 0.3)
 xlim = (-0.5, 0.35)
-plot_letter_loc = -0.45
+plot_letter_loc = -0.6
 plot_letter_size = 10
 
 color0      = '#AA4839'
@@ -88,7 +84,7 @@ ax[1].set_yticks(np.arange(0, 0.2, 0.1))
 ax[1].yaxis.set_label_text('y position (m)')
 ax[1].text(plot_letter_loc,0.15,'B', size = plot_letter_size)
 ylabelpos = ax[1].yaxis.get_label().get_position()
-ax[1].yaxis.set_label_coords(-0.175, ylabelpos[1] - 0.65)
+ax[1].yaxis.set_label_coords(-0.3, ylabelpos[1] - 0.65)
 shift_axes(ax[1], 0.06)
 
 #plot mid impulse data
@@ -127,7 +123,7 @@ ax[3].text(plot_letter_loc,0.15,'D', size = plot_letter_size)
 ax[3].set_xlim(xlim[0], xlim[1])
 
 #plot target ft pt
-ax[-1].axvline(x=-1*late_impulse['foot_tgt_pt'][0][0],ymin=-0,ymax= 3.5,
+ax[-1].axvline(x=-1*late_impulse['foot_tgt_pt'][0][0],ymin=-0,ymax= 3.0,
     c='k', linestyle='--', linewidth=1, zorder=0, clip_on=False)
 
 #set axis properties
@@ -140,9 +136,9 @@ for axis in ax:
     axis.yaxis.set_ticks_position('left')
 
 ax[-1].spines['bottom'].set_visible(True)
-xtickbnds = (-0.45, 0.3)
+xtickbnds = (-0.4, 0.2)
 ax[-1].spines['bottom'].set_bounds(xtickbnds[0], xtickbnds[1])
-ax[-1].set_xticks(np.arange(-0.45, 0.45, 0.15))
+ax[-1].set_xticks(np.arange(-0.4, 0.4, 0.2))
 ax[-1].xaxis.set_tick_params(direction = 'out', width = 1)
 ax[-1].xaxis.set_ticks_position('bottom')
 ax[-1].xaxis.set_label_text('x position (m)')
@@ -150,8 +146,8 @@ axbnds = ax[-1].get_xlim()
 center_xlabel(axbnds, xtickbnds, ax[-1])
 
 ax[0].legend((p00[0], p01), ('Individual Trial', 'Median'),
-    frameon = False, loc = 'upper center', prop={'size': 6}, ncol = 2,
-    bbox_to_anchor =(0.4,1.05))
+    frameon = False, loc = 'upper center', prop={'size': 8}, ncol = 2,
+    bbox_to_anchor =(0.3,1.05))
 
 #fig.tight_layout()
 plt.savefig('impulseHardware.pdf', bbox_inches='tight', transparent=True)
