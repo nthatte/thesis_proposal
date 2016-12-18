@@ -284,11 +284,13 @@ commands to the motor controller at a rate of 1kHz. Given a desired torque,
 $\tau_d$, and a measured torque error, $\tau_e$, the commanded motor velocity is
 given by
 \begin{align}
-    \omega_m = \frac{1}{k} \frac{\tn{d} \tau_d}{\tn{d} t} + \omega_l 
+    \omega_m = \frac{1}{k} \frac{\tn{d} \tau_d}{\tn{d} t} + (1 + k_d)\omega_l 
         + \func{PD}{\tau_e},
+    \label{eq:velocity_based_sea}
 \end{align}
 where $\omega_l$ is the velocity of the load-side of the series spring (the
-shank) and $\func{PD}{\cdot}$ is a proportional-derivative feedback term. 
+shank), $k_d>0$ compensates for damping in the knee bearing, and
+$\func{PD}{\cdot}$ is a proportional-derivative feedback term. 
 
 The behavior control of the knee is a hybrid model that combines the
 Neuromuscular Stance control described in \cref{sec:neuro_stance_reflexes} with
@@ -307,7 +309,7 @@ the control transitions between the two phases in proportion to the measured
 ground reaction force (\cref{eq:stance_grf_trans,eq:swing_grf_trans}).
 
 % Generation of normal stance behavior
-\subsection{Slow Walking Behavior}
+\subsection{Slow Walking Behavior}\label{sec:completed_knee_exp_walk}
 We first test if the prosthesis control can reproduce normal stance and swing
 behavior of the lower limb in steady-state walking. For this purpose, we capture
 joint kinematics and kinetics as well as the virtual muscle activations of the
@@ -361,7 +363,8 @@ Finally, the lack of an active ankle and its control in the current prosthesis
 prototype further limits how closely the leg behaviors can match.
 
 % Response to Swing Leg Tripping
-\subsection{Response to Swing Leg Tripping} 
+\subsection{Response to Swing Leg Tripping}\label{sec:completed_exp_swing_trip}
+ 
 
 In a second set of experiments, we evaluate the response of the prosthesis
 controller to trip disturbances. We apply disturbances during treadmill walking
