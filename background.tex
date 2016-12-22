@@ -1,28 +1,29 @@
 \chapter{Background}\label{sec:back}
 \newthought{The main goal of this thesis} is to improve transfemoral amputee
 gait robustness and naturalness by applying neuromuscular models of human
-locomotion to control prosthesis hardware capable of dynamic locomotion.
-Existing approaches to walking control in humanoid robots and prostheses have
-largely failed to reach the levels of stability and dynamism required to match
-that of an amputee's lost limb. In this \namecref{sec:back}, we will review
-these existing approaches, examine their strengths and weaknesses, and motivate
-our specific control and design choices.
+locomotion to control prosthesis hardware capable of dynamic locomotion. We
+choose to investigate this problem as existing approaches to walking control in
+humanoid robots and prostheses have not yet reached the levels of stability and
+dynamism required to match that of an amputee's lost limb. In this
+\namecref{sec:back}, we will review these existing approaches, examine their
+strengths and weaknesses, and motivate our specific control and design choices.
 
 \Cref{sec:back_walking_review} categorizes approaches to walking control into
 four major groups based on their ability to produce dynamic interactions with
 the environment (dynamic vs kinematic) and whether they can produce control
 commands using only a subset of state (decentralized vs centralized). As
-mentioned earlier, only dynamic, decentralized controls address
-\cref{chal:dynamic,chal:incomplete_state} of amputee locomotion
+mentioned earlier, only dynamic, decentralized controls can potentially address
+\cref{chal:dynamic,chal:adaptability} of amputee locomotion
 (\cref{sec:intro_challenges}) and are thus suitable for prosthesis control.
 \Cref{sec:back_bioinspired_pros_control} dives deeper into a subset of dynamic
 decentralized control: bioinspired approaches that seek to model the function of
 the lost limb and are thus particularly well suited for prosthesis control.
 \Cref{sec:back_pros_design} reviews existing mechanical designs of active
-prostheses and examines their ability to enable dynamic locomotion. Finally,
-\cref{sec:back_stumble_recovery} will discuss previous work towards empowering
+prostheses and examines their ability to enable dynamic locomotion.
+\Cref{sec:back_stumble_recovery} will discuss previous work towards empowering
 prostheses with active trip recovery modes via explicit detection and
-classification of stumbles. 
+classification of stumbles. Finally, \Cref{sec:back_optimization} reviews
+approaches to prosthesis optimization for individual amputees.
 
 \section{Fundamental Walking Dynamics and
 Control}\label{sec:back_walking_review}
@@ -133,7 +134,7 @@ position imposed on it by the environment and robot body.
 \emph{Dynamic centralized control} seeks to control these interaction forces by
 directly computing joint torques, instead of using high-gain position control.
 Commonly, in this approach the dynamics model of the full
-system\sidenote[][-1in]{Where $q$, $\dot{q}$, and $\ddot{q}$ describe the
+system\sidenote[][-1.5in]{Where $q$, $\dot{q}$, and $\ddot{q}$ describe the
 generalized coordinates, velocities, and accelerations of the system
 configuration, $M(q)$ is the mass matrix, $C(q, \dot{q})$ is a matrix of
 centripetal and Coriolis force coefficients, $N(q)$ represents the gravitational
@@ -172,13 +173,13 @@ Alternatively, \citet{sreenath2011compliant} replaced the LIPM model with a
 one-degree-of-freedom walking mechanical linkage. In this control, all joint
 angles are parameterized with respect to a single phase variable, usually the
 leg angle. As the phase variable progresses via its passive dynamics a control
-Lyapunov function impose virtual constraints that force joints to follow a
+Lyapunov function imposes virtual constraints that force joints to follow a
 walking gait trajectory. The control expresses a degree of dynamism, as the
 phase variable is free to evolve naturally, and demonstrates human-like reflexes
 as it is automatically maintains its balance in response to external
 perturbations by stepping forward or backwards.
 
-While centralized control approaches have helped close the gap in dynamism and
+While dynamic centralized control approaches have helped close the gap in
 reactiveness displayed by humans and robotic systems, these methods can also
 suffer from their reliance on an accurate model of the system dynamics
 (\cref{eq:euler_lagrange}). It may be difficult to identify the parameters of
@@ -204,17 +205,17 @@ control,} records the kinematics of the healthy leg and then executes an
 identical trajectory on the prosthesis on the following step
 \citep{grimes1977feasibility, grimes1979active}. This strategy, as with all
 robotic prosthesis controls we will review, does not require measurement of the
-torso, head, or arm movement. Also, during execution of the trajectory, the
-position servo controls only require measurement of the prosthesis joint angles,
-making it more practical for implementation on a prosthesis device. However,
-this control is an example of a \emph{kinematic decentralized control.}
-Consequently, it suffers from many of the same problems identified in
-centralized kinematic control. Namely, it does not comply to the environment,
-which can result in large and unnatural reaction forces. For example, if a
-prosthesis under this control strategy encountered an obstacle during swing, the
-knee would not flex in response, thereby inducing a large moment on the amputee.
-Moreover, echo control suffers from the problem of not allowing the amputee to
-to start or stop gait with their prosthesis leg.
+torso, head, or arm movement or the environment. Also, during execution of the
+trajectory, the position servo controls only require measurement of the
+prosthesis joint angles, making it more practical for implementation on a
+prosthesis device. However, this control is an example of a \emph{kinematic
+decentralized control.} Consequently, it suffers from many of the same problems
+identified in centralized kinematic control. Namely, it does not comply to the
+environment, which can result in large and unnatural reaction forces. For
+example, if a prosthesis under this control strategy encountered an obstacle
+during swing, the knee would not flex in response, thereby inducing a large
+moment on the amputee.  Moreover, echo control suffers from the problem of not
+allowing the amputee to to start or stop gait with their prosthesis leg.
 
 As was the case for centralized control, commanding torques instead of joint
 angles helps alleviate this issue by allowing for compliant interaction with the
@@ -245,14 +246,14 @@ an experimenter. Moreover, the control strategy easily extended to 3D locomotion
 as well without an exponential increase in computation complexity. This seminal
 work demonstrates that LIPM-based, centralized control that carries stability
 guarantees is not necessary to ensure stability of robotic systems and suggests
-the constraints and model reductions enforced by centralized control may hold
-systems back. Rather, intelligent design of heuristic control to shape the
-natural dynamics of a system can in fact provide high levels of performance in
-practice.
+the constraints and model reductions enforced by centralized control may hamper
+achievable performance. Rather, intelligent design of heuristic control to shape
+the natural dynamics of a system can in fact provide high levels of performance
+in practice.
 
 Virtual model control, proposed by \citet{pratt2001virtual}, provides a
 convenient method for designing heuristic control strategies. While the authors
-originally used the method as a centralized control, later work such as
+originally used the method to design centralized controllers, later work such as
 \citet{ajallooeian2013central} apply the method to design controls that feature
 decentralized elements as well. In contrast to the control proposed in
 \citet{raibert1983dynamically}, which commands forces aligned with the robot's
@@ -277,19 +278,39 @@ approach that can be applied to prostheses. Last, impedance mechanisms such as
 springs and dampers ensure dynamic interaction with the environment with
 reasonable reaction forces.
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[height=2in]{ankle_impedance_fits}
+    \caption{Examples of two linear quasi-stiffness functions fit to the early
+    and late portions of the ankle torque vs angle curve during level ground
+    walking. Data from \citet{winter2009biomechanics} scaled to \unit[85]{kg}
+    subject.}
+    \label{fig:ankle_impedance_fits}
+\end{figure}
 \subsection{Dynamic Prosthesis Control}\label{sec:back_dynamic_pros_control}
+\begin{marginfigure}[-0.5in]
+    \centering
+    \includegraphics[width=\linewidth]{impedance_control_state_flow}
+    \caption{Finite state machine used for the quasi-stiffness control proposed
+    by \citet{sup2007design}. In each state the control employs impedance
+    functions that determine the behavior of the ankle and knee joints of an
+    active transfemoral prosthesis.}
+    \label{fig:impedance_control_state_flow}
+\end{marginfigure}
 With the goal of dynamic interaction with the environment in mind,
 \citet{sup2007design} formulated \emph{impedance control} for active prostheses.
 The strategy is a essentially a form of simple virtual model control, where
 linear and nonlinear springs along with linear dampers span individual joints.
-\todo{add figure with torque vs angle curves}
 A finite state machine, such as the one in
 \cref{fig:impedance_control_state_flow}, switches impedance functions as the
 amputee progresses through phases of gait: early and late stance and early and
 late swing. The impedance functions in this strategy actually describe the
 \emph{quasi-stiffness} of the joint \citep{rouse2013difference}, which is the
-torque vs angle curve seen during walking. Therefore, we will henceforth, refer
-to this strategy as quasi-stiffness control for prostheses.
+torque versus angle curve seen during walking.  Therefore, we will henceforth,
+refer to this strategy as quasi-stiffness control for prostheses.
+\Cref{fig:ankle_impedance_fits} shows an example of linear quasi-stiffness
+curves fit to the early and late halves of the ankle stance torque versus angle
+curve.
 
 To describe the quasi-stiffness curve, \citet{sup2008design} uses a piecewise
 model with linear and cubic stiffness terms, and a linear damping term.
@@ -300,15 +321,6 @@ Regression analysis of the torque versus angle and velocity data of intact
 subjects performing level-ground walking returns the quasi-stiffness parameters
 for each joint in each state. An experimenter can further tune these parameters
 to better suit the amputee's gait. 
-\begin{marginfigure}
-    \centering
-    \includegraphics[width=\linewidth]{impedance_control_state_flow}
-    \caption{Finite state machine used for the quasi-stiffness control proposed
-    by \citet{sup2007design}. In each state the control employs impedance
-    functions that determine the behavior of the ankle and knee joints of an
-    active transfemoral prosthesis.}
-    \label{fig:impedance_control_state_flow}
-\end{marginfigure}
 This strategy has been implemented on both transtibial \citep{shultz2014walking}
 and transfemoral \citep{lawson2014robotic} active prostheses and has improved
 amputee gait characteristics over those provided by passive prostheses.
@@ -330,7 +342,10 @@ thus high feedback gains. However, whereas impedance control as originally
 proposed by \citet{hogan1985impedance} advocated independent specification of
 the disturbance response torque and the torque required to achieve the desired
 motion, the quasi-stiffness control strategies we have discussed use the same
-behavior for both. 
+behavior for both. While recent work characterizing the impedance of the ankle
+joint suggests that this behavior may be appropriate from mid to
+terminal-stance, there is no reason to believe the quasi-stiffness and stiffness
+should be the same in general for all joints across phases.
 
 Recently, several research efforts have investigated dynamic control strategies
 that provide both a feed forward element that generates the desired motion and a
@@ -390,22 +405,22 @@ that is parameterized with respect to hip angle.
 
 The dynamic control prosthesis control strategies we outlined in this section in
 some sense all provide a feed-forward torque that generates a desired nominal
-trajectory, and an impedance behavior that determines the disturbance response
-characteristics. In the case of quasi-stiffness control, the same function
-encodes both of these characteristics.  In the case of trajectory following
-controllers, model inversion provides the necessary torque to execute the plan
-while either a proportional derivative controller, feedback linearization, or
-control Lyapunov function provides impedance behavior.  
+trajectory as well as a disturbance response behavior. In the case of
+quasi-stiffness control, the same function encodes both of these
+characteristics. In the case of trajectory following controllers, model
+inversion provides the necessary torque to execute the plan while either a
+proportional derivative controller, feedback linearization, or control Lyapunov
+function provides impedance behavior.  
 
-However, it is not clear that these approaches generate the impedance responses
-of the system we actually want to replicate in the field of prosthetics, that of
-the amputee's missing limb. In the biological leg, impedance characteristics may
-play a crucial role when it comes to stabilizing movement
-\citep{won1995stability, burdet2001central} and changes in response to a number
-of factors including any of mean ankle torque, ankle position, perturbation
-amplitude, and muscle fatigue \citep{kearney1989system}. It may be possible to
-model the both the quasistatic and impedance behaviors via powerful function
-approximators such as Gaussian Processes or Neural Networks, but these
+However, it is not clear that these approaches generate the disturbance
+responses of the system we actually want to replicate in the field of
+prosthetics, those of the amputee's missing limb. In the biological leg,
+impedance characteristics may play a crucial role when it comes to stabilizing
+movement \citep{won1995stability, burdet2001central} and changes in response to
+a number of factors including any of mean ankle torque, ankle position,
+perturbation amplitude, and muscle fatigue \citep{kearney1989system}. It may be
+possible to model the both the quasistatic and impedance behaviors via powerful
+function approximators such as Gaussian Processes or Neural Networks, but these
 approaches could also suffer from the curse of dimensionality and the difficulty
 of gathering biomechanical training data. Therefore, in the next section we will
 discuss approaches that seek to directly model the underlying bioloical system
@@ -413,14 +428,14 @@ that generates these behaviors.
 
 \section{Bioinspired Control}\label{sec:back_bioinspired_pros_control} 
 
-An alternative approach to prosthesis control, which may better model both the
-joint quasi-stiffness and joint impedance, is to model the underlying biological
-neuromuscular dynamical system that gives rise to these characteristics. Two
-hypothesized mechanisms that govern the neuromuscular system are central pattern
-generators (\cref{sec:back_CPG}) and reflexes
-(\cref{sec:back_neuromuscular_reflexes}). These two mechanisms are naturally
-decentralized and dynamic and are thus attractive models to utilize in a
-prosthesis controller.
+An alternative approach to prosthesis control, which may better model both
+nominal joint torque generation and disturbance response characteristics, is to
+model the underlying biological neuromuscular dynamical system that gives rise
+to these characteristics. Two hypothesized mechanisms that govern the
+neuromuscular system are central pattern generators (\cref{sec:back_CPG}) and
+reflexes (\cref{sec:back_neuromuscular_reflexes}). These two mechanisms are
+naturally decentralized and dynamic and are thus attractive models to utilize in
+a prosthesis controller.
 
 \subsection{Central Pattern Generators}\label{sec:back_CPG}
 \subsubsection{Central Pattern Generators in Biology}
@@ -635,7 +650,8 @@ leg despite not being explicitly trained to do so. These disturbance response
 characteristics point to reflex control providing the appropriate quasi-static
 and impedance behaviors.
 
-\subsubsection{Neuromuscular Reflexes for Prosthesis Control}
+\subsubsection{Neuromuscular Reflexes for Prosthesis
+Control}\label{sec:back_neuromusc_prosthesis}
 \begin{marginfigure}
     \centering
     \includegraphics[width=\linewidth]{eilenberg_diagram} \caption{Neuromuscular
@@ -1209,7 +1225,7 @@ error rates \citep{hargrove2015intuitive}. As we discuss in
 \cref{sec:proposed_trip_recovery}, it is likely this trend will hold true for
 stumble classification as well.
 
-\section{Backgorund Summary}
+\section{Background Summary}
 From this literature review, we see that in order to achieve dynamic prosthesis
 behaviors, such as trip recovery, both the prosthesis controls and mechanical
 must address both the nominal walking gait as well as the disturbance response.
@@ -1223,12 +1239,10 @@ actuators, we can design prosthesis joints that can simulate the passive
 dynamics of the human leg, allowing for natural interactions with the
 environment. 
 
-In this thesis, we intend to take an integrated approach to the hardware and
-control design in order to maximize the dynamism of the resulting system. We
-plan design and build a series elastic actuator transfemoral prosthesis, capable
-of executing dynamic motions, and combine it with neuromuscular reflex control,
-which provides a unified explanation for both the quasistatic and impedance
-behaviors of the human leg. With this approach, we hope the prosthesis will be
-respond to smaller disturbances like biological human leg and will be able to
-execute dynamic trip recovery responses such as the raising and lowering
-strategies in response to larger disturbances.
+In this thesis, we intend to design and build a series elastic actuator
+transfemoral prosthesis, capable of executing dynamic motions, and combine it
+with neuromuscular reflex control, which provides a unified explanation for both
+the nominal and disturbed behaviors of the human leg. With this approach, we
+hope the prosthesis will be respond to smaller disturbances like biological
+human leg and will be able to execute dynamic trip recovery responses such as
+the raising and lowering strategies in response to larger disturbances.

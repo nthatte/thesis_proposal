@@ -135,14 +135,17 @@
 \crefname{challengesi}{challenge}{challenges}
 \Crefname{challengesi}{Challenge}{Challenges}
 
-\newlist{proposed_works}{enumerate}{10}
-\setlist[proposed_works]{align=left, listparindent=\parindent, parsep=0pt}
-
 \newlist{contributions}{enumerate}{10}
 \setlist[contributions]{label=\emph{Contribution \arabic*:}, ref=\arabic*, align=left, 
     listparindent=\parindent, parsep=0pt}
 \crefname{contributionsi}{contribution}{contributions}
 \Crefname{contributionsi}{Contribution}{Contributions}
+
+\newlist{tasks}{enumerate}{10}
+\setlist[tasks]{label=\emph{Task \arabic*:}, ref=\arabic*,
+    align=left, listparindent=\parindent, parsep=0pt}
+\crefname{tasksi}{task}{tasks}
+\Crefname{tasksi}{Task}{Tasks}
 
 \newcommand{\proposaltitle}{Robust and Natural Gait via Neuromuscular Control
 for Tansfemoral Prostheses}
@@ -298,7 +301,5 @@ for Tansfemoral Prostheses}
 
 \bibliography{references}
 \bibliographystyle{plainnat}
-
-\printindex
 
 \end{document}

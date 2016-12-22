@@ -118,26 +118,35 @@ finds a posterior distribution of latent objective functions $\vecf{f}$,
         \prob{\vecf{f}}}{\prob{D_n}}.
     \label{eq:bayes_rule}
 \end{align}
-The method assumes that the prior distribution of objective functions is a
-zero-mean \emph{Gaussian process} (GP), $\prob{\vecf{f}} = \mathcal{N}(0,
-\Sigma)$.  (See~\citep{williams2006gaussian} for a full description of GPs.) In
-\cref{eq:bayes_rule}, $\prob{D_n|\vecf{f}}$ is the overall likelihood of
-preferences in the dataset given specific objective function values and is
-modeled as the product of the likelihood of each independent preference in the
-dataset. The likelihood model for preferences proposed by
-\citeauthor{chu2005preference} increases the certainty of a preference between
-$x_k^\tn{a}$ and $x_k^\tn{b}$ as the difference between $f(x_k^\tn{a})$ and
-$f(x_k^\tn{b})$ widens. This model stems from the assumption that Gaussian
-noise with variance $\sigma^2$ corrupts the user's latent objective function
-$\vecf{f}$.
+where $\vecf{f} = [f(x_1^\tn{a}), f(x_1^\tn{b}), \ldots, f(x_n^\tn{a}),
+f(x_n^\tn{b})]^T$. First, the method assumes that the prior distribution of
+objective functions is a zero-mean \emph{Gaussian process} (GP),
+$\prob{\vecf{f}} = \mathcal{N}(0, \Sigma)$. An appropriate kernel, $\Sigma_{i,j}
+= \func{k}(x_i,x_j)$, describes the elements of the covariance matrix $\Sigma$.
+(See~\citep{williams2006gaussian} for a full description of GPs.) Second,
+$\prob{D_n|\vecf{f}}$ is the overall likelihood of preferences in the
+dataset given specific reward function values and is modeled as the product of
+the likelihood of each independent preference in the dataset,
+\begin{align}
+    \prob{D_n|\vecf{f}} &= \prod_{k=1}^n \prob{x_k^\tn{a} \succ x_k^\tn{b} 
+            | f(x_k^\tn{a}), f(x_k^\tn{b})} 
+        = \prod_{k=1}^n \Phi(q_k),
+    \label{eq:likelihood}
+\end{align}
+where $\prob{x_k^\tn{a} \succ x_k^\tn{b} | f(x_k^\tn{a}), f(x_k^\tn{b})}$ is the
+probability of a preference if Gaussian noise with variance $\sigma^2$ corrupts
+the function values, $\Phi(\cdot)$ is the cumulative distribution function of a
+normal distribution, and $q_k = \frac{f(x_k^\tn{a}) - f(x_k^\tn{b})}{\sqrt{2}
+\sigma}$.  In essence, the likelihood model increases the certainty of a
+preference between $x_k^\tn{a}$ and $x_k^\tn{b}$ as the difference between
+$f(x_k^\tn{a})$ and $f(x_k^\tn{b})$ widens. 
 
 To obtain the posterior distribution $\prob{\vecf{f}|D_n}$ the method
 approximates \cref{eq:bayes_rule} with a Gaussian distribution. As a result, the
 predictive distribution (subscript p) of the objective function at test points,
 $\vecf{f}[\tn{t}]$, is also Gaussian, $\prob{\vecf{f}[\tn{t}] | D_n} =
 \mathcal{N} \left( \mu_\tn{p}, \Sigma_\tn{p} \right)$. Finally, the predictive
-distribution of a preference between two points $x^\tn{a}$ and
-$x^\tn{b}$ is 
+distribution of a preference between two points $x^\tn{a}$ and $x^\tn{b}$ is 
 \begin{align} 
     \prob{x^\tn{a} \succ x^\tn{b} |D_n} 
     &=\hspace{-2pt}\int \prob{x^\tn{a} \succ x^\tn{b}|\vecf{f}[\tn{t}],D_n}
@@ -146,10 +155,8 @@ $x^\tn{b}$ is
     &= \Phi \left(\frac{\mu^\tn{a} - \mu^\tn{b}}{\sigma_\tn{p}} \right),
         \label{eq:p_pref} \\ 
     \sigma_\tn{p}^2 &= 2\sigma^2 + \Sigma_\tn{p}^\tn{aa} + \Sigma_\tn{p}^\tn{bb}
-        - \Sigma_\tn{p}^\tn{ab} - \Sigma_\tn{p}^\tn{ba},
+        - \Sigma_\tn{p}^\tn{ab} - \Sigma_\tn{p}^\tn{ba}.
 \end{align}
-where $\Phi(\cdot)$ is the cumulative density function of the standard normal
-distribution.
 
 \Cref{fig:pes_plot}a provides an example of how the method estimates a
 ground-truth objective function shown in purple. The blue line and shaded area show
@@ -168,6 +175,18 @@ optimal parameters $x^*$, we should forgo modeling the objective function
 accurately in all parameter regions and instead focus on regions where the
 objective might be high. Bayesian optimization addresses this problem with an
 acquisition function that helps to efficiently sample training data.
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{pes_plot.pdf}
+    \caption{Learning from preferences. (a) Mean and standard deviation of
+    $\prob{\vecf{f}[\tn{t}]|D_n}$ (blue) after two preferences queries (orange)
+    from the true objective function (purple). (b) Mean of
+    $\prob{\vecf{f}[\tn{t}]|D_n}$ (blue) and means of
+    $\prob{\vecf{f}[\tn{t}]|D_n, x_m^*}$ (green) for two samples of $x_m^*$.
+    PES-P queries a new comparison (orange) for which the preference is
+    currently uncertain, but on average is certain after conditioning on all
+    $x_m^*$.}\label{fig:pes_plot}
+\end{marginfigure}
 
 One such acquisition function is the expected improvement, which has been used
 both in the context of preference feedback~\citep{eric2008active} and interval
@@ -194,19 +213,6 @@ $y$,
 where $\funcsb{H}{\prob{x}} = - \int \prob{x} \log \prob{x} \tn{d} x$
 is the differential entropy. The authors of these methods have shown they can
 outperform EI\@. 
-
-\begin{marginfigure}
-    \centering
-    \includegraphics[width=\linewidth]{pes_plot.pdf}
-    \caption{Learning from preferences. (a) Mean and standard deviation of
-    $\prob{\vecf{f}[\tn{t}]|D_n}$ (blue) after two preferences queries (orange)
-    from the true objective function (purple). (b) Mean of
-    $\prob{\vecf{f}[\tn{t}]|D_n}$ (blue) and means of
-    $\prob{\vecf{f}[\tn{t}]|D_n, x_m^*}$ (green) for two samples of $x_m^*$.
-    PES-P queries a new comparison (orange) for which the preference is
-    currently uncertain, but on average is certain after conditioning on all
-    $x_m^*$.}\label{fig:pes_plot}
-\end{marginfigure}
 
 % -------
 % Methods
@@ -372,6 +378,29 @@ $\func{mode}{\prob{\vecf{f}[\tn{t}](x)| D_N}}$, which is equal to the posterior
 mean function in the Gaussian process case (line 10). While it may be more
 correct to return $\func{mode}{\prob{x^*|D_N}}$, we do not do this as the PES
 algorithm seeks to avoid approximating this distribution.
+\subsection{Results}\label{s:results}
+We test the ability of PES-P to solve optimization problems in four cases with
+increasing realism from the optimization of randomly generated objective
+functions drawn from a GP, to the tuning of feedback gains of random linear
+systems and a neuromuscular walking model, to the optimization of control
+parameters for a powered transfemoral prosthesis given real user feedback. In
+all four cases, we compare the performance of the proposed algorithm to the
+expected improvement criterion (EI) (\cref{eq:expected_improvement}) and random
+sampling via Latin hypercubes (LH)\sidenote{LH sampling divides the parameter
+space into ${(2N)}^D$ hypercubes, where $D$ is the dimensionality of the space.
+$2N$ samples are placed such that each hypercube has at most one sample and
+there is at most one filled hypercube along any row of hypercubes when viewed
+along any direction.  This method ensures that the samples are roughly uniformly
+distributed in the entire space. At each iteration we choose two of these
+samples to query users.}~\citep{mckay2000comparison}. For the three simulated
+cases, we show results over 20 trials and measure performance in terms of the
+immediate regret, defined as $IR = |f(\tilde x_n^*) - f(x^*)|$, versus the
+number iterations.  Here, $f(\tilde x_n^*)$ is the objective value of the
+current estimate of the optimum at this iteration, $f(x^*)$ is the value of the
+true optimum, and an iteration consists of a single preference query between two
+points.  Additionally, we also check the statistical significance of the
+reduction in IR obtained by PES-P compared to both EI and LH via one-sided
+Mann-Whitney $U$ tests $(p < 0.05)$.
 
 \begin{figure*}[t!]
     \centering
@@ -426,30 +455,6 @@ algorithm seeks to avoid approximating this distribution.
     and LH according to one-sided Mann-Whitney $U$ tests $(p <
     0.05)$.}\label{fig:y_err_sim}
 \end{figure*}
-
-\subsection{Results}\label{s:results}
-We test the ability of PES-P to solve optimization problems in four cases with
-increasing realism from the optimization of randomly generated objective
-functions drawn from a GP, to the tuning of feedback gains of random linear
-systems and a neuromuscular walking model, to the optimization of control
-parameters for a powered transfemoral prosthesis given real user feedback. In
-all four cases, we compare the performance of the proposed algorithm to the
-expected improvement criterion (EI) (\cref{eq:expected_improvement}) and random
-sampling via Latin hypercubes (LH)\sidenote{LH sampling divides the parameter
-space into ${(2N)}^D$ hypercubes, where $D$ is the dimensionality of the space.
-$2N$ samples are placed such that each hypercube has at most one sample and
-there is at most one filled hypercube along any row of hypercubes when viewed
-along any direction.  This method ensures that the samples are roughly uniformly
-distributed in the entire space. At each iteration we choose two of these
-samples to query users.}~\citep{mckay2000comparison}. For the three simulated
-cases, we show results over 20 trials and measure performance in terms of the
-immediate regret, defined as $IR = |f(\tilde x_n^*) - f(x^*)|$, versus the
-number iterations.  Here, $f(\tilde x_n^*)$ is the objective value of the
-current estimate of the optimum at this iteration, $f(x^*)$ is the value of the
-true optimum, and an iteration consists of a single preference query between two
-points.  Additionally, we also check the statistical significance of the
-reduction in IR obtained by PES-P compared to both EI and LH via one-sided
-Mann-Whitney $U$ tests $(p < 0.05)$.
 
 \subsubsection{Optimizing Randomly Generated Objective Functions}
 
@@ -579,7 +584,7 @@ between its current and final estimates, $\lVert \tilde{x}_n^* - \tilde{x}_N^*
 fastest, but to lower scoring parameters on average
 (Fig.~\ref{fig:prosthesis_result}a).
 
-\subsection{Discussion and Conclusion}
+\subsection{Discussion and Conclusion}\label{sec:tuning_discussion}
 We presented a new optimization algorithm (PES-P) that extends Predictive
 Entropy Search to preference feedback. The algorithm addresses two key problems
 frequently encountered in system optimization. First, it circumvents the often
@@ -621,16 +626,26 @@ prosthesis walking task.
 Several modifications could improve the PES-P algorithm. First, using a non-zero
 prior mean function governed by a set of hyperparameters could embed specific
 knowledge about the problem to speed up optimization. To improve efficiency in
-this way, \citep{brochu2010bayesian} details an approach for learning hyperpriors
-that could be integrated with PES-P.  Second, integrating more varied user
-feedback may also help improve the algorithm. For example, ``I don't know''
-responses could imply that the function values at two points are similar,
+this way, \citep{brochu2010bayesian} details an approach for learning
+hyperpriors that could be integrated with PES-P.  Second, integrating more
+varied user feedback may also help improve the algorithm. For example, ``I don't
+know'' responses could imply that the function values at two points are similar,
 absolute good and bad ratings could encourage the algorithm to more quickly
-explore promising control polices and avoid bad ones, and derivative
-observations could indicate the user prefers more or less of a parameter. With
-these two changes, the algorithm may be able to tackle higher dimensional
-problems.  Finally, including time as a dimension in the GP could account for
-user adaptation to the robotic system.
+explore promising control polices and avoid bad ones, derivative observations
+could indicate the user prefers more or less of a parameter, and better than all
+seen so far feedback could more clearly identify optimal parameters. Third, when
+asking users to compare the optima achieved by the three algorithms, we had them
+walk with each parameter set for 15 seconds and then give a rating for all
+three. Subjects seemed able to recall and compare the performance of all three
+parameter sets with ease. Therefore, moving forward, we should use comparisons
+between three optima instead of pairwise comparisons as it will provide more
+data per unit of time. Fourth, a greedier selection strategy may help improve
+the performance of the algorithm in practice, as it will more quickly identify
+good parameters even if they are suboptimal. With these four changes, the
+algorithm may be able to tackle higher dimensional problems. Finally, we should
+investigate is including time as a dimension in the GP to account for user
+adaptation to the robotic system. This may allow us to eliminate the hour-long
+adaptation session on the first day of our study. 
 
 \hypertarget{sec:appendix}{\section*{Appendix}}
 
