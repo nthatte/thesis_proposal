@@ -1,2 +1,44 @@
 \chapter*{Abstract}
-the abstract
+
+We present work on developing a control method for powered knee-ankle prostheses
+based on a neuromuscular model of human locomotion. Previous research applying
+neuromuscular control to simulated biped models and to powered ankle prostheses
+suggest that this approach may adapt automatically to changes in speed, incline,
+and rough ground. The improved robustness and generalizability of the approach
+may arise from its modeling of various physical and neural components of the
+human neuromuscular system. For example, muscular reflexes, such as positive
+force feedback, have been shown to generate human-like compliant leg behavior in
+segmented legs. Research has shown muscle properties such as the force-velocity
+relationship are important for regulating energy in simplified gait models.
+Finally, biarticular structures have been shown to play an important role in
+preventing joint over extension during compression of multi-segmented legs.
+While research has demonstrated that these components individually contribute to
+the robustness of simplified legged- systems, it is unclear if their combined
+effect when applied to a powered prosthesis will help improve the amputee gait
+robustness. Therefore, the goal of this thesis is to investigate how to apply
+neuromuscular control to a powered knee and ankle prosthesis and quantify the
+robustness of amputee gait under this control strategy.
+
+To further motivate our use of neuromuscular control, we first model and
+simulate an amputee walking with a powered prosthesis and compare the gait
+robustness achieved by proposed neuromuscular control and the established
+impedance control method. We find that the proposed control significantly
+improves the simulated amputee's gait robustness on uneven ground. To confirm
+that this improved robustness is evident on a real system, we design and build a
+powered knee and ankle prosthesis. The prosthesis features on-board actuation to
+allow eventual use outside of laboratory environments as well as series elastic
+actuation to enable accurate torque control. With this prosthesis, we propose to
+implement neuromuscular control and investigate its robustness properties. In
+parallel, we have investigated methods to optimize prosthesis control parameters
+for specific subjects via qualitative feedback. In completed work, we present 
+and evaluate the performance of a Bayesian Optimization method that works with
+a user's preferences between pairs of parameters.
+
+In our proposed work we intend to implement the neuromuscular control on the
+prosthesis hardware and evaluate its robustness properties. We hypothesize that
+the proposed control will allow amputees to more quickly recover from
+disturbances. Furthermore, we will extend our method for optimizing control
+parameters to include more forms of qualitative feedback and explicit
+consideration of user adaptation over time. Finally, we propose to improve the
+neuromuscular control's response to disturbances during swing via explicit
+detection, classification, and execution of recovery strategies.

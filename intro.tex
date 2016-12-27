@@ -1,7 +1,7 @@
 \chapter{Introduction}\label{sec:intro}
 
 \section{Motivation}\label{sec:intro_motivation}
-\begin{marginfigure}[0.8in]
+\begin{marginfigure}[1in]
     \centering
 	\begin{subfigure}[b]{\textwidth}
     	\centering
@@ -86,24 +86,21 @@ further debilitation.
     \centering
 	\begin{subfigure}[b]{0.3\textwidth}
     	\centering
-        %\includegraphics{}
-        \missingfigure{Gen 1}
+        \includegraphics[width=2in]{VU_gen_1}
         \caption{Generation 1}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.3\textwidth}
     	\centering
-        %\includegraphics{}
-        \missingfigure{Gen 2}
+        \includegraphics[width=2in]{VU_gen_2}
         \caption{Generation 2}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.3\textwidth}
     	\centering
-        %\includegraphics{}
-        \missingfigure{Gen 3}
+        \includegraphics[width=2in]{VU_gen_3}
         \caption{Generation 3}
 	\end{subfigure}
     \caption{Vanderbilt University's Robotic Transfemoral
-    Prostheses.\vspace{0.1in}}
+    Prostheses. Images courtesy of Michael Goldfarb.\vspace{0.1in}}
     \label{fig:vanderbilt_prostheses_intro}
 \end{figure*}
 
@@ -126,14 +123,16 @@ mechanically-passive prostheses.
 
 \begin{marginfigure}[-1in]
     \centering
-    %\includegraphics{}
-    \missingfigure{Biom Ankle}
-    \caption{Biom Robotic Ankle Prosthesis}
+    \includegraphics[width=\linewidth]{biom_prosthesis}
+    \caption{Biom Robotic Ankle Prosthesis. By
+    \href{https://www.flickr.com/photos/jurvetson/13480667874/}{Steve
+    Jurvetson}, \href{http://creativecommons.org/licenses/by/2.0}{CC BY 2.0},
+    \href{https://commons.wikimedia.org/w/index.php?curid=32568854}{Link}
+    (cropped from original).}
     \label{fig:biom_ankle}
 \end{marginfigure}
 
-
-\subsection{Challenges in Transfemoral Prosthesis
+\section{Challenges in Transfemoral Prosthesis
 Control}\label{sec:intro_challenges} 
 
 It still remains an open research question how best to control these prostheses
@@ -155,15 +154,6 @@ environments, which will improve amputee gait robustness. Formulating a robotic
 prosthesis controller to accomplish this goal requires we address three main
 challenges:
 
-\begin{marginfigure}
-    \centering
-    %\includegraphics{}
-    \missingfigure{passive dynamic walker}
-    \caption{A passive dynamic walker walks down hill with no internal
-    actuation highlighting the role of natural dynamics in walking.}
-    \label{fig:passive_dynamic_walker}
-\end{marginfigure}
-
 \begin{challenges}
     \item\label{chal:dynamic} \emph{Human locomotion is a dynamic task}~~During
     stance, the leg acts in a compliant, spring-like manner
@@ -172,10 +162,9 @@ challenges:
     mechanical stability achieved via foot placement \citep{perry2010gait}.
     During swing, ballistic motion explains much of the leg trajectory
     \citep{mochon1980ballistic}. Indeed, much of the entire gait cycle can be
-    explained via passive dynamics as evidenced by passive-dynamic walkers
-    (\cref{fig:passive_dynamic_walker}) that can stably walk down slight
-    inclines with no onboard power source~\citep{mcgeer1990passive,
-    collins2005efficient}.
+    explained via passive dynamics as evidenced by passive-dynamic walkers that
+    can stably walk down slight inclines with no onboard power
+    source~\citep{mcgeer1990passive, collins2005efficient}.
 
     Consequently, in order to ensure that amputee gaits are natural and
     efficient, but still robust, it is essential that robotic prosthesis
@@ -189,16 +178,18 @@ challenges:
 
     \begin{marginfigure}
         \centering
-        %\includegraphics{}
-        \missingfigure{Rheo Knee}
-        \caption{Honda's Asimo Robot uses position control and statically
-        stable gaits.}
+        \includegraphics[width=\linewidth]{asimo}
+        \caption{Honda's Asimo Robot uses position control and statically stable
+        gaits. By \href{http://commons.wikimedia.org/wiki/User:Morio}{Morio} -
+        Own work, \href{http://creativecommons.org/licenses/by-sa/3.0}{CC BY-SA
+        3.0},
+        \href{https://commons.wikimedia.org/w/index.php?curid=29969316}{Link}.}
         \label{fig:asimo}
     \end{marginfigure}
 
     \item\label{chal:adaptability} \emph{Prosthesis control must automatically
-    adapt to novel gait situations}~~Throughout a typcial day of walking, the
-    amputee will adapt their gait in numerous ways, including chaning speed,
+    adapt to novel gait situations}~~Throughout a typical day of walking, the
+    amputee will adapt their gait in numerous ways, including changing speed,
     walking on slopes, walking with loads, and responding to disturbances.
     Humanoid walking controllers such as those used in the DARPA robotics
     challenge (DRC), can explicitly deal with these situations through
@@ -225,7 +216,7 @@ methods for transfemoral prostheses, along with methods to optimize them for
 individual amputees, in order to improve gait robustness and naturalness.}
 \end{fullwidth}
 
-\subsection{Approach}\label{sec:intro_approach}
+\section{Approach}\label{sec:intro_approach}
 
 We seek to improve amputee gait robustness and naturalness by employing an
 alternative approach to joint control in prostheses that seeks to mimic the
@@ -238,26 +229,18 @@ virtual muscles integrate the sensed kinematic state of the prosthesis in order
 to generate desired torques, not positions, at the joints. These torques, along
 with the reaction forces in the amputee's socket and on the ground shape the
 motion of the amputee-prosthesis system. Moreover, 
-\begin{marginfigure}
-    \centering
-    %\includegraphics{}
-    \missingfigure{muscle ankle}
-    \caption{\citet{eilenberg2010control} simulate virtual muscles in
-    order to control an ankle prosthesis.}
-    \label{fig:eilenberg_muscle}
-\end{marginfigure}
 
 Moreover, prior work on neuromuscular models shows that when applied to
-simulated biped models they can produce robust and adaptable gaits. Thefore,
+simulated biped models they can produce robust and adaptable gaits. Therefore,
 this control approach may help address \cref{chal:adaptability}. For example,
 using a neuromuscular model, an optimized simulated biped model walked on
 unseen, uneven terrain with sudden drops and steps up to 14 centimeters
 \citep{song2015neural}. In addition, \citet{eilenberg2010control} successfully
-applied the neuromuscular control approach to a powered ankle prosthesis
-(\cref{fig:eilenberg_muscle}), which mimics the kinematics and kinetics of the
-ankle joint in human walking including its adaptation to sloped environments.
-It remains unclear, however, whether the approach and observed adaptability
-extend to transfemoral prostheses with both knee and ankle joints.
+applied the neuromuscular control approach to a powered ankle prosthesis, which
+mimics the kinematics and kinetics of the ankle joint in human walking including
+its adaptation to sloped environments.  It remains unclear, however, whether the
+approach and observed adaptability extend to transfemoral prostheses with both
+knee and ankle joints.
 
 To motivate our specific choice of neuromuscular control for improving amputee
 gait stability, in completed work, we construct a simulation of the
@@ -276,7 +259,9 @@ adaptor show that the proposed neuromuscular control, when applied to the knee
 of an active prosthesis, produce reasonable kinematics and joint torques. This
 positive result motivates continued development of the prosthesis into a full
 active knee and ankle transfemoral prosthesis and implementation of testing of
-the full neuromuscular prosthesis control.
+the full neuromuscular prosthesis control. Specifically, we plan to evaluate the
+controls ability to generalize to changes in speed, incline, and disturbances
+applied to the amputee.
 
 To address the \cref{chal:amputees_unique}, we propose to optimize prosthesis
 controls for specific subjects. To this end, in completed work, we develop an
@@ -288,8 +273,8 @@ parameters for intact users wearing the prosthesis through an amputee emulator
 brace. The results suggest the proposed optimization method outperforms baseline
 methods for optimizing from user preferences. However, we also find that
 pair-wise feedback is overly limiting and that it is important to consider time
-adaptation. Therefore, we intend to further develop the method to incoroprate
-more varied forms of qualitative feedback and to explicity consider user
+adaptation. Therefore, we intend to further develop the method to incorporate
+more varied forms of qualitative feedback and to explicitly consider user
 adaptation over time.
 
 Last, we seek to improve the capability of the transfemoral prosthesis to
@@ -302,13 +287,6 @@ in that it will be a decentralized control that only uses information from the
 prosthesis and will be dynamic and personalized by working with each amputee'
 innate trip response reflexes.
 
-\begin{marginfigure}[2in]
-    \centering
-    %\includegraphics{}
-    \missingfigure{push bot}
-    \caption{Push Bot robot for training and evaluating trip recovery policies}
-    \label{fig:push_bot}
-\end{marginfigure}
 Previous work in this area has trained classifiers on data obtained by tripping
 healthy human subjects~\citep{lawson2010stumble, shirota2014recovery}. The
 authors then evaluate these classifiers via cross validation, in which a subset
@@ -319,13 +297,13 @@ application of classifiers trained on healthy human subject data likely will
 yield poor results, as the distribution of data at test time generated by a
 prosthesis that is controlled by a learned policy will differ from the data used
 to train that policy. The training and test time distribution mismatch violates
-the i.i.d.\sidenote[][1in]{independent and identically drawn} assumption that
+the i.i.d.\sidenote[]{independent and identically drawn} assumption that
 underpins classification performance. To remedy this problem, we intend to
 employ the DAGGER training method \citep{ross2011reduction} that aligns the
 train and test time distributions through an iterative procedure. We will
 collect training and testing data to learn and evaluate the trip recovery
-policies using the Push Bot robot (\cref{fig:push_bot}) which can apply tripping
-forces to subjects via actuated tethers.
+policies using the Push Bot robot which can apply tripping forces to subjects
+via actuated tethers \citep{emanuel2016disturbance}.
 
 \section{Expected Contributions}\label{sec:intro_contributions}
 
@@ -346,11 +324,11 @@ contributions:
     current stage of the prosthesis prototype with the completed SEA knee and a
     passive spring-loaded ankle well as a CAD render of the expected completed
     prosthesis design.
-    \begin{marginfigure}[-2in]
+    \begin{marginfigure}[1in]
         \centering
-        %\includegraphics{}
-        \missingfigure{prosthesis}
-        \caption{Proposed SEA prosthesis design}
+        \includegraphics[width=\linewidth]{current_final_design}
+        \caption{(a) Current stage of the prosthesis design with active knee and
+        passive ankle. (b) Final design with active knee and ankle joints.}
         \label{fig:prosthesis_design}
     \end{marginfigure}
 

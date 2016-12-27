@@ -1,95 +1,16 @@
 \section{Optimization of Systems Using
-    Preferences}\label{sec:completed_pref_opt}
+Preferences}\label{sec:completed_pref_opt}
 
-\subsection{Introduction} 
-Optimizing control policies for human-in-the-loop robotic systems, such as
-lower-limb prostheses and exoskeletons, is a challenging task due to two key
-issues. First, to optimize these systems it is currently necessary to define an
-objective function that includes and correctly assigns importance to all
-characteristics that determine system performance. For instance, consider an
-amputee trying to optimize the control parameters of her robotic leg prosthesis.
-The amputee could evaluate the prosthesis performance via an objective function
-that trades off important gait characteristics in order to guide the
-optimization. However, gait features, such as metabolic energy consumption,
-speed, and gait symmetry, require a high level of technical expertise and
-equipment to measure. Moreover, other aspects of gait may also be important but
-difficult to quantify, such as the amputee's comfort and sense of stability.
-Even if the amputee could measure all these characteristics, the objective
-function would still need to assign weights to each feature that reflect the
-amputee's individual needs.
-
-To solve the problem of defining objective functions for robotic systems that
-human operators can directly control, researchers have proposed \emph{learning
-from demonstration} (LfD)~\citep{argall2009survey}. In this paradigm, we can
-either circumvent learning the objective function by directly learning a policy
-that matches the distribution of state-action pairs recorded during human
-demonstrations of the desired behavior~\citep{pomerleau1991efficient,
-schaal1999imitation}, or we can learn a reward function consistent with the
-demonstrator's actions and visited states and use it to derive an optimal
-control~\citep{ng2000algorithms, ratliff2006maximum, ziebart2009human}. LfD
-methods are attractive because they allow non-experts to specify both the
-quantifiable and qualitative aspects of the desired robot behavior via the
-non-technical language of demonstration.
-
-For robot behavior that people cannot demonstrate, such as the optimal behavior
-of an amputee's prosthesis, or the desired behavior of complex, dynamic robots,
-we can alternatively query human users for qualitative feedback in order to
-shape the robot policy. For example, the TAMER
-framework~\citep{knox2009interactively, knox2013training} utilizes good/bad
-assessments of a robot's recent actions to optimize its policy.
-\citeauthor{pilarski2011online} use this method to allow subjects to optimize
-the policy of an EMG-controlled prosthesis arm via their positive and negative
-feedback signals~\citep{pilarski2011online}.  Another paradigm in qualitative
-feedback is to obtain \emph{preference feedback} between two or more policies or
-sequences of actions, which may provide more nuanced feedback than absolute
-ratings. For example, \citeauthor{jain2013learning} and
-\citeauthor{akrour2014programming} propose methods that learn a user's
-trajectory scoring function based on his rankings of possible
-policies~\citep{jain2013learning, akrour2014programming}. Similarly,
-\citeauthor{wilson2012bayesian} provide a method to directly identify a user's
-preferred policy based on her preferences between pairs of demonstrated
-trajectories~\citep{wilson2012bayesian}. These prior works demonstrate that we
-can successfully use qualitative feedback, such as preferences, from non-expert
-users to program robot behavior, without prescribing an objective function.
-
-A drawback of the aforementioned methods that learn from preference feedback is
-their reliance on simulators to predict system behavior. Human-in-the-loop
-systems, such as lower-limb prostheses and exoskeletons, are challenging to
-simulate accurately, making these methods difficult to apply. If the control is
-governed by a fixed set of parameters, as is often the case for these kinds of
-systems, we can instead employ model-free \emph{black-box} optimization methods.
-These methods have gained traction in the related field of control optimization
-for dynamic locomotion, where it can be difficult to model the nonlinear,
-discontinuous dynamics of these systems.  Specifically, many have applied
-stochastic or ``evolutionary'' optimization methods, which repeatedly sample and
-mix control parameters that perform well, to locomotion control
-problems~\citep{gong2010review}. 
-
-The second issue an operator tasked with optimizing control policies for
-human-in-the-loop systems faces is the expense, in terms of time and effort, of
-repeatedly executing policies. Consequently, stochastic sampling approaches may
-be less applicable in this domain. To minimize the number of trials needed,
-researchers have proposed black-box \emph{Bayesian Optimization} (BO) methods
-that model both the objective function and its uncertainty. In these methods,
-the uncertainty informs an acquisition function that speeds up the
-optimization by exploiting regions of the parameter space with believed high
-objective value while still exploring regions where the objective function is
-uncertain. For example, researchers have successfully employed BO methods to
-efficiently optimize the gait parameters of a robotic
-snake~\citep{tesch2011using} and a dynamic bipedal
-robot~\citep{calandra2014bayesian}.
-
-This work is motivated by the observation that prior research has not
-thoroughly explored solutions that address both the difficulty of defining
-objective functions and the expense of running repeated experiments for systems
-that are difficult to model and for which qualitative characteristics are
-important. We present a new optimization algorithm, Predictive Entropy Search
-with Preferences (PES-P), that addresses these issues. The algorithm uses
-preference queries between pairs of control parameters to avoid the a priori
-definition of features and to consider unquantifiable qualities of the desired
-behavior. The algorithm further incorporates black-box Bayesian optimization to
-ensure its preference queries gather information efficiently without relying on
-a system model.
+As discussed in \cref{sec:back_optimization} previous work has explored learning
+from qualitative feedback, such as preferences, in order to circumvent defining
+objective functions and using Bayesian optimization in order to reduce the
+number of experiments requried to optimize a system. In this section, we present
+a new optimization algorithm, Predictive Entropy Search with Preferences
+(PES-P), that addresses these issues. The algorithm uses preference queries
+between pairs of control parameters to avoid the a priori definition of features
+and to consider unquantifiable qualities of the desired behavior. The algorithm
+further incorporates black-box Bayesian optimization to ensure its preference
+queries gather information efficiently without relying on a system model.
 
 In developing the algorithm, we make three main contributions. First, we adapt
 an acquisition function previously proposed for interval scale feedback to the
@@ -378,6 +299,7 @@ $\func{mode}{\prob{\vecf{f}[\tn{t}](x)| D_N}}$, which is equal to the posterior
 mean function in the Gaussian process case (line 10). While it may be more
 correct to return $\func{mode}{\prob{x^*|D_N}}$, we do not do this as the PES
 algorithm seeks to avoid approximating this distribution.
+
 \subsection{Results}\label{s:results}
 We test the ability of PES-P to solve optimization problems in four cases with
 increasing realism from the optimization of randomly generated objective
@@ -386,7 +308,9 @@ systems and a neuromuscular walking model, to the optimization of control
 parameters for a powered transfemoral prosthesis given real user feedback. In
 all four cases, we compare the performance of the proposed algorithm to the
 expected improvement criterion (EI) (\cref{eq:expected_improvement}) and random
-sampling via Latin hypercubes (LH)\sidenote{LH sampling divides the parameter
+sampling via Latin hypercubes (LH)\sidenote[][-1in]{LH sampling divides the
+parameter
+
 space into ${(2N)}^D$ hypercubes, where $D$ is the dimensionality of the space.
 $2N$ samples are placed such that each hypercube has at most one sample and
 there is at most one filled hypercube along any row of hypercubes when viewed

@@ -122,6 +122,12 @@ design, the output of the gear set drives the proximal end of a fiberglass leaf
 spring in series with the shank. Two Renishaw Resolute absolute encoders measure
 the deflection of this spring to enable torque control.
 
+\begin{marginfigure}[2.5in]
+    \centering 
+    \includegraphics[width=\linewidth]{knee_impact_sim}
+    \caption{Impact simulation we used to determine appropriate series spring
+    stiffness.}\label{fig:knee_impact sim}
+\end{marginfigure}
 In addition to allowing for accurate torque control, as shown by
 \citet{au2007biomechanical,au2008powered}, the series elasticity also plays a
 crucial role in protecting fragile gear components from impact loads. To choose
@@ -137,12 +143,6 @@ consider the case where the external voltage applied to the motor is zero. This
 simulation suggests that a spring stiffness under $\unitfrac[2300]{N \cdot
 m}{rad}$ will ensure that the peak impact torque remains lower than the peak
 allowable impact torque of the Harmonic Drive of $\unit[242]{N \cdot m}$.
-\begin{marginfigure}[-2.5in]
-    \centering 
-    \includegraphics[width=\linewidth]{knee_impact_sim}
-    \caption{Impact simulation we used to determine appropriate series spring
-    stiffness.}\label{fig:knee_impact sim}
-\end{marginfigure}
 
 \subsection{Ankle Joint}
 In the ankle joint we utilize a RoboDrive ILM $70\times10$ HS-SP motor coupled
