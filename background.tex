@@ -3,10 +3,10 @@
 gait robustness and naturalness by applying neuromuscular models of human
 locomotion to control prosthesis hardware capable of dynamic locomotion. We
 choose to investigate this problem as existing approaches to walking control in
-humanoid robots and prostheses have not yet reached the levels of stability and
-dynamism required to match that of an amputee's lost limb. In this
-\namecref{sec:back}, we will review these existing approaches, examine their
-strengths and weaknesses, and motivate our specific control and design choices.
+humanoid robots and prostheses have not yet matched the levels of stability and
+dynamism of the amputee's lost limb. In this \namecref{sec:back}, we will review
+these existing approaches, examine their strengths and weaknesses, and motivate
+our specific control and design choices.
 
 \Cref{sec:back_walking_review} categorizes approaches to walking control into
 four major groups based on their ability to produce dynamic interactions with
@@ -23,22 +23,21 @@ prostheses and examines their ability to enable dynamic locomotion.
 \Cref{sec:back_stumble_recovery} will discuss previous work towards empowering
 prostheses with active trip recovery modes via explicit detection and
 classification of stumbles. Finally, \Cref{sec:back_optimization} reviews
-potential approaches we could utilize for prosthesis optimization.
+potential approaches for prosthesis optimization.
 
 \section{Fundamental Walking Dynamics and
 Control}\label{sec:back_walking_review}
 
 Simple point-mass models of walking can help us understand the fundamental
-dynamics that control must shape in order to achieve stable locomotion gaits.
-The simplest model that reproduces the center of mass trajectory and ground
-reaction forces seen during human walking is the bipedal spring mass model
-\citep{geyer2006compliant}. This model, illustrated in \cref{fig:ssm_diagram},
-simplifies locomotion to a pair of compliant unidirectional springs connected to
-a point mass. When initialized with human-like mass and leg length, the model
-can generate characteristic features of human locomotion such as sinusoidal
-center of mass trajectories, M-shaped vertical ground reaction forces, S-shaped
-horizontal ground reaction forces, and the proper sequence of double and single
-support. 
+dynamics of locomotion that control must stabilize.  The simplest model that
+reproduces the center of mass trajectory and ground reaction forces seen during
+human walking is the bipedal spring mass model \citep{geyer2006compliant}. This
+model, illustrated in \cref{fig:ssm_diagram}, simplifies locomotion to a pair of
+compliant unidirectional springs connected to a point mass. When initialized
+with human-like mass and leg length, the model can generate characteristic
+features of human locomotion such as sinusoidal center of mass trajectories,
+M-shaped vertical ground reaction forces, S-shaped horizontal ground reaction
+forces, and the proper sequence of double and single support. 
 
 \begin{marginfigure}
     \centering
@@ -69,9 +68,9 @@ inverted pendulum model (LIPM) \citep{kajita1991study, kajita20013d}.  This
 simplified locomotion model applies additional reductions to the bipedal
 spring-mass model, replacing spring legs with ideal prismatic force sources and
 constraining the center of mass to move on a plane. The resulting simplified
-model features linear COM dynamics with respect to the zero moment point (ZMP).
-The ZMP is the point on the ground about which the horizontal moments needed to
-counteract the total reaction forces on the system is zero. When the ZMP lies
+model features linear COM dynamics with respect to the zero moment point (ZMP),
+which is the point on the ground about which the horizontal moments needed to
+counteract the total reaction forces on the system are zero. When the ZMP lies
 within the support polygon\sidenote{The convex hull of contact points on the
 ground} (SP), it is coincident with the center of pressure (COP). On the other
 hand, if the ZMP moves beyond the SP, the system will begin to tip over the edge
@@ -133,27 +132,26 @@ position imposed on it by the environment and robot body.
 
 \emph{Dynamic centralized control} seeks to control these interaction forces by
 directly computing joint torques, instead of using high-gain position control.
-Commonly, in this approach the dynamics model of the full
-system\sidenote[][-1.5in]{Where $q$, $\dot{q}$, and $\ddot{q}$ describe the
-generalized coordinates, velocities, and accelerations of the system
-configuration, $M(q)$ is the mass matrix, $C(q, \dot{q})$ is a matrix of
-centripetal and Coriolis force coefficients, $N(q)$ represents the gravitational
-forces, $S$ is a selection matrix that assigns joint torques $\tau$ to
-coordinates $q$, $J(q)$ is the Jacobian between joint angles and contact points,
-and $\lambda$ is a vector of external forces},
+Commonly, in this approach the dynamics model of the full system,
 \begin{align}
     M(q) \ddot{q} + C(q, \dot{q}) \dot{q} + N(q) = S\tau + J^T(q) \lambda,
     \label{eq:euler_lagrange}
 \end{align}
 is used as an equality constraint in a \emph{quadratic program} (QP) that
-minimizes torques, reaction forces, and deviation from the desired trajectory.
-Additionally, the QP can include inequality constraints representing torque
-saturations and friction limits \citep{hutter2013hybrid, herzog2014balancing,
-saab2013dynamic, wensing2013generation}. Recently, at the DARPA Robotics
-Challenge (DRC) several robots used QP-based dynamic centralized approaches to
-control humanoid robots through a disaster relief scenario
-\citep{feng2015optimization, kuindersma2014efficiently,
-englsberger2014trajectory}. 
+minimizes torques, reaction forces, and deviation from the desired
+trajectory\sidenote[][-1in]{Where $q$, $\dot{q}$, and $\ddot{q}$ describe the
+generalized coordinates, velocities, and accelerations of the system
+configuration, $M(q)$ is the mass matrix, $C(q, \dot{q})$ is a matrix of
+centripetal and Coriolis force coefficients, $N(q)$ represents the gravitational
+forces, $S$ is a selection matrix that assigns joint torques $\tau$ to
+coordinates $q$, $J(q)$ is the Jacobian between joint angles and contact points,
+and $\lambda$ is a vector of external forces}.  Additionally, the QP can include
+inequality constraints representing torque saturations and friction limits
+\citep{hutter2013hybrid, herzog2014balancing, saab2013dynamic,
+wensing2013generation}. Recently, at the DARPA Robotics Challenge (DRC) several
+robots used QP-based dynamic centralized approaches to control humanoid robots
+through a disaster relief scenario \citep{feng2015optimization,
+kuindersma2014efficiently, englsberger2014trajectory}. 
 
 While the replacing \cref{lipm_step_ik,lipm_step_servo} with a QP-based torque
 control can help improve dynamism and compliance, the resulting biped gaits of
@@ -194,8 +192,8 @@ In contrast to the centralized control methods discussed in the previous
 \namecref{sec:back_centralized_control}, decentralized methods generate walking
 gaits without requiring measurement of the full system state. Consequently,
 decentralized walking strategies typically do not involve
-planning\sidenote{\crefrange{lipm_step_foot_plan}{lipm_step_com_traj} of the
-centralized control framework} and do not enjoy stability guarantees. Rather,
+planning (\crefrange{lipm_step_foot_plan}{lipm_step_com_traj} of the
+centralized control framework) and do not enjoy stability guarantees. Rather,
 gait emerges naturally from the coupled dynamics of several closed-loop systems.
 In the case of prosthesis control, one system is the human neuromuscular
 system and the other is the closed-loop dynamics of the robotic prosthesis.
@@ -214,8 +212,8 @@ identified in centralized kinematic control. Namely, it does not comply to the
 environment, which can result in large and unnatural reaction forces. For
 example, if a prosthesis under this control strategy encountered an obstacle
 during swing, the knee would not flex in response, thereby inducing a large
-moment on the amputee.  Moreover, echo control suffers from the problem of not
-allowing the amputee to to start or stop gait with their prosthesis leg.
+moment on the amputee.  Moreover, echo control does not allow the amputee to to
+start or stop gait with their prosthesis leg.
 
 As was the case for centralized control, commanding torques instead of joint
 angles helps alleviate this issue by allowing for compliant interaction with the
@@ -224,8 +222,8 @@ state machine with states representing different phases of gait such as stance
 and swing. Within each phase, a heuristic control law specifies the torque
 command. For example, the first robotic system to achieve stable, dynamic
 locomotion employed simple heuristics to regulate the height, velocity, and
-attitude of 2 dimensional one legged hopping robot
-\citep{raibert1983dynamically}. Specifically, to control the height of the
+attitude of 2-dimensional, one-legged hopping robot
+\citep{raibert1983dynamically}. Specifically, to regulate the height of the
 robot, the control adjusts the duration of thrust generated by the prismatic leg
 actuator during stance. Researchers empirically determined the relationship
 mapping thrust duration to hopping apex height. To control horizontal velocity,
@@ -304,13 +302,13 @@ linear and nonlinear springs along with linear dampers span individual joints.
 A finite state machine, such as the one in
 \cref{fig:impedance_control_state_flow}, switches impedance functions as the
 amputee progresses through phases of gait: early and late stance and early and
-late swing. The impedance functions in this strategy actually describe the
-\emph{quasi-stiffness} of the joint \citep{rouse2013difference}, which is the
-torque versus angle curve seen during walking.  Therefore, we will henceforth,
-refer to this strategy as quasi-stiffness control for prostheses.
-\Cref{fig:ankle_impedance_fits} shows an example of linear quasi-stiffness
-curves fit to the early and late halves of the ankle stance torque versus angle
-curve.
+late swing. The stiffness-portion of the impedance functions in this strategy
+actually describe the \emph{quasi-stiffness} of the joint
+\citep{rouse2013difference}, which is the torque versus angle curve seen during
+walking.  Therefore, we will henceforth, refer to this strategy as
+quasi-stiffness control for prostheses.  \Cref{fig:ankle_impedance_fits} shows
+an example of linear quasi-stiffness curves fit to the early and late halves of
+the ankle stance torque versus angle curve.
 
 To describe the quasi-stiffness curve, \citet{sup2008design} uses a piecewise
 model with linear and cubic stiffness terms, and a linear damping term.
@@ -337,10 +335,10 @@ between two look up tables representing slow and fast walking.
 In contrast to the kinematic echo control strategy discussed earlier,
 quasi-stiffness control should produce more reasonable interaction forces. This
 is especially true when the prosthesis encounters an unexpected disturbance, as
-the control does not try to follow a specific trajectory with high precision and
-thus high feedback gains. However, whereas impedance control as originally
-proposed by \citet{hogan1985impedance} advocated independent specification of
-the disturbance response torque and the torque required to achieve the desired
+the control does not try to follow a specific trajectory with high feedback
+gains. However, whereas impedance control as originally proposed by
+\citet{hogan1985impedance} advocated independent specification of the
+disturbance response torque and the torque required to achieve the desired
 motion, the quasi-stiffness control strategies we have discussed use the same
 behavior for both. While recent work characterizing the impedance of the ankle
 joint suggests that this behavior may be appropriate from mid to
@@ -388,13 +386,13 @@ variable for these trajectories. The observation that the roll-over shapes are
 invariant across walking speed, shoe geometry, and amputee weight motivates this
 choice. In this strategy, a model-based feedback linearization controller
 enforces adherence to these desired trajectories as the center of pressure
-progress through its natural dynamics. This formulation provides both the feed
-forward torque command and a disturbance response command that provides
+progress through its natural dynamics. This formulation provides both the
+feed-forward torque command and a disturbance response command that provides
 exponential converge to the desired rollover shapes. 
 
 As we noted earlier for centralized robotic control approaches, a downside of
 these two trajectory following controllers is their reliance on accurate
-dynamics models to compute feed forward torques. To overcome this issue,
+dynamics models to compute feed-forward torques. To overcome this issue,
 \citet{zhao2016first} propose a model-independent virtual constraint control. In
 this scheme, quasi-stiffness control provides a feed-forward torque signal that
 reduces the dependence on the model. A quadratic program then computes the
@@ -419,12 +417,12 @@ impedance characteristics may play a crucial role when it comes to stabilizing
 movement \citep{won1995stability, burdet2001central} and changes in response to
 a number of factors including any of mean ankle torque, ankle position,
 perturbation amplitude, and muscle fatigue \citep{kearney1989system}. It may be
-possible to model the both the quasistatic and impedance behaviors via powerful
-function approximators such as Gaussian Processes or Neural Networks, but these
-approaches could also suffer from the curse of dimensionality and the difficulty
-of gathering biomechanical training data. Therefore, in the next section we will
-discuss approaches that seek to directly model the underlying bioloical system
-that generates these behaviors.
+possible to model the both the quasistatic and disturbance response behaviors
+via powerful function approximators such as Gaussian Processes or Neural
+Networks, but these approaches could also suffer from the curse of
+dimensionality and the difficulty of gathering biomechanical training data.
+Therefore, in the next section we will discuss approaches that seek to directly
+model the underlying bioloical system that generates these behaviors.
 
 \section{Bioinspired Control}\label{sec:back_bioinspired_pros_control} 
 
@@ -581,12 +579,11 @@ neuron that receives input from a CPG oscillator and proprioceptive feedback
 from one or more muscles. The muscles produce forces according to their state
 and activation input (computed using models presented in
 \citet{pierrynowski1985physiological} and \citet{davy1987dynamic}). These forces
-are applied to constant moment arms in order to produce joint torques summed
-about joints as in a virtual model control. The authors optimize the cost of
-transport of the biped with a genetic algorithm and achieve a gait with
-human-like kinematics and kinetics. Moreover, the forces produced by many of the
-muscles resemble those produced during human locomotion. Despite the fact that
-the CPG used in this model received no feedback signals, the resultant gait
+apply torques to the joints through constant moment arms. The authors optimize
+the cost of transport of the biped with a genetic algorithm and achieve a gait
+with human-like kinematics and kinetics. Moreover, the forces produced by many
+of the muscles resemble those produced during human locomotion. Despite the fact
+that the CPG used in this model received no feedback signals, the resultant gait
 still exhibited a small degree of robustness to perturbations although not as
 much as \citeauthor{taga1991self}'s model. The author's attribute the robustness
 to the stabilizing feedback provided by muscle reflexes. 
@@ -604,9 +601,9 @@ to the stabilizing feedback provided by muscle reflexes.
 Whereas models and robot experiments show reflexes are vital for maintaining
 bipedal gait stability, the same cannot be said about CPGs. In fact, as shown by
 \citet{geyer2010muscle}, it is possible to simulate robust and human-like
-bipedal locomotion using only reflexes. This work employs a neuromuscular
-model, similar to that used in \citet{ogihara2001generation}, but does away with
-the feed forward CPG stimulations sent to alpha motor neurons. Instead,
+bipedal locomotion using only reflexes. This work employs a neuromuscular model,
+similar to that used by \citet{ogihara2001generation}, but does away with the
+feed forward CPG stimulations sent to alpha motor neurons. Instead,
 \citeauthor{geyer2010muscle} hypothesize the existence of several force and
 length muscle reflexes that implement three key aspects of bipedal locomotion:
 compliant leg behavior, preventing joint over extension, and providing trunk
@@ -646,9 +643,7 @@ in the gait cycle. In another work, \citet{murai2011neuromuscular} subject a
 neuromuscular model, initially trained to match kinematic data of single
 subject, to impacts during early and late swing. They find the learned model
 exhibits the elevating and lowering trip response strategies of the biological
-leg despite not being explicitly trained to do so. These disturbance response
-characteristics point to reflex control providing the appropriate quasi-static
-and impedance behaviors.
+leg despite not being explicitly trained to do so. 
 
 \subsubsection{Neuromuscular Reflexes for Prosthesis
 Control}\label{sec:back_neuromusc_prosthesis}
@@ -771,13 +766,12 @@ or exceed the requirements for walking~(\cref{tab:walking_requirements}).
 \end{margintable}
 
 In this \namecref{sec:back_pros_design}, we review a number of recent prosthesis
-designs and analyze their ability to enable dynamic locomotion
-(\cref{chal:dynamic,chal:adaptability} of transfemoral prosthesis locomotion).
-To address this challenge, prostheses should be able to regulate their output
-joint torques and behave as though they have inertial properties similar to that
-of a normal human leg. This will ensure that the prosthesis will emulate the
-energy efficient gaits of normal walking and remain compliant to unforeseen
-disturbances and uneven terrain.
+designs and analyze their ability to enable dynamic locomotion. To address this
+challenge, prostheses should be able to regulate their output joint torques and
+behave as though they have inertial properties similar to that of a normal human
+leg. This will ensure that the prosthesis will emulate the energy efficient
+gaits of normal walking and remain compliant to unforeseen disturbances and
+uneven terrain.
 
 \subsection{Rigid Transmission Transfemoral
 Prostheses}\label{sec:back_rigid_trans} 
@@ -839,12 +833,12 @@ wear.
 
 Further improvements resulted in two more generations of prostheses
 (\cref{fig:vanderbilt_gen_2,fig:vanderbilt_gen_3}) \citep{lawson2013control,
-lawson2014robotic}. These versions replaced ball screw transmissions with
-a multi-stage belt/chain due to the improved packaging and reduced noise and
-wear they afford (Michael Goldfarb, personal communication, September 18, 2013).
-With these prostheses, researchers have extensively tested a variety of control
-strategies including quasi-stiffness control \citep{sup2009preliminary,
-sup2011upslope, lawson2013control, lawson2014robotic, lenzi2014speed}, EMG-based control
+lawson2014robotic}. These versions replaced ball screw transmissions with a
+multi-stage belt/chain which improved packaging and reduced noise and wear
+(Michael Goldfarb, personal communication, September 18, 2013).  With these
+prostheses, researchers have extensively tested a variety of control strategies
+including quasi-stiffness control \citep{sup2009preliminary, sup2011upslope,
+lawson2013control, lawson2014robotic, lenzi2014speed}, EMG-based control
 \citep{ha2011volitional, varol2010multiclass}, minimum jerk trajectory following
 \citep{lenzi2014minimum}, and virtual constraint control
 \citep{gregg2014virtual}. 
@@ -862,19 +856,10 @@ swing to help avoid trips.
 
 \subsubsection{Torque Control Strategies for Rigid Transmission Prostheses}
 In order to achieve dynamic locomotion capabilities, it is crucial that
-prosthesis designs allow for closed loop control of torques. To do this control
-system must be able to accurately measure the torque at the joint output. There
-are two main strategies for torque measurement used by prostheses with rigid
-transmissions.
-\begin{marginfigure}
-    \centering
-    \includegraphics[width=\linewidth]{ankle_torque_vs_angle}
-    \caption{Torque vs angle relationship for the ankle during level ground
-    walking. A linear spring relationship captures a significant portion of
-    ankle function during stance. Data from \citet{winter2009biomechanics}
-    scaled to 85 kg subject.}
-    \label{fig:ankle_torque_vs_angle}
-\end{marginfigure}
+prosthesis designs allow for closed loop control of torques. To do this, the
+control system must be able to accurately measure the torque at the joint
+output. There are two main strategies for torque measurement used by prostheses
+with rigid transmissions.
 
 The first strategy is to measure the current draw of the motors windings, which
 is related linearly to the motor torque. One can then multiply this measurement
@@ -889,6 +874,15 @@ strategy that deals with this problem is to install load cells in series with
 the motor after the transmission, as was done on Generation 1 of the Vanderbilt
 prosthesis. With this method, the closed-loop control can compensate for
 frictional losses as they are included in the torque measurement. 
+\begin{marginfigure}
+    \centering
+    \includegraphics[width=\linewidth]{ankle_torque_vs_angle}
+    \caption{Torque vs angle relationship for the ankle during level ground
+    walking. A linear spring relationship captures a significant portion of
+    ankle function during stance. Data from \citet{winter2009biomechanics}
+    scaled to 85 kg subject.}
+    \label{fig:ankle_torque_vs_angle}
+\end{marginfigure}
 
 However, this method may still not address a second problem: sluggish passive
 dynamics caused by reflected inertia and damping. Reflected inertia refers to
@@ -896,17 +890,19 @@ the apparent magnification of motor rotor and gearing inertia on the outside of
 gearbox.  We can derive this effect through Newton's second law for the geared
 motor
 \begin{align}
-    J_i \ddot{\theta}_i = \tau_i - b_i \dot{\theta}_i.
+    J_\tn{i} \ddot{\theta}_\tn{i} = \tau_\tn{i} - b_\tn{i} \dot{\theta}_\tn{i}.
 \end{align}
-Here, $\theta$ and its derivatives refer to angular states of the motor, $b$
-is the damping constant, $J$ is the inertia and $\tau$ is the motor torque. We
-use subscript $i$ to refer to these quantities as seen before the gear
-reduction, and subscript $o$ to refer to those quantities reflected outside of
-the motor. Plugging in $\theta_i = n \theta_o$ and $\tau_i = \frac{1}{n}
-\tau_o$, where $n$ is the gear ratio, and multiplying through by $n$ yields
+Here, $\theta$ and its derivatives refer to angular states of the motor, $b$ is
+the damping constant, $J$ is the inertia and $\tau$ is the motor torque. We use
+subscript i to refer to these quantities as seen before the gear reduction, and
+subscript o to refer to those quantities reflected outside of the motor.
+Substituting $\theta_\tn{i} = n \theta_\tn{o}$ and $\tau_\tn{i} = \frac{1}{n}
+\tau_\tn{o}$, where $n$ is the gear ratio, and multiplying through by $n$ yields
 \begin{align}
-    J_i n^2 \ddot{\theta}_o &= \tau_o - b_i n^2 \dot{\theta}_o \\
-    \implies \quad J_o \ddot{\theta}_o &= \tau_o - b_o \dot{\theta}_o.
+    J_\tn{i} n^2 \ddot{\theta}_\tn{o} 
+        &= \tau_\tn{o} - b_\tn{i} n^2 \dot{\theta}_o \\
+    \implies \quad J_\tn{o} \ddot{\theta}_\tn{o} 
+        &= \tau_\tn{o} - b_\tn{o} \dot{\theta}_\tn{o}.
 \end{align}
 These equations show that the inertia and damping of the motor rotor are
 amplified by the square of the gear ratio. As prostheses may often use gear
@@ -924,7 +920,7 @@ the reflected inertia of the rotor alone is several orders of magnitude more
 than that of the foot and more than twice that of the shank and foot. When we
 also consider reflected damping and friction, the dynamics of prosthesis system
 may be significantly slower than assumed.
-\begin{table}
+\begin{table}[t]
   \centering
   \begin{tabular}{lll}
     \toprule
@@ -968,7 +964,7 @@ impact shock could cause damage to gearing and discomfort for the amputee.
 %human foot for 1.7m 85 kg = 0.0187 kg*m^2
 
 \subsection{Design of Dynamic Prostheses}\label{sec:back_dyn_pros}
-\begin{marginfigure}[3in]
+\begin{marginfigure}[2.5in]
     \centering
     \includegraphics[width=2in]{sea_diagram}
     \caption{Series elastic actuation inserts a spring between the gear output
@@ -1009,7 +1005,7 @@ reducing force control bandwidth. Therefore, a trade-off exists between the
 compliance of the actuator and speed with which it can generate desired torques.
 
 \citet{au2007biomechanical, au2008powered} design powered ankle prostheses with
-this trade off in mind. In these publications, the authors find that using an
+this trade off in mind. In these publications, the authors find that using a
 SEA spring soft enough to protect the ball screw transmission results in
 insufficient closed loop torque control bandwidth. To overcome this shortcoming,
 the authors incorporate a parallel spring into the ankle as was done for some of
@@ -1235,13 +1231,13 @@ strategy, the author's improved tracking of the knee trajectory, but also note
 that other metrics might be important such as metabolic energy, symmetry, and
 disturbance rejection.
  
-If we choose to optimize more than on of these outcomes simultaneously, we would
-need to assign weights to each feature to each feature that reflect the
-amputee's individual needs. Moreover, other aspects of gait may also be
-important but difficult to quantify, such as the amputee's comfort and sense of
-stability. In any case, measuring gait features require a high level of
-technical expertise and equipment to measure, and therefore preclude an
-amputee's tuning their own prostheses.
+If we choose to optimize more than on of these outcomes simultaneously, we need
+to assign weights to each feature to each feature that reflect the amputee's
+individual needs. Moreover, other aspects of gait may also be important but
+difficult to quantify, such as the amputee's comfort and sense of stability. In
+any case, measuring gait features require a high level of technical expertise
+and equipment to measure, and therefore preclude an amputee tuning his or her
+own prosthesis.
 
 To solve the problem of defining and measuring objective functions for robotic
 systems that human operators can directly control, researchers have proposed
@@ -1303,7 +1299,7 @@ example, researchers have successfully employed BO methods to efficiently
 optimize the gait parameters of a robotic snake~\citep{tesch2011using} and a
 dynamic bipedal robot~\citep{calandra2014bayesian}.
 
-In \cref{sec:completed_pref_opt} we present a new optimization method uses
+In \cref{sec:completed_pref_opt} we present a new optimization method that uses
 learning from preferences between pairs of control parameters to avoid the a
 priori definition of features and to consider unquantifiable qualities of the
 desired behavior. The algorithm further incorporates black-box Bayesian
@@ -1314,14 +1310,14 @@ tasks as well as a prosthesis optimization task.
 \section{Background Summary}
 From this literature review, we see that in order to achieve dynamic prosthesis
 behaviors, such as trip recovery, both the prosthesis controls and mechanical
-must address both the nominal walking gait as well as the disturbance response.
-We see a clear trend in the literature in this direction: Control algorithms
-have evolved from kinematic strategies that follow preplanned trajectories with
-stiff position control to dynamic strategies that allow us to design both the
-nominal trajectory the disturbance response characteristics. Likewise, in
-prosthesis design we see a trend towards series elastic actuators that enable
-accurate sensing and control of the prosthesis joint torque. With these
-actuators, we can design prosthesis joints that can simulate the passive
+design must consider both the nominal walking gait as well as the disturbance
+response.  We see a clear trend in the literature in this direction: Control
+algorithms have evolved from kinematic strategies that follow preplanned
+trajectories with stiff position control to dynamic strategies that allow us to
+design both the nominal trajectory the disturbance response characteristics.
+Likewise, in prosthesis design we see a trend towards series elastic actuators
+that enable accurate sensing and control of the prosthesis joint torque. With
+these actuators, we can design prosthesis joints that can simulate the passive
 dynamics of the human leg, allowing for natural interactions with the
 environment. 
 

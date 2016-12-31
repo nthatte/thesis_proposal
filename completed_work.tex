@@ -12,11 +12,11 @@
 
 \newthought{To test our proposed Neuromuscular control approach}, and its
 ability to help subjects maintain or recover their balance, we build a custom
-transemoral prosthesis capable of reproducing dynamic locomotion tasks. The
+transfemoral prosthesis capable of reproducing dynamic locomotion tasks. The
 proposed design, shown in \cref{fig:prosthesis_render_annotated}, uses brushless
 electric motors coupled to harmonic drive gear sets to drive both the knee and
 ankle joints.  Additionally, the joints employ series elastic actuation to
-enable accurate torque control and to protect the Harmonic Drive gear sets from
+enable accurate torque control and to protect the prosthesis' gear sets from
 sudden impacts.  The design also features a unidirectional parallel spring in
 the ankle that partly offsets the torque demands on the ankle motor.  We design
 both joints to meet the demands of dynamic locomotion tasks such as running and
@@ -27,11 +27,11 @@ designed with commercial applicability in mind
 \citep{sup2007design,sup2009preliminary,lawson2014robotic,rouse2015design,
 martinez2011antagonistic} which feature onboard actuation and power sources, and
 high-powered tethered systems \citep{caputo2013experimental,
-caputo2015informing} with off board actuation designed exclusively for use in
+caputo2015informing} with off-board actuation designed exclusively for use in
 lab environment. Our design features onboard actuators that are more powerful
 than those used in standalone devices, but less capable than those employed in
 tethered devices. To ensure a reasonable overall weight the device's batteries,
-motor drivers, and computers are off board. With this design, we expect to be
+motor drivers, and computers are off-board. With this design, we expect to be
 able to test control ideas without encountering hardware performance limitations
 as with a tethered device. At the same time the device is capable of functioning
 outside of the lab environment like a standalone prosthesis. 
@@ -126,23 +126,23 @@ the deflection of this spring to enable torque control.
     \centering 
     \includegraphics[width=\linewidth]{knee_impact_sim}
     \caption{Impact simulation we used to determine appropriate series spring
-    stiffness.}\label{fig:knee_impact sim}
+    stiffness.}\label{fig:knee_impact_sim}
 \end{marginfigure}
 In addition to allowing for accurate torque control, as shown by
 \citet{au2007biomechanical,au2008powered}, the series elasticity also plays a
 crucial role in protecting fragile gear components from impact loads. To choose
 the spring stiffness for the knee joint, we simulate the prosthesis impacting a
 rigid wall with the foot during swing. To do this, we construct a model of the
-prosthesis in Matlab Simulink Simulink Simscape Multibody that includes the
-series elasticity, gear dynamics, and motor electrical dynamics (for
-details see \cref{sec:sec_simulation_environ}). \Cref{fig:impact_sim_knee} shows
-the simulation environment. The prosthesis is attached to the distal end of a
-thigh segment with a fixed hip position. We control the hip via the ideal swing
-leg control outlined in \cref{sec:neuro_ideal_swing} (\cref{eq:hipfeedback}) and
-consider the case where the external voltage applied to the motor is zero. This
-simulation suggests that a spring stiffness under $\unitfrac[2300]{N \cdot
-m}{rad}$ will ensure that the peak impact torque remains lower than the peak
-allowable impact torque of the Harmonic Drive of $\unit[242]{N \cdot m}$.
+prosthesis in Matlab Simulink Simscape Multibody that includes the
+series elasticity, gear dynamics, and motor electrical dynamics.
+\Cref{fig:knee_impact_sim} shows the simulation environment. The prosthesis is
+attached to the distal end of a thigh segment with a fixed hip position. We
+control the hip via the ideal swing leg control outlined in
+\cref{sec:neuro_ideal_swing} (\cref{eq:hipfeedback}) and consider the case where
+the external voltage applied to the motor is zero. This simulation suggests that
+a spring stiffness under $\unitfrac[2300]{N \cdot m}{rad}$ will ensure that the
+peak impact torque remains lower than the peak allowable impact torque of the
+Harmonic Drive of $\unit[242]{N \cdot m}$.
 
 \subsection{Ankle Joint}
 In the ankle joint we utilize a RoboDrive ILM $70\times10$ HS-SP motor coupled
@@ -248,7 +248,7 @@ encoder magnet stays aligned with the read head.
     \caption{Impact simulation we used to determine appropriate series spring
     stiffness.}\label{fig:ankle_impact_sim}
 \end{marginfigure}
-As with did for the knee series spring, we again determine an acceptable ankle
+As we did for the knee series spring, we again determine an acceptable ankle
 spring stiffness by performing an impact simulation. For the ankle, we simulate
 an \unit[80]{kg} person stepping on the prosthesis when the motor driver
 provides the ankle motor with zero applied voltage. \Cref{fig:ankle_impact_sim}
@@ -258,7 +258,13 @@ the ankle gear set from impacts. This estimate is likely softer than necessary
 due to the additional series compliance in the amputee's socket and the
 composite foot that are not included in the simulation.
 
-\subsection{Experiments on Powered Knee/Passive Ankle Prosthesis}
+\section{Experiments on Powered Knee/Passive Ankle
+Prosthesis}\label{sec:complete_exp} 
+
+\emph{Material in this section based partially on
+\citet{thatte2016toward}\cite{thatte2016toward}}
+\linebreak
+
 Towards a full realization and study on amputee subjects, we present a partial
 implementation and evaluation of the control on the current prosthesis prototype
 worn by a non-amputee user. \Cref{fig:test_bed_annotation} shows an able-bodied
@@ -282,15 +288,15 @@ To control the prosthesis knee, we use Simulink Real-Time (Mathworks, USA),
 which samples all sensors (joint encoders, IMU on thigh, force sensors in foot),
 runs a velocity-based SEA control \citep{schepelmann2012development}, and sends
 commands to the motor controller at a rate of 1kHz. Given a desired torque,
-$\tau_d$, and a measured torque error, $\tau_e$, the commanded motor velocity is
-given by
+$\tau_\tn{d}$, and a measured torque error, $\tau_\tn{e}$, the commanded motor
+velocity is given by
 \begin{align}
-    \omega_m = \frac{1}{k} \frac{\tn{d} \tau_d}{\tn{d} t} + (1 + k_d)\omega_l 
-        + \func{PD}{\tau_e},
+    \omega_\tn{m} = \frac{1}{k} \frac{\tn{d} \tau_\tn{d}}{\tn{d} t} 
+        + (1 + k_\tn{d})\omega_\tn{l} + \func{PD}{\tau_\tn{e}},
     \label{eq:velocity_based_sea}
 \end{align}
-where $\omega_l$ is the velocity of the load-side of the series spring (the
-shank), $k_d>0$ compensates for damping in the knee bearing, and
+where $\omega_\tn{l}$ is the velocity of the load-side of the series spring (the
+shank), $k_\tn{d}>0$ compensates for damping in the knee bearing, and
 $\func{PD}{\cdot}$ is a proportional-derivative feedback term. 
 
 The behavior control of the knee is a hybrid model that combines the
@@ -341,15 +347,15 @@ observed prosthesis leg behavior (solid lines) to corresponding human data at
 preferred walking speed (dashed lines, adapted from
 \citet{winter2009biomechanics,perry2010gait}). The hip and knee kinematics match
 overall, although later transitions from stance to swing are observed in both
-joints ($\theta_h$ and $\theta_k$) and the prosthesis knee flexes less in stance
-($\theta_k$). The knee torque follows trends similar to human data, but the peak
-flexion and extension torques in the early stance phase are diminished
-($\tau_k$). These lower peaks are caused by reduced activations of the virtual
-vastus and hamstring muscles (VAS and HAM) in this phase, a clear difference to
-these muscles' activation in humans, in which bursts of activity at heel strike
-are followed by relative silence. Finally, the activity of the virtual
-gastrocnemius muscle (GAS) bears strong similarity the activity of this muscle
-in human walking.
+joints ($\theta_\tn{h}$ and $\theta_\tn{k}$) and the prosthesis knee flexes less
+in stance ($\theta_k$). The knee torque follows trends similar to human data,
+but the peak flexion and extension torques in the early stance phase are
+diminished ($\tau_\tn{k}$). These lower peaks are caused by reduced activations
+of the virtual vastus and hamstring muscles (VAS and HAM) in this phase, a clear
+difference to these muscles' activation in humans, in which bursts of activity
+at heel strike are followed by relative silence. Finally, the activity of the
+virtual gastrocnemius muscle (GAS) bears strong similarity the activity of this
+muscle in human walking.
 
 To some extent, limitations of our current experimental testbed may
 account for observed discrepancies. The imposed slow walking speed of 0.5 m/s
@@ -434,6 +440,11 @@ from the treadmill handrails.
 
 \section{Comparison of Robustness Achieved by Reflex and Impedance Controls in
     Simulation}\label{sec:completed_comparison}
+
+\emph{Material in this section based partially on 
+\citet{thatte2016toward}\cite{thatte2016toward}} 
+and \citet{thatte2014towards}\cite[0.25in]{thatte2014towards}}
+\linebreak
 
 To evaluate the potential of neuromuscular prosthesis control to improve amputee
 gait robustness, we construct a simulation of an amputee walking on a powered

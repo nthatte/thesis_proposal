@@ -30,7 +30,10 @@ completing four tasks before graduation in May 2018:
 
 \Cref{fig:gantt_chart} shows a Gantt chart that indicates the expected sequence
 and duration of these tasks. We expect to complete \cref{task_1} by the end of
-March. As \cref{task_1,task_2} are largely experimental in nature 
+April. As \cref{task_2} is largely experimental and will rely on scheduling of
+amputee subjects, we expect this task to take nearly a year. In parallel, we
+plan to perfom \cref{task_3,task_4}. These two tasks will involve experiments
+with non-amputee subjects and thus will be easier to execute.
 
 \section{Build and Characterize Performance of Transfemoral
 Prosthesis}\label{sec:proposed_build}
@@ -57,21 +60,20 @@ prosthesis, shown in
 actuator design seems well suited to the task. However, we have not thoroughly
 evaluated the prosthesis performance in terms of step response, bandwidth, and
 zero torque tracking. Therefore, we propose to evaluate these characteristics
-for both the knee and ankle joints. \emph{We estimate that this task will take
-roughly two months.}
+for both the knee and ankle joints. 
+
+Next, we will evaluate the prosthesis' ability to reproduce walking gait
+kinematics and kinetics for steady-state level ground walking. We can quantify
+performance in terms of similarity to published steady state walking data of
+intact subjects such as that found in \citet{winter2009biomechanics} or
+\citet{perry2010gait}. Additionally, we can look for improvement over amputee
+subjects' walking gaits when they use their prescribed passive prostheses.
+\emph{We estimate that these tasks will take roughly four months to complete.}
 
 \section{Evaluate Neuromuscular Transfemoral Prosthesis
 Control Recovery}\label{sec:proposed_evaluate}
 
-We will characterize the performance of the neuromuscular control in two ways.
-First, we will evaluate its ability to reproduce walking gait kinematics and
-kinetics for steady-state level ground walking. We can quantify performance
-in terms of similarity to published steady state walking data of intact subjects
-such as that found in \citet{winter2009biomechanics} or \citet{perry2010gait}.
-Additionally, we can look for improvement over amputee subjects' walking gaits
-when they use their prescribed passive prostheses.
-
-Second, we will describe the ability of the neuromuscular control to adapt to
+We will also investigate the ability of the neuromuscular control to adapt to
 novel situations and disturbances. As mentioned in
 \cref{sec:back_neuromusc_prosthesis}, previous work on powered ankle prostheses
 has demonstrated neuromuscular control adapts to slopes by producing more torque
@@ -79,23 +81,30 @@ when walking up slopes and less when walking down slopes
 \citep{eilenberg2010control} and adapts to changes in speed by producing more
 ankle plantarflexion work as gait speed increases \citep{markowitz2011speed}. As
 the knee joint is governed by similar force feedback reflexes, and is linked to
-the ankle via the biarticular gastrocnemius muscle we would expect the knee
-joint to show similar increases in output. \citet{chen1997influence} show that
-the knee indeed significantly increases its power output as speed increases.
+the ankle via the biarticular gastrocnemius muscle, we expect the knee joint to
+show similar increases in output. \citet{chen1997influence} show that the knee
+indeed significantly increases its power output as incline or speed increase.
 Similarly, \citet{mcintosh2006gait} find that the knee produces significantly
 higher knee flexion moment at heel strike on downward inclines and significantly
 higher knee extension moment at the end of double stance on upward inclines.
+
 More generally, we expect the neuromuscular model to adapt well to novel
 circumstances because it encodes key features of walking mechanics such as the
-role of positive force feedback and damping effect of muscle's force-velocity
-relationship in generating stable compliant leg behavior
-(\citep{grey2007positive} see \cref{sec:neuro_hill_muscle}) and the importance
-of biarticular structures for preventing joint overextension during leg
-compression \citep{seyfarth2001stable}. \emph{We expect this task to take
-roughly seven months to complete.}
+role of positive force feedback and the damping effect of muscle's
+force-velocity relationship in generating stable compliant leg behavior
+(\citep{grey2007positive} see \cref{sec:neuro_hill_muscle}), the importance of
+biarticular structures for preventing joint overextension during leg compression
+\citep{seyfarth2001stable}, and the need for swing control to achieve target
+foot placements. To empirically test the contribution of these mechanisms to
+stabilizing gait, we also propose to subject amputees to disturbances such as
+sudden treadmill speed changes and impulses applied to the amputee's hip by the
+PushBot Robot. We can quantify the responses in terms of the time required to
+regain normal gait and compare to the response of impedance control and the
+amputee's passive prosthesis. \emph{We expect this task to take roughly ten
+months to complete.}
 
-\section{Optimizing Prosthesis Control using
-Preferences}\label{sec:proposed_optimize}
+\section{Optimizing Prosthesis Control using Qualitative
+Feedback}\label{sec:proposed_optimize}
 
 In the discussion of our current method for optimizing control parameters
 (\cref{sec:tuning_discussion}), we identified several possible improvements.
@@ -112,20 +121,21 @@ belonging to the good class, the likelihood takes the form
         = \prod_{k=1}^{n_\tn{g}} \Phi(q_k^\tn{g}),
     \label{eq:likelihood_abs_good}
 \end{align}
-where $D_{n_\tn{g}}^\tn{g} = \{x_1, \ldots, x_k, \ldots, x_{n_\tn{g}}\}$ is the set of
-points the user has classified as good and $q_k^\tn{g} =
+where $D_{n_\tn{g}}^\tn{g} = \{x_1, \ldots, x_k, \ldots, x_{n_\tn{g}}\}$ is the
+set of points the user has classified as good and $q_k^\tn{g} =
 \frac{f(x_k^\tn{a})}{\sigma_\tn{g}}$. The likelihood has the effect of pushing
 the function values for points classified as good higher, with parameter
-$\sigma_\tn{g}$ controlling the strength of this effect. We can define an analogous
-likelihood function $\prob{D_{n_b}^\tn{b}|\vecf{f}}$ for points the user
-identifies as bad.
+$\sigma_\tn{g}$ controlling the strength of this effect. We can define an
+analogous likelihood function $\prob{D_{n_b}^\tn{b}|\vecf{f}}$ for points the
+user identifies as bad.
 
-If the user identifies two points they are unsure of the preference between, we
-can utilize a likelihood function that pulls the function values of the two
-points closer together. Given a data set of ambiguous or ``unclear'' relations
-$D_{n_\tn{u}}^\tn{u} = \{x_1^\tn{a} \simeq x_1^\tn{b}, \ldots, x_k^\tn{a} \simeq
-x_k^\tn{b}, \ldots, x_n^\tn{a} \simeq x_n^\tn{b}\}$ (where $\simeq$ denotes
-approximate equality of latent function value), we can use the likelihood
+If the user identifies two points that he or she is unsure of the preference
+between, we can utilize a likelihood function that pulls the function values of
+the two points closer together. Given a data set of ambiguous or ``unclear''
+relations $D_{n_\tn{u}}^\tn{u} = \{x_1^\tn{a} \simeq x_1^\tn{b}, \ldots,
+x_k^\tn{a} \simeq x_k^\tn{b}, \ldots, x_n^\tn{a} \simeq x_n^\tn{b}\}$ (where
+$\simeq$ denotes approximate equality of latent function value), we can use the
+likelihood
 \begin{align}
     \prob{D_{n_\tn{u}}^\tn{u}|\vecf{f}} &= \prod_{k=1}^{n_\tn{u}} \prob{x_k^\tn{a}
         \simeq x_k^\tn{b} | f(x_k^\tn{a}), f(x_k^\tn{b})} 
@@ -141,8 +151,8 @@ the product of the likelihoods of all forms of feedback.
 
 To incorporate time adaptation into the model, we can simply add time as a
 dimension to all points. In a Gaussian Process, the kernel function governs the
-correlation the function value of a point in the training dataset has on the
-function value of a new test point. The Gaussian kernel we currently employ,
+correlation between the function value of a point in the training dataset and
+the function value of a new test point. The Gaussian kernel we currently employ,
 decreases the correlation between points as the euclidean distance between them
 increases. Therefore, appending the time to all data points will diminish the
 effect of old data points on new predictions.
@@ -157,13 +167,13 @@ how fast the system converges to the user's preferred foot placement parameters.
 In this case, we can assume users prefer zero skewness, and straight foot
 placement. We can measure their step frequency beforehand, and hand-tune the
 width. We choose this scenario as it has a clear optimum that we can find easily
-with an alternative method. We can perform this optimization in one, three, and
-five dimensions to assess how the algorithm scales as dimensionality increases.
-In a second scenario, we apply the method to tune the parameters of the
-prosthesis stance control. We then look for improvement over the default control
-parameters and for local optimality by comparing to points near the identified
-optimum. \emph{We will perform this task in parallel with the neuromuscular
-control task over the course of five months}
+via hand tuning. We can perform this optimization in one, three, and five
+dimensions to assess how the algorithm scales as dimensionality increases.  In a
+second scenario, we apply the method to tune the parameters of the prosthesis
+stance control. We then look for improvement over the default control parameters
+and for local optimality by comparing to points near the identified optimum.
+\emph{We will perform this task in parallel with the neuromuscular control task
+over the course of five months (see \cref{fig:gantt_chart}).}
 
 \section{Learning Trip Recovery Policies}\label{sec:proposed_trip_class}
 
@@ -207,21 +217,21 @@ prosthesis.
     \caption{Swing leg model used to train and test trip detection
     SVM.}\label{fig:trip_sim}
 \end{marginfigure}
-We tested in simulation the hypotheses that online error rate will increase over
-offline error rates when we use classifiers to control the swing leg trip
+We tested in simulation the hypotheses that online error rates will be greater
+than offline error rates when we use classifiers to control the swing leg trip
 response and that employing Dagger training improves trip classification error
 rates. To do this we modeled a swing leg in the Simulink Simscape Multibody
 Environment (\cref{fig:trip_sim}). We controlled by a heuristic ``expert''
 policy that can perfectly identify impacts with obstacles and then
 stochastically chooses to execute either a raising or lowering strategy. Using
 kinematic data generated by 25 executions of the expert policy, we trained two
-SVMs: one that distinguish between unimpeded swing and disturbed swing and one
+SVMs: one that distinguishes between unimpeded swing and disturbed swing and one
 that, when the first SVM detects a trip, classifies the response as either a
 raising or lowering strategy. As shown in \cref{fig:dagger_result}, the offline
 error rates, evaluated when the expert policy still controls the swing leg, are
 very small, $0.50\%$ and $0.00\%$ respectively. However, when we evaluate these
-classifiers in the online-case, when the trained policies control the system, we
-see much higher error rates of $20.7\%$ and $29.3$ respectively. Finally,
+classifiers in the online-case, where the trained policies control the system,
+we see much higher error rates of $20.7\%$ and $29.3\%$ respectively. Finally,
 employing the Dagger method to train the system. In this case we first use the
 expert policy to generate 5 trajectories and train the to SVMs. We then use the
 SVMs to control the system and generate 5 new trajectories and retrain the
@@ -232,27 +242,28 @@ respectively.
 \begin{marginfigure}[-1in]
     \centering
     \includegraphics[width = \linewidth]{dagger_result}
-    \caption{Swing leg model used to train and test trip detection
-    SVM.}\label{fig:dagger_result}
+    \caption{Online error rates of trip detection and classification SVMs are
+    significantly higher than offline error rates. Using a Data set aggregation
+    approach helps reduce the online error rate.}\label{fig:dagger_result}
 \end{marginfigure}
 
 We can employ a similar training method to improve trip detection and strategy
 identification on the real prosthesis. For the initial trip detection policy, we
 can programmatically engage the trip recovery controller when the trip is
 applied by PushBot. For the initial strategy classification policy, we can use
-policies train on healthy subjects, or have an operator visually classify the
-amputee's response and select correct recovery control in real-time. From there,
-we can iterative train classifiers and execute them on the system to gather more
+policies trained on healthy subjects, or have an operator visually classify the
+amputee's response and select the correct recovery response in real-time. We can
+then iteratively train classifiers and execute them on the system to gather more
 training data. At the end of the procedure, we can evaluate the classifier error
 rates, and compare against controllers trained only using the response of
 healthy subjects. \emph{We expect this task to take roughly four months to
-complete in parallel with the amputee experiments of \cref{task_2}.
-(see \cref{fig:gantt_chart}).}
+complete in parallel with the amputee experiments of \cref{task_2}.  (see
+\cref{fig:gantt_chart}).}
 
 \section{Proposed Work Summary}\label{sec:proposed_summary}
 
 Our proposed tasks seek to address the three challenges of amputee locomotion we
-identified in the Introduction (\cref{sec:intro_challenges}). Namely, that it is
+identified in the introduction (\cref{sec:intro_challenges}). Namely, that it is
 a dynamic task requiring consideration of interaction forces with the
 environment and obstacles, that it requires a control that is robust to changes
 in gait and disturbances, and that amputees are unique and require
@@ -260,15 +271,15 @@ individualized control parameters.
 
 We propose to address these challenges through four main contributions: First,
 we design and characterize a series elastic prosthesis design capable of
-executing dynamic locomotion tasks. Second, we implement a prosthesis control
-based on a neuromuscular model of human locomotion. In simulation, such models
-have proven to be robust to disturbances, and previous experiments with powered
-ankle prostheses have demonstrated that they can adapt to amputee gait
-variations such as speed and incline changes.  Third, we proposed to improve
-upon the existing control structure by implementing specific reflexes that
-respond to mid-swing disturbances. Finally, we intend to adapt the neuromuscular
-control parameters to individual subjects by using their qualitative feedback
-and preferences between control parameter sets.
+executing dynamic locomotion tasks. Second, we implement and characterize
+prosthesis control based on a neuromuscular model of human locomotion. In
+simulation, such models have proven to be robust to disturbances, and previous
+experiments with powered ankle prostheses have demonstrated that they can adapt
+to amputee gait variations such as speed and incline changes. Third, we propose
+to improve upon the existing control structure by implementing specific reflexes
+that respond to mid-swing disturbances. Finally, we intend to adapt the
+neuromuscular control parameters to individual subjects by using their
+qualitative feedback and preferences between control parameter sets.
 
 If these tasks are completed successfully, the resulting prosthesis design and
 control strategy should significantly improve transfemoral amputee gait
@@ -276,8 +287,6 @@ robustness, while still providing a natural and individualized nominal gait. As
 we noted in the introduction (\cref{sec:intro_motivation}), transfemoral
 amputees face a variety of gait deficits and are often unable to complete many
 tasks such as walking on uneven terrain, walking without support, and walking
-with loads. While we will not have specifically addressed all these deficits and
-will not have fully closed the performance gap between amputees and non-amputees
-on those we do investigate, we will have hopefully provided evidence for a
-promising direction for future research that will eventually fully address these
-issues. 
+with loads. While we will not have completely addressed all these deficits, we
+will have hopefully provided evidence for a promising direction for continued
+research that will eventually fully address these issues. 
