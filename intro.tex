@@ -231,24 +231,23 @@ to generate desired torques, not positions, at the joints. These torques, along
 with the reaction forces in the amputee's socket and on the ground shape the
 motion of the amputee-prosthesis system.
 
-Moreover, prior work on neuromuscular models shows that when applied to
-simulated biped models they can produce robust and adaptable gaits. Therefore,
-this control approach may help address \cref{chal:adaptability}. For example,
-using a neuromuscular model, an optimized simulated biped model walked on
-unseen, uneven terrain with sudden drops and steps up to 14 centimeters
-\citep{song2015neural}. In addition, \citet{eilenberg2010control} successfully
-applied the neuromuscular control approach to a powered ankle prosthesis, which
-mimics the kinematics and kinetics of the ankle joint in human walking including
-its adaptation to sloped environments.  It remains unclear, however, whether the
-approach and observed adaptability extend to transfemoral prostheses with both
-knee and ankle joints.
+Moreover, prior work on neuromuscular models shows they can produce robust and
+adaptable gaits. Therefore, this control approach may help address
+\cref{chal:adaptability}. For example, using a neuromuscular model, an optimized
+simulated biped model walked on unseen, uneven terrain with sudden drops and
+steps up to 14 centimeters \citep{song2015neural}. In addition,
+\citet{eilenberg2010control} successfully applied the neuromuscular control
+approach to a powered ankle prosthesis, which mimics the kinematics and kinetics
+of the ankle joint in human walking including its adaptation to sloped
+environments.  It remains unclear, however, whether the approach and observed
+adaptability extend to transfemoral prostheses with both knee and ankle joints.
 
 To motivate our specific choice of neuromuscular control for improving amputee
 gait stability, in completed work, we construct a simulation of the
 amputee-prosthesis system and compare the gait robustness achieved by
 neuromuscular control versus the established impedance control method. We find
 that neuromuscular control enables the simulated amputee to walk further over
-rougher terrain than does the established impedance control method.
+rougher terrain than does impedance control.
 
 Next, to test the feasibility of controlling a real prosthesis with a
 neuromuscular model, we design and build a partial powered transfemoral
@@ -359,7 +358,6 @@ contributions:
     feedback such as absolute good/bad ratings, perceived ambiguity between
     parameters, and ``best so far'' statements and to explicitly consider the
     users adaptation to the prosthesis over time.
-
 
     \item\label{contrib:trip_recovery} \emph{Learning and evaluation of trip
     recovery policies}~~The last contribution is a method to learn and
