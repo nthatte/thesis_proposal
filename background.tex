@@ -601,16 +601,64 @@ to the stabilizing feedback provided by muscle reflexes.
 Whereas models and robot experiments show reflexes are vital for maintaining
 bipedal gait stability, the same cannot be said about CPGs. In fact, as shown by
 \citet{geyer2010muscle}, it is possible to simulate robust and human-like
-bipedal locomotion using only reflexes. This work employs a neuromuscular model,
-similar to that used by \citet{ogihara2001generation}, but does away with the
-feed forward CPG stimulations sent to alpha motor neurons. Instead,
-\citeauthor{geyer2010muscle} hypothesize the existence of several force and
-length muscle reflexes that implement three key aspects of bipedal locomotion:
-compliant leg behavior, preventing joint over extension, and providing trunk
-stabilization. The gait achieved by this model is more robust than and more
-accurately reproduces kinematics, kinetics, and ground reaction forces seen in
-human walking than \citeauthor{ogihara2001generation}'s model. Moreover, it also
-produces human-like stimulations for many of its muscles.
+bipedal locomotion using only reflexes applied to muscle actuators. This work
+employs a neuromuscular model, similar to that used by
+\citet{ogihara2001generation}, but does away with the feed forward CPG
+stimulations sent to alpha motor neurons. Instead, the model proposed by
+\citet{geyer2010muscle} and later extended by \citet{song2015neural}
+hypothesizes the existence of several force and length muscle reflexes that
+implement three major mechanisms that contribute stable bipedal locomotion:
+ensuring compliant leg behavior, preventing joint over extension, and placing
+the swing leg into target landing angles. 
+
+Reproducing the first of these mechanisms, compliant leg behavior, is important
+to ensure that overall ground reaction forces resemble those of the bipedal
+spring-mass model, which as reviewed in \cref{sec:back_walking_review} explains
+the fundamental dynamics of both walking and running \citep{geyer2006compliant}
+and can produce robust gaits via leg stiffness adaptation
+\citep{visser2012robust}. Previous work has shown that positive force feedback
+of leg extensor muscles can produce similar compliant leg behavior to the spring
+mass model thereby generating stable, periodic, and adjustable bouncing gaits
+such as hopping and running~\citep{geyer2003positive}. Moreover,
+\citet{grey2007positive} have demonstrated that positive force feedback likely
+does play a major role in the stimulation of the ankle extensor muscles during
+stance. Therefore, the model proposed by
+\citeauthor{geyer2010muscle,song2015neural} proposes using positive force
+feedback of leg extensor muscles to reproduce this characteristic of lower limb
+mechanics. These feedbacks are explained in detail in
+\cref{sec:neuro_stance_reflexes,sec:neuro_hill_muscle}.
+
+The second mechanism, preventing joint over extension, is important for ensuring
+that the leg can stably achieve compliant leg behavior.
+\citet{seyfarth2001stable} showed that legged systems that only include
+monoarticular compliant elements (that span only single joints) are susceptible
+to joint over extension as the leg is loaded and that the addition of
+biarticular structures can help prevent this instability. The neuromuscular
+model proposed by \citet{geyer2010muscle,song2015neural} addresses this issue by
+including biarticular muscles such as the hamstrings, which spans the hip and
+knee, and the gastrocnemius, which spans the ankle and knee. We provide a
+detailed overview of the mechanical structure of the model in section
+\cref{sec:neuro_mech_model}.
+
+Finally, the importance of the third mechanism, ensuring regulation of the swing
+leg into target foot placement positions, has been demonstrated by Raibert's
+dynamic legged robots, which achieved stable gaits primarily through foot
+placment (\citep{raibert1983dynamically,raibert1986legged} reviewed in
+\cref{sec:back_decentralized_control}). The swing-leg control of the
+neuromuscular implements a similar swing leg placement strategy (see
+\cref{sec:neuro_swing_reflexes}).
+
+The resulting control can allows a biped model to walk on terrains featuring
+random steps up to $\unit[\pm 6]{cm}$ (55 \% success rate) and rejects pushes in
+both the forward and backward directions at various points in the gait cycle
+\citep{song2015neural}. In another work, \citet{murai2011neuromuscular} subject
+a neuromuscular model, initially trained to match kinematic data of single
+subject, to impacts during early and late swing. They find the learned model
+exhibits the elevating and lowering trip response strategies of the biological
+leg despite not being explicitly trained to do so. The robustness properties
+exhibited by neuromuscular model are especially relevant to our goal of
+developing a robust prosthesis control that will help transfemoral amputees
+avoid falls. 
 
 While we cannot say based on this result alone that CPGs do not play an
 important role in human locomotion, the fact that human locomotion can emerge
@@ -631,19 +679,6 @@ further research to extend this model to include swing leg placement
 \citep{desai2013muscle}, 3D locomotion, running, speed changes, stair and slope
 negotiation, turning, and obstacle avoidance \citep{song2015neural}.  
 
-The robustness properties exhibited by neuromuscular model are especially
-relevant to our goal of developing a robust prosthesis control that will help
-transfemoral amputees avoid falls. In \citet{song2015neural} the author's
-improve the model's robustness by incorporating reflexes that place the swing
-leg into target landing angles. The authors optimize this model to achieve a
-combination of robustness and energy efficiency.  The resulting gait can walk on
-terrains featuring random steps up to $\unit[\pm 6]{cm}$ (50 \% success rate)
-and rejects pushes in both the forward and backward directions at various points
-in the gait cycle. In another work, \citet{murai2011neuromuscular} subject a
-neuromuscular model, initially trained to match kinematic data of single
-subject, to impacts during early and late swing. They find the learned model
-exhibits the elevating and lowering trip response strategies of the biological
-leg despite not being explicitly trained to do so. 
 
 \subsubsection{Neuromuscular Reflexes for Prosthesis
 Control}\label{sec:back_neuromusc_prosthesis}
@@ -748,7 +783,7 @@ and lithium-ion batteries, inexpensive microcontrollers and inertial measurement
 units (IMUs), and strong but light composite materials such as carbon fiber.
 With these advancements, engineers have successfully designed prostheses to meet
 or exceed the requirements for walking~(\cref{tab:walking_requirements}).
-\begin{margintable}[-0in]
+\begin{margintable}[-2in]
   \centering
   \begin{tabular}{lll}
     \toprule
@@ -783,40 +818,39 @@ belts, ball screws, and four-bar-mechanisms in order to increase the torque
 output of the actuator, at the expense of speed, in order to satisfy the
 requirements listed in \cref{tab:walking_requirements}. A successful line of
 transfemoral prostheses following this design paradigm comes from Vanderbilt
-university. The first prosthesis in this line (\cref{fig:vanderbilt_gen_1})
-used a pair of ball screw transmissions and brushless motors capable of
-\unit[200]{W} of continuous power output to drive its knee and ankle joints
+university. The first prosthesis in this line
+(\cref{fig:vanderbilt_prostheses}a) used a pair of ball screw transmissions and
+brushless motors capable of \unit[200]{W} of continuous power output to drive
+its knee and ankle joints
 \citep{sup2009preliminary}. 
-\begin{marginfigure}
+\begin{figure*}[t]
     \centering
-	\begin{subfigure}[t]{\linewidth}
+	\begin{subfigure}[t]{0.32\linewidth}
     	\centering
-        \includegraphics[height=1.9in]{VU_gen_1}
+        \includegraphics[height=2in]{VU_gen_1}
         \caption{Generation 1 used ball screw transmissions, \unit[200]{W}
         brushless motors, and a unidirectional parallel spring in the ankle that
         reduced motor torque requirements \citep{sup2009preliminary}.}
         \label{fig:vanderbilt_gen_1}
 	\end{subfigure}
-
-	\begin{subfigure}[t]{\linewidth}
+	\begin{subfigure}[t]{0.32\linewidth}
     	\centering
-        \includegraphics[height=1.9in]{VU_gen_2}
+        \includegraphics[height=2in]{VU_gen_2}
         \caption{Generation 2 replaced ball screws with custom gear-based
         transmission that is less noisy and more durable
         \citep{lawson2013control}.}
         \label{fig:vanderbilt_gen_2}
 	\end{subfigure}
-
-	\begin{subfigure}[t]{\linewidth}
+	\begin{subfigure}[t]{0.32\linewidth}
     	\centering
-        \includegraphics[height=1.9in]{VU_gen_3}
+        \includegraphics[height=2in]{VU_gen_3}
         \caption{Generation 3 features a modular design with separable knee and
         ankle units \citep{lawson2014robotic}.}
         \label{fig:vanderbilt_gen_3}
 	\end{subfigure}
     \caption{Vanderbilt University's Robotic Transfemoral Prostheses.}
     \label{fig:vanderbilt_prostheses}
-\end{marginfigure}
+\end{figure*}
 
 With these actuators, the knee motor can achieve the required peak torque and
 peak power intermittently (\cref{tab:walking_requirements}). However, the ankle
@@ -832,7 +866,7 @@ the spring reduces motor energy consumption, heat generation, and transmission
 wear.
 
 Further improvements resulted in two more generations of prostheses
-(\cref{fig:vanderbilt_gen_2,fig:vanderbilt_gen_3}) \citep{lawson2013control,
+(\cref{fig:vanderbilt_prostheses}b,c) \citep{lawson2013control,
 lawson2014robotic}. These versions replaced ball screw transmissions with a
 multi-stage belt/chain which improved packaging and reduced noise and wear
 (Michael Goldfarb, personal communication, September 18, 2013).  With these
