@@ -605,13 +605,13 @@ bipedal locomotion using only reflexes applied to muscle actuators. This work
 employs a neuromuscular model, similar to that used by
 \citet{ogihara2001generation}, but does away with the feed forward CPG
 stimulations sent to alpha motor neurons. Instead, the model proposed by
-\citet{geyer2010muscle} and later extended by \citet{song2015neural}
+\citet{geyer2010muscle}, and later extended by \citet{song2015neural},
 hypothesizes the existence of several force and length muscle reflexes that
-implement three major mechanisms that contribute stable bipedal locomotion:
+implement three major features that contribute stable bipedal locomotion:
 ensuring compliant leg behavior, preventing joint over extension, and placing
 the swing leg into target landing angles. 
 
-Reproducing the first of these mechanisms, compliant leg behavior, is important
+Reproducing the first of these features, compliant leg behavior, is important
 to ensure that overall ground reaction forces resemble those of the bipedal
 spring-mass model, which as reviewed in \cref{sec:back_walking_review} explains
 the fundamental dynamics of both walking and running \citep{geyer2006compliant}
@@ -620,30 +620,29 @@ and can produce robust gaits via leg stiffness adaptation
 of leg extensor muscles can produce similar compliant leg behavior to the spring
 mass model thereby generating stable, periodic, and adjustable bouncing gaits
 such as hopping and running~\citep{geyer2003positive}. Moreover,
-\citet{grey2007positive} have demonstrated that positive force feedback likely
-does play a major role in the stimulation of the ankle extensor muscles during
-stance. Therefore, the model proposed by
-\citeauthor{geyer2010muscle,song2015neural} proposes using positive force
-feedback of leg extensor muscles to reproduce this characteristic of lower limb
-mechanics. These feedbacks are explained in detail in
+\citet{grey2007positive} suggests positive force feedback likely plays a major
+role in the stimulation of the ankle extensor muscles during stance. Therefore,
+\citeauthor{geyer2010muscle} and \citeauthor{song2015neural} propose using
+positive force feedback of leg extensor muscles to reproduce this characteristic
+of lower limb mechanics. These feedbacks are explained in detail in
 \cref{sec:neuro_stance_reflexes,sec:neuro_hill_muscle}.
 
-The second mechanism, preventing joint over extension, is important for ensuring
-that the leg can stably achieve compliant leg behavior.
-\citet{seyfarth2001stable} showed that legged systems that only include
-monoarticular compliant elements (that span only single joints) are susceptible
-to joint over extension as the leg is loaded and that the addition of
-biarticular structures can help prevent this instability. The neuromuscular
-model proposed by \citet{geyer2010muscle,song2015neural} addresses this issue by
-including biarticular muscles such as the hamstrings, which spans the hip and
-knee, and the gastrocnemius, which spans the ankle and knee. We provide a
-detailed overview of the mechanical structure of the model in section
-\cref{sec:neuro_mech_model}.
+The second feature, preventing joint over extension, ensures that a segmented
+leg can achieve overall compliant leg behavior while observing physiological
+joint limits. \citet{seyfarth2001stable} showed that legged systems that only
+include monoarticular compliant elements (that span single joints) are
+susceptible to joint over extension as the leg is loaded and that the addition
+of biarticular structures can help prevent this instability. Consequently, the
+neuromuscular models proposed by \citet{geyer2010muscle} and
+\citet{song2015neural} include biarticular muscles such as the hamstrings, which
+span the hip and knee, and the gastrocnemius, which spans the ankle and knee.
+We provide a detailed overview of the mechanical structure of the model in
+section \cref{sec:neuro_mech_model}.
 
-Finally, the importance of the third mechanism, ensuring regulation of the swing
+Finally, the importance of the third feature, ensuring regulation of the swing
 leg into target foot placement positions, has been demonstrated by Raibert's
 dynamic legged robots, which achieved stable gaits primarily through foot
-placment (\citep{raibert1983dynamically,raibert1986legged} reviewed in
+placement (\citep{raibert1983dynamically,raibert1986legged} reviewed in
 \cref{sec:back_decentralized_control}). The swing-leg control of the
 neuromuscular implements a similar swing leg placement strategy (see
 \cref{sec:neuro_swing_reflexes}).
