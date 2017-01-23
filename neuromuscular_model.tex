@@ -231,10 +231,12 @@ representing a unidirectional, stiffening spring, the behavior of which is shown
 in \cref{fig:force_length_pese}. The expressions for the elastic force produces
 by these elements are
 \begin{align}
-    \func{F_\tn{PE}}{l_\tn{CE}} &= F_\tn{max} \left( \frac{l_\tn{CE} - l_\tn{opt}}{\epsilon_\tn{PE}
-        l_\tn{opt}} \right)^2 (l_\tn{CE} > l_\tn{opt})\\
-    \func{F_\tn{SE}}{l_\tn{SE}} &= F_\tn{max} \left( \frac{l_\tn{SE} - l_\tn{slack}}{\epsilon_\tn{SE}
-        l_\tn{slack}} \right)^2 (l_\tn{SE} > l_\tn{slack}).
+    \func{F_\tn{PE}}{l_\tn{CE}} &= F_\tn{max} \left( \frac{l_\tn{CE} -
+        l_\tn{opt}}{\epsilon_\tn{PE} l_\tn{opt}} \right)^2 
+        (l_\tn{CE} > l_\tn{opt}) \label{eq:parallel_force_length}\\
+    \func{F_\tn{SE}}{l_\tn{SE}} &= F_\tn{max} \left( \frac{l_\tn{SE} - 
+        l_\tn{slack}}{\epsilon_\tn{SE} l_\tn{slack}} \right)^2 
+        (l_\tn{SE} > l_\tn{slack}). \label{eq:series_force_length}
 \end{align}
 \begin{marginfigure}
     \centering
@@ -273,6 +275,7 @@ of the muscle fibers. The variable length moment arms also govern the torque a
 muscle produces about a joint according to
 \begin{align}
     \tau_\tn{mtu} = \func{r}[\tn{mtu}][j]{\phi^j} F_\tn{mtu}.
+    \label{eq:muscle_moment}
 \end{align}
 
 \section{Stance Reflexes}\label{sec:neuro_stance_reflexes}
@@ -597,7 +600,8 @@ S_\tn{thr}$, where $S_\tn{thr}$ is a threshold.
     \func{S}[\tn{iii}][\tn{gas}]{t} &= G_\tn{gas}^\tn{ham}
         \left (\func{S}[\tn{iii}][\tn{ham}]{t} - S_\tn{thr} \right)
 \end{align}
-The control triggers knee extension through vastus length feedback, when the leg angle velocity crosses zero,
+The control triggers knee extension through vastus length feedback, when the leg
+angle velocity crosses zero,
 \begin{align}
     \func{S}[\tn{iii}][\tn{vas}]{t} = G_\tn{vas}^\tn{vas}
         \func{L}[\tn{vas}]{t_\tn{s}}.
@@ -619,3 +623,62 @@ prevent toe scuffing
     \func{S}[][\tn{ta}]{t} = S_0^\tn{ta} + G_\tn{ta}^\tn{ta}
         \func{L}[\tn{ta}]{t_\tn{l}}
 \end{align}
+
+\section{Limitations of the Current Neuromuscular Model}
+
+The neuromuscular model we have presented in this chapter crudely describes the
+underlying dynamics of joint torque production in human locomotion. If we look
+at how joint torque at joint $i$ changes with respect to joint angle $j$ in the
+real human neuromuscular system, we obtain the following expression:
+\begin{align}
+    \frac{\partial \tau_i}{\partial \theta_j} &= \sum_{m=1}^M \frac{\partial
+    r_m}{\partial \theta_j} F_m + r_m \frac{\partial F_m}{\partial
+    \theta_j}_\tn{total} \\
+    \textrm{where} & \notag \\
+    \frac{\partial F_m}{\partial \theta_j}_\tn{total}&= 
+        \frac{\partial F_m}{\partial l_m}
+            \frac{\partial l_m}{\partial \theta_j} 
+        + \frac{\partial F_m}{\partial S_m}
+            \frac{\partial S_m}{\partial \theta_j} 
+        + \frac{\partial F_m}{\partial \theta_j}_\tn{explicit}
+\end{align}
+In this equation $\frac{\partial r_m}{\partial \theta_j}$ refers to the change
+in muscle attachment moment arms with respect to changing joint angles. Our
+model accounts for this term via modeling of the variable moment arms for many
+muscles (see \cref{eq:muscle_moment}). We can decompose the next term,
+$\frac{\partial F_m}{\partial \theta_j}_\tn{total}$, into several parts:
+
+\begin{description}
+    \item[$\frac{\partial F_m}{\partial l_m} \frac{\partial l_m}{\partial
+    \theta_j}$]  The first part describes how muscular forces change as length
+    changes. The Hill type model represents this term via the force length
+    relationships of the contractile, parallel elastic, and series elastic
+    elements given by
+    \cref{eq:hill_force_length,eq:parallel_force_length,eq:series_force_length}.
+
+    \item[$\frac{\partial F_m}{\partial S_m} 
+        \frac{\partial S_m}{\partial \theta_j}$] The second part describes how
+        stimulation changes as angle changes. Ignoring time delays, this term
+        can be further decomposed into implicit and explicit parts: The implicit
+        part is captured by the feedback laws of model, which describe how
+        muscle stimulation changes as muscle state changes, where muscle state
+        is a function of joint angle.  The explicit part describes how the
+        stimulation laws themselves change as a function of joint angle.
+
+        Currently, the model does not consider structural changes to the
+        feedback laws except for the stance to swing and swing to stance
+        transitions. In our future work, described in
+        \cref{sec:proposed_trip_class} we intend to investigate how the swing
+        control may change structurally in response to trips. As reviewed in
+        \cref{sec:back_stumble_recovery}, there is strong evidence that the
+        control structure should change in response to swing leg disturbances in
+        order to implement raising and lower strategies. Incorporating this term
+        into the model will be vital to ensure amputees can recover from trips
+        through proper foot placement.
+        
+    \item[\frac{\partial F_m}{\partial \theta_j}_\tn{explicit}] The last term
+    refers to the actual stiffness of the muscle itself, often referred to as
+    the \emph{short range stiffness} (SRS). Currently, our model does not
+    consider this component of overall joint stiffness. 
+        
+\end{description}
