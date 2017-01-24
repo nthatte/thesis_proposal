@@ -200,7 +200,7 @@ expression captures this relationship.
     \toprule
     Param & Value             & Param                   & Value \\
     \midrule                           
-    $\tau$ & \unit[0.1]{s}    & $l_\tn{opt}^\tn{ham}$   & \unit[0.10]{m} \\
+    $\tau$ & \unit[0.01]{s}   & $l_\tn{opt}^\tn{ham}$   & \unit[0.10]{m} \\
     $w$    & 0.56             & $v_\tn{max}^\tn{ham}$   & \unitfrac[-1.2]{m}{s} \\
     $K$    & 5                & $F_\tn{max}^\tn{ham}$   & \unit[3000]{N} \\
     $N$    & 1.5              & $l_\tn{slack}^\tn{ham}$ & \unit[0.31]{m} \\
@@ -636,12 +636,12 @@ system, we obtain the following expression:
 \begin{align}
     \frac{\tn{d} \tau_i}{\tn{d} \theta_j} 
     = \frac{\partial \tau_i}{\partial \theta_j}
-    + \sum_{m=1}^M \frac{\tn{d} r_m}{\tn{d} \theta_j} F_m  
+    + \sum_{m=1}^M \left[ \frac{\tn{d} r_m}{\tn{d} \theta_j} F_m  
     + r_m \left(\frac{\partial F_m}{\partial l_m}
             \frac{\tn{d} l_m}{\tn{d} \theta_j} 
         + \frac{\partial F_m}{\partial S_m}
             \frac{\tn{d} S_m}{\tn{d} \theta_j} 
-        + \frac{\partial F_m}{\partial \theta_j} \right)
+        + \frac{\partial F_m}{\partial \theta_j} \right) \right].
 \end{align}
 This expression has several components. The first, $\frac{\partial
 \tau_i}{\partial \theta_j}$, describes how torques that depend directly on the
