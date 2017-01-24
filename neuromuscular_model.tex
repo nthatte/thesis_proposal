@@ -627,58 +627,83 @@ prevent toe scuffing
 \section{Limitations of the Current Neuromuscular Model}
 
 The neuromuscular model we have presented in this chapter crudely describes the
-underlying dynamics of joint torque production in human locomotion. If we look
-at how joint torque at joint $i$ changes with respect to joint angle $j$ in the
-real human neuromuscular system, we obtain the following expression:
+underlying dynamics of joint torque production in human locomotion. To identify
+potential shortcomings of the model it is enlightening to examine how joint
+torque varies with joint angle in the real human system. If we ignore
+time-delays and assume continuity, taking the total derivative of the torque at
+joint $i$ with respect to the angle of joint $j$ in the real human neuromuscular
+system, we obtain the following expression:
 \begin{align}
-    \frac{\partial \tau_i}{\partial \theta_j} &= \sum_{m=1}^M \frac{\partial
-    r_m}{\partial \theta_j} F_m + r_m \frac{\partial F_m}{\partial
-    \theta_j}_\tn{total} \\
-    \textrm{where} & \notag \\
-    \frac{\partial F_m}{\partial \theta_j}_\tn{total}&= 
-        \frac{\partial F_m}{\partial l_m}
-            \frac{\partial l_m}{\partial \theta_j} 
+    \frac{\tn{d} \tau_i}{\tn{d} \theta_j} 
+    = \frac{\partial \tau_i}{\partial \theta_j}
+    + \sum_{m=1}^M \frac{\tn{d} r_m}{\tn{d} \theta_j} F_m  
+    + r_m \left(\frac{\partial F_m}{\partial l_m}
+            \frac{\tn{d} l_m}{\tn{d} \theta_j} 
         + \frac{\partial F_m}{\partial S_m}
-            \frac{\partial S_m}{\partial \theta_j} 
-        + \frac{\partial F_m}{\partial \theta_j}_\tn{explicit}
+            \frac{\tn{d} S_m}{\tn{d} \theta_j} 
+        + \frac{\partial F_m}{\partial \theta_j} \right)
 \end{align}
-In this equation $\frac{\partial r_m}{\partial \theta_j}$ refers to the change
-in muscle attachment moment arms with respect to changing joint angles. Our
-model accounts for this term via modeling of the variable moment arms for many
-muscles (see \cref{eq:muscle_moment}). We can decompose the next term,
-$\frac{\partial F_m}{\partial \theta_j}_\tn{total}$, into several parts:
+This expression has several components. The first, $\frac{\partial
+\tau_i}{\partial \theta_j}$, describes how torques that depend directly on the
+joint angle change. This component represents factors such as joint limits,
+which are included in our model. The next few terms represent the change in
+force due to the change in each muscle-tendon unit's force production as angle
+is changed and are thus summed over the $M$ muscles that span joint $i$. These
+components include:
 
 \begin{description}
-    \item[$\frac{\partial F_m}{\partial l_m} \frac{\partial l_m}{\partial
-    \theta_j}$]  The first part describes how muscular forces change as length
-    changes. The Hill type model represents this term via the force length
-    relationships of the contractile, parallel elastic, and series elastic
-    elements given by
+    \item[$\frac{\tn{d} r_m}{\tn{d} \theta_j} F_m$] This first term
+    represents how the muscle moment arms change with respect to joint angle. As
+    our model includes variable moment arms it will account for this term.
+
+    \item[$\frac{\partial F_m}{\partial l_m} \frac{\tn{d} l_m}{\tn{d}
+    \theta_j}$] The second part describes how muscular forces change as muscle
+    tendon unit length changes. The Hill type model represents this term via the
+    force-length relationships of the contractile, parallel elastic, and series
+    elastic elements given by
     \cref{eq:hill_force_length,eq:parallel_force_length,eq:series_force_length}.
 
-    \item[$\frac{\partial F_m}{\partial S_m} 
-        \frac{\partial S_m}{\partial \theta_j}$] The second part describes how
-        stimulation changes as angle changes. Ignoring time delays, this term
-        can be further decomposed into implicit and explicit parts: The implicit
-        part is captured by the feedback laws of model, which describe how
-        muscle stimulation changes as muscle state changes, where muscle state
-        is a function of joint angle.  The explicit part describes how the
-        stimulation laws themselves change as a function of joint angle.
+    \item[$\frac{\partial F_m}{\partial S_m} \frac{\tn{d} S_m}{\tn{d} \theta_j}
+    $] The third part describes how stimulation changes as angle changes. Using
+    the chain rule, we can further decompose the total derivative of stimulation
+    into terms that represent how the stimulation changes as angle changes given
+    the current reflex structure and a second term that considers how the
+    structure changes as the angle changes. \ie if the reflex is represented by
+    some function $S_m = f(\theta_j, p)$, where $p$ are parameters that govern
+    the structure of reflex law, then $\frac{\tn{d} S_m}{\tn{d} \theta_j} =
+    \frac{\partial f}{\partial \theta_j} + \frac{\partial f}{\partial p}
+    \frac{\tn{d} p}{\tn{d} \theta_j}$.
 
-        Currently, the model does not consider structural changes to the
-        feedback laws except for the stance to swing and swing to stance
-        transitions. In our future work, described in
-        \cref{sec:proposed_trip_class} we intend to investigate how the swing
-        control may change structurally in response to trips. As reviewed in
-        \cref{sec:back_stumble_recovery}, there is strong evidence that the
-        control structure should change in response to swing leg disturbances in
-        order to implement raising and lower strategies. Incorporating this term
-        into the model will be vital to ensure amputees can recover from trips
-        through proper foot placement.
+    Currently, the model does not consider structural changes to the feedback
+    laws except for the stance to swing and swing to stance transitions. In our
+    future work, described in \cref{sec:proposed_trip_class} we intend to
+    investigate how the swing control may change structurally in response to
+    trips. As reviewed in \cref{sec:back_stumble_recovery}, there is strong
+    evidence that the control structure should change in response to swing leg
+    disturbances to implement raising and lower strategies.  Incorporating this
+    term into the model will be vital to ensure amputees can recover from trips
+    through proper foot placement.
         
-    \item[\frac{\partial F_m}{\partial \theta_j}_\tn{explicit}] The last term
-    refers to the actual stiffness of the muscle itself, often referred to as
-    the \emph{short range stiffness} (SRS). Currently, our model does not
-    consider this component of overall joint stiffness. 
+    \item[$\frac{\partial F_m}{\partial \theta_j}$] The last term represents the
+    actual stiffness of the muscle itself, refered to in the literature as the
+    \emph{short range stiffness} (SRS).  Currently, our model does not consider
+    this component of overall joint stiffness. 
+    
+    Whereas the force-length curve of muscle given by
+    \cref{eq:hill_force_length} describes how changes in a muscle's length
+    scales its isometric force production, the SRS emerges from the stiffness of
+    the active cross bridges \citep{morgan1977separation}. This component of
+    muscle stiffness is apparent for small disturbances (3-4\% of physiological
+    range) \citep{rack1974short}. Therefore, in situations with small
+    disturbances, it has been found that this component plays a major role in
+    determining overall joint stiffness \citep{hu2011muscle}. However, it is not
+    yet known if this component is important for stabilizing disturbances
+    encountered during locomotion tasks.
+
+    For this reason, for the disturbances we plan to investigate in this thesis,
+    which involve large forces applied via a perturbation robot, we do not
+    currently believe that including SRS in the model would markedly improve
+    amputee stability. However, this remains a potential area for future
+    investigation.
         
 \end{description}
