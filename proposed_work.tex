@@ -156,23 +156,32 @@ decreases the correlation between points as the euclidean distance between them
 increases. Therefore, appending the time to all data points will diminish the
 effect of old data points on new predictions.
 
-We will test this improved method for learning from qualitative feedback in two
-scenarios both involving real user feedback. In the first scenario, we project
-foot placement targets onto a treadmill and users are asked to walk while
-hitting the target on every step. The target placement is governed by up to five
-parameters: width, skewness, frequency, and left and right foot direction. Users
-will provide their qualitative feedback on these parameters and we will gauge
-how fast the system converges to the user's preferred foot placement parameters.
-In this case, we can assume users prefer zero skewness, and straight foot
-placement. We can measure their step frequency beforehand, and hand-tune the
-width. We choose this scenario as it has a clear optimum that we can find easily
-via hand tuning. We can perform this optimization in one, three, and five
-dimensions to assess how the algorithm scales as dimensionality increases.  In a
-second scenario, we apply the method to tune the parameters of the prosthesis
-stance control. We then look for improvement over the default control parameters
-and for local optimality by comparing to points near the identified optimum.
-\emph{We will perform this task in parallel with the neuromuscular control task
-over the course of five months (see \cref{fig:gantt_chart}).}
+We will test this improved method for learning from qualitative feedback in
+three scenarios involving real user feedback. In the first scenario, we ask
+users to optimize the feedback gains of a simulated double pendulum on a cart.
+The users will interact with two graphical user interfaces. The first allows
+users to manually tune the gains via sliders and the second allows users to
+provide qualitative feedback. We will compare the number of simulations required
+for the user to find a set of stable gains in each case and ask the user to
+provide a preference between the final set of hand tuned gains and the optimum
+found by the Gaussian process method.
+
+In the second scenario, we project foot placement targets onto a treadmill and
+users are asked to walk while hitting the target on every step. The target
+placement is governed by up to five parameters: width, skewness, frequency, and
+left and right foot direction. Users will provide their qualitative feedback on
+these parameters and we will gauge how fast the system converges to the user's
+preferred foot placement parameters.  In this case, we can measure the ground
+truth parameters via a motion capture system. We choose this scenario as it has
+a clear optimum that we can find easily via an alternative method. We can
+perform this optimization in one, three, and five dimensions to assess how the
+algorithm scales as dimensionality increases. 
+
+In a third scenario, we apply the method to tune the parameters of the
+prosthesis stance control. We then look for improvement over the default control
+parameters and for local optimality by comparing to points near the identified
+optimum. \emph{We will perform this task in parallel with the neuromuscular
+control task over the course of five months (see \cref{fig:gantt_chart}).}
 
 \section{Learning Trip Recovery Policies}\label{sec:proposed_trip_class}
 
