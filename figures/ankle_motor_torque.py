@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib as mpl
 from matplotlib import rc
 import scipy.io as sio
+import scipy.integrate as integrate
 import pdb
 mpl.use("pgf")
 import matplotlib.pyplot as plt
@@ -34,9 +35,13 @@ color3light = '#F8D6A3'
 winter_data = np.loadtxt(open("winter_data_angle_torque.csv","rb"),
     delimiter=",",skiprows=1)
 scale_factor = 202.0/np.max(winter_data[:,1])
+scale_factor_walking = 85/56.7
+
 ankle_angle  = winter_data[:,0]
 ankle_torque = winter_data[:,1]*scale_factor
 ankle_vel    = winter_data[:,2]
+
+ankle_torque_walking = winter_data[:,1]*scale_factor_walking
 
 tau_max = 2.3
 tau_rated = 0.74
@@ -54,6 +59,12 @@ spring_torque = spring_const*ankle_angle
 spring_torque[spring_torque < 0] = 0
 motor_torque_spring = (ankle_torque - spring_torque)/gear_ratio/eff
 
+motor_torque_spring_walking = (ankle_torque_walking - spring_torque)/gear_ratio/eff
+
+torque_motor_rms = np.sqrt(integrate.cumtrapz(motor_torque_spring_walking**2, x=None, 
+    dx = 0.972/69)/0.972)
+torque_motor_rms = torque_motor_rms[-1]
+
 #create figure
 fig = plt.figure(figsize = (2,2))
 ax = plt.axes()
@@ -65,11 +76,16 @@ p1, = ax.plot(np.abs(motor_speed), np.abs(motor_torque_spring),
     linewidth=2, color=color1)
 p2, = ax.plot(volt_lim_speed, volt_lim_tau,
     linewidth=2, color=color2)
+p3, = ax.plot([0, 7330], [tau_rated, tau_rated], '--',
+    linewidth=2, color=color3)
+p4, = ax.plot([0, 7330], [torque_motor_rms, torque_motor_rms], '--',
+    linewidth=2, color='black')
 
 fontsize = ax.xaxis.get_label().get_fontsize()
-ax.legend((p0, p1, p2), ('Motor Torque no Spring', 'Motor Torque with Spring', 
-    'Torque Limit'), frameon = False, loc = (1,0.3), fontsize=10,
-    handlelength=3)
+ax.legend((p0, p1, p2, p3, p4), ('Stumble Motor Torque no Spring', 
+    'Stumble Motor Torque with Spring', 'Torque Limit', 'Motor Rated Torque', 
+    'Walking Motor RMS Torque'), frameon = False, 
+    loc = (1,0.2), fontsize=10, handlelength=3)
 ax.xaxis.set_label_text('Motor Speed (RPM)')
 ax.yaxis.set_label_text('Motor Torque (N-m)')
 
